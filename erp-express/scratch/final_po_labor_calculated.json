@@ -1,0 +1,614 @@
+[
+  {
+    "no": 1,
+    "name": "BOX LUGGAGE K2FK",
+    "po_qty": 35600,
+    "uph": 65,
+    "hours_needed": 547.6923076923077,
+    "labor_per_pcs": 1551,
+    "total_labor_item": 55215600
+  },
+  {
+    "no": 2,
+    "name": "PROTECTOR MUFFLER K2SA",
+    "po_qty": 0,
+    "uph": 70,
+    "hours_needed": 0,
+    "labor_per_pcs": 1441,
+    "total_labor_item": 0
+  },
+  {
+    "no": 3,
+    "name": "PROTECTOR MUFFLER K59",
+    "po_qty": 0,
+    "uph": 70,
+    "hours_needed": 0,
+    "labor_per_pcs": 1441,
+    "total_labor_item": 0
+  },
+  {
+    "no": 4,
+    "name": "RR GRAB RAIL K1AL",
+    "po_qty": 48400,
+    "uph": 55,
+    "hours_needed": 880,
+    "labor_per_pcs": 1833,
+    "total_labor_item": 88717200
+  },
+  {
+    "no": 5,
+    "name": "RR GRAB RAIL K2FP",
+    "po_qty": 18800,
+    "uph": 30,
+    "hours_needed": 626.6666666666666,
+    "labor_per_pcs": 3361,
+    "total_labor_item": 63186800
+  },
+  {
+    "no": 6,
+    "name": "BOX LUGGAGE K1Z",
+    "po_qty": 31500,
+    "uph": 50,
+    "hours_needed": 630,
+    "labor_per_pcs": 2017,
+    "total_labor_item": 63535500
+  },
+  {
+    "no": 7,
+    "name": "PLATE BOTTOM K3VA",
+    "po_qty": 20700,
+    "uph": 70,
+    "hours_needed": 295.7142857142857,
+    "labor_per_pcs": 1441,
+    "total_labor_item": 29828700
+  },
+  {
+    "no": 8,
+    "name": "PLATE BOTTOM SUZUKI (45111-12K10)",
+    "po_qty": 1500,
+    "uph": 35,
+    "hours_needed": 42.857142857142854,
+    "labor_per_pcs": 2881,
+    "total_labor_item": 4321500
+  },
+  {
+    "no": 9,
+    "name": "HOLDER MIRROR S/A RH",
+    "po_qty": 0,
+    "uph": 100,
+    "hours_needed": 0,
+    "labor_per_pcs": 1008,
+    "total_labor_item": 0
+  },
+  {
+    "no": 10,
+    "name": "HOLDER MIRROR S/A LH",
+    "po_qty": 0,
+    "uph": 100,
+    "hours_needed": 0,
+    "labor_per_pcs": 1008,
+    "total_labor_item": 0
+  },
+  {
+    "no": 11,
+    "name": "HOLDER MIRROR K3VA",
+    "po_qty": 55000,
+    "uph": 140,
+    "hours_needed": 392.85714285714283,
+    "labor_per_pcs": 720,
+    "total_labor_item": 39600000
+  },
+  {
+    "no": 12,
+    "name": "PLATE BOTTOM K1AL SC",
+    "po_qty": 51400,
+    "uph": 55,
+    "hours_needed": 934.5454545454545,
+    "labor_per_pcs": 1833,
+    "total_labor_item": 94216200
+  },
+  {
+    "no": 13,
+    "name": "COVER AIR CLEANER K60",
+    "po_qty": 49480,
+    "uph": 60,
+    "hours_needed": 824.6666666666666,
+    "labor_per_pcs": 1681,
+    "total_labor_item": 83175880
+  },
+  {
+    "no": 14,
+    "name": "ELEMENT COMP A/C K60R",
+    "po_qty": 49480,
+    "uph": 80,
+    "hours_needed": 618.5,
+    "labor_per_pcs": 1260,
+    "total_labor_item": 62344800
+  },
+  {
+    "no": 15,
+    "name": "SET ILLUST AC ELEMENT KOJA",
+    "po_qty": 0,
+    "uph": 60,
+    "hours_needed": 0,
+    "labor_per_pcs": 1681,
+    "total_labor_item": 0
+  },
+  {
+    "no": 16,
+    "name": "SET ILLUST AIR C ELEMENT K2V",
+    "po_qty": 0,
+    "uph": 60,
+    "hours_needed": 0,
+    "labor_per_pcs": 1681,
+    "total_labor_item": 0
+  },
+  {
+    "no": 17,
+    "name": "ELEMENT COMP A/C KOJA",
+    "po_qty": 69840,
+    "uph": 80,
+    "hours_needed": 873,
+    "labor_per_pcs": 1260,
+    "total_labor_item": 87998400
+  },
+  {
+    "no": 18,
+    "name": "SUB ASSY COVER AIR CLEANER K1AA",
+    "po_qty": 40040,
+    "uph": 70,
+    "hours_needed": 572,
+    "labor_per_pcs": 1441,
+    "total_labor_item": 57697640
+  },
+  {
+    "no": 19,
+    "name": "SUB ASSY COVER AIR CLEANER KOJA",
+    "po_qty": 0,
+    "uph": 70,
+    "hours_needed": 0,
+    "labor_per_pcs": 1441,
+    "total_labor_item": 0
+  },
+  {
+    "no": 20,
+    "name": "CASE AIR CLEANER KWN (K2V)",
+    "po_qty": 0,
+    "uph": 55,
+    "hours_needed": 0,
+    "labor_per_pcs": 1833,
+    "total_labor_item": 0
+  },
+  {
+    "no": 21,
+    "name": "SUB ASSY CASE AIR CLEANER KOJA",
+    "po_qty": 0,
+    "uph": 70,
+    "hours_needed": 0,
+    "labor_per_pcs": 1441,
+    "total_labor_item": 0
+  },
+  {
+    "no": 22,
+    "name": "SUB ASSY CASE AIR CLEANER K1AL",
+    "po_qty": 103360,
+    "uph": 95,
+    "hours_needed": 1088,
+    "labor_per_pcs": 1061,
+    "total_labor_item": 109664960
+  },
+  {
+    "no": 23,
+    "name": "COVER SUB ASSY AIR CLEANER KOJA (AHM-PC)",
+    "po_qty": 0,
+    "uph": 70,
+    "hours_needed": 0,
+    "labor_per_pcs": 1441,
+    "total_labor_item": 0
+  },
+  {
+    "no": 24,
+    "name": "CASE SUB ASSY AIR CLEANER KOJA (AHM-PC)",
+    "po_qty": 0,
+    "uph": 70,
+    "hours_needed": 0,
+    "labor_per_pcs": 1441,
+    "total_labor_item": 0
+  },
+  {
+    "no": 25,
+    "name": "GRIP HANDLE BRACKET BZ050",
+    "po_qty": 7392,
+    "uph": 60,
+    "hours_needed": 123.2,
+    "labor_per_pcs": 1681,
+    "total_labor_item": 12425952
+  },
+  {
+    "no": 26,
+    "name": "GRIP PARKING BRAKE LEVER 0K130",
+    "po_qty": 8800,
+    "uph": 40,
+    "hours_needed": 220,
+    "labor_per_pcs": 2521,
+    "total_labor_item": 22184800
+  },
+  {
+    "no": 27,
+    "name": "HOLDER MIRROR BACK RH K97G",
+    "po_qty": 24200,
+    "uph": 70,
+    "hours_needed": 345.7142857142857,
+    "labor_per_pcs": 1441,
+    "total_labor_item": 34872200
+  },
+  {
+    "no": 28,
+    "name": "HOLDER MIRROR BACK LH K97G",
+    "po_qty": 24200,
+    "uph": 100,
+    "hours_needed": 242,
+    "labor_per_pcs": 1008,
+    "total_labor_item": 24393600
+  },
+  {
+    "no": 29,
+    "name": "HOLDER MIRROR BACK RH KZLG",
+    "po_qty": 0,
+    "uph": 100,
+    "hours_needed": 0,
+    "labor_per_pcs": 1008,
+    "total_labor_item": 0
+  },
+  {
+    "no": 30,
+    "name": "HOLDER MIRROR BACK LH KZLG",
+    "po_qty": 0,
+    "uph": 100,
+    "hours_needed": 0,
+    "labor_per_pcs": 1008,
+    "total_labor_item": 0
+  },
+  {
+    "no": 31,
+    "name": "SUB ASSY HOLDER MIRROR BACK RH/LH K93",
+    "po_qty": 15400,
+    "uph": 250,
+    "hours_needed": 61.6,
+    "labor_per_pcs": 403,
+    "total_labor_item": 6206200
+  },
+  {
+    "no": 32,
+    "name": "COVER PARKING BRAKE HOLE F1010",
+    "po_qty": 880,
+    "uph": 54,
+    "hours_needed": 16.296296296296298,
+    "labor_per_pcs": 1867,
+    "total_labor_item": 1642960
+  },
+  {
+    "no": 33,
+    "name": "BACK MRR STYLISH RL YM 12-BMST-M10BYR AM",
+    "po_qty": 240,
+    "uph": 80,
+    "hours_needed": 3,
+    "labor_per_pcs": 1260,
+    "total_labor_item": 302400
+  },
+  {
+    "no": 34,
+    "name": "BACK MRR STYLISH RL HD 12-BMST-M10BHR AM",
+    "po_qty": 720,
+    "uph": 80,
+    "hours_needed": 9,
+    "labor_per_pcs": 1260,
+    "total_labor_item": 907200
+  },
+  {
+    "no": 35,
+    "name": "BACK MRR GN LOOK RL HD FP-BMGL-M10BHR AM",
+    "po_qty": 1920,
+    "uph": 80,
+    "hours_needed": 24,
+    "labor_per_pcs": 1260,
+    "total_labor_item": 2419200
+  },
+  {
+    "no": 36,
+    "name": "BACK MRR GN LOOK RL YM FP-BMGL-M10BYR AM",
+    "po_qty": 320,
+    "uph": 80,
+    "hours_needed": 4,
+    "labor_per_pcs": 1260,
+    "total_labor_item": 403200
+  },
+  {
+    "no": 37,
+    "name": "BACK MRR GN LOOK RL HD 12-BMGL-M10BHR AM",
+    "po_qty": 3840,
+    "uph": 80,
+    "hours_needed": 48,
+    "labor_per_pcs": 1260,
+    "total_labor_item": 4838400
+  },
+  {
+    "no": 38,
+    "name": "BACK MRR GN LOOK RL YM 12-BMGL-M10BYR AM",
+    "po_qty": 1040,
+    "uph": 80,
+    "hours_needed": 13,
+    "labor_per_pcs": 1260,
+    "total_labor_item": 1310400
+  },
+  {
+    "no": 39,
+    "name": "MIRROR BASIC YMH",
+    "po_qty": 0,
+    "uph": 800,
+    "hours_needed": 0,
+    "labor_per_pcs": 126,
+    "total_labor_item": 0
+  },
+  {
+    "no": 40,
+    "name": "MIRROR ARROW HND",
+    "po_qty": 0,
+    "uph": 800,
+    "hours_needed": 0,
+    "labor_per_pcs": 126,
+    "total_labor_item": 0
+  },
+  {
+    "no": 41,
+    "name": "MIRROR ARROW YMH",
+    "po_qty": 0,
+    "uph": 800,
+    "hours_needed": 0,
+    "labor_per_pcs": 126,
+    "total_labor_item": 0
+  },
+  {
+    "no": 42,
+    "name": "MIRROR BASIC HND",
+    "po_qty": 0,
+    "uph": 800,
+    "hours_needed": 0,
+    "labor_per_pcs": 126,
+    "total_labor_item": 0
+  },
+  {
+    "no": 43,
+    "name": "MIRROR SET (CHR)",
+    "po_qty": 0,
+    "uph": 800,
+    "hours_needed": 0,
+    "labor_per_pcs": 126,
+    "total_labor_item": 0
+  },
+  {
+    "no": 44,
+    "name": "MIRROR,BACK (SET)",
+    "po_qty": 2880,
+    "uph": 800,
+    "hours_needed": 3.6,
+    "labor_per_pcs": 126,
+    "total_labor_item": 362880
+  },
+  {
+    "no": 45,
+    "name": "MIRROR,BACK (SET) OLD YMH",
+    "po_qty": 720,
+    "uph": 100,
+    "hours_needed": 7.2,
+    "labor_per_pcs": 1008,
+    "total_labor_item": 725760
+  },
+  {
+    "no": 46,
+    "name": "MIRROR, BACK (SET) FED",
+    "po_qty": 1248,
+    "uph": 100,
+    "hours_needed": 12.48,
+    "labor_per_pcs": 1008,
+    "total_labor_item": 1257984
+  },
+  {
+    "no": 47,
+    "name": "MIRROR, BACK (SET) OLD YMH FED",
+    "po_qty": 120,
+    "uph": 100,
+    "hours_needed": 1.2,
+    "labor_per_pcs": 1008,
+    "total_labor_item": 120960
+  },
+  {
+    "no": 48,
+    "name": "MIRROR,BACK (SET) HND",
+    "po_qty": 0,
+    "uph": 100,
+    "hours_needed": 0,
+    "labor_per_pcs": 1008,
+    "total_labor_item": 0
+  },
+  {
+    "no": 49,
+    "name": "MIRROR,BACK (SET) YMH",
+    "po_qty": 1320,
+    "uph": 100,
+    "hours_needed": 13.2,
+    "labor_per_pcs": 1008,
+    "total_labor_item": 1330560
+  },
+  {
+    "no": 50,
+    "name": "CAP LOCK NUT K3VA",
+    "po_qty": 55000,
+    "uph": 200,
+    "hours_needed": 275,
+    "labor_per_pcs": 504,
+    "total_labor_item": 27720000
+  },
+  {
+    "no": 51,
+    "name": "COVER MIRROR K3VA",
+    "po_qty": 55000,
+    "uph": 150,
+    "hours_needed": 366.6666666666667,
+    "labor_per_pcs": 672,
+    "total_labor_item": 36960000
+  },
+  {
+    "no": 52,
+    "name": "PROTECTOR MUFFLER K2SA (AM)",
+    "po_qty": 578,
+    "uph": 70,
+    "hours_needed": 8.257142857142858,
+    "labor_per_pcs": 1441,
+    "total_labor_item": 832898
+  },
+  {
+    "no": 53,
+    "name": "COVER INNER LOWER KZL",
+    "po_qty": 258,
+    "uph": 50,
+    "hours_needed": 5.16,
+    "labor_per_pcs": 2017,
+    "total_labor_item": 520386
+  },
+  {
+    "no": 54,
+    "name": "COVER FRONT LOWER K25",
+    "po_qty": 1050,
+    "uph": 50,
+    "hours_needed": 21,
+    "labor_per_pcs": 2017,
+    "total_labor_item": 2117850
+  },
+  {
+    "no": 55,
+    "name": "COVER L BODY SIDE K59A AHM-PC",
+    "po_qty": 948,
+    "uph": 50,
+    "hours_needed": 18.96,
+    "labor_per_pcs": 2017,
+    "total_labor_item": 1912116
+  },
+  {
+    "no": 56,
+    "name": "COVER R BODY SIDE K59A AHM-PC",
+    "po_qty": 756,
+    "uph": 50,
+    "hours_needed": 15.12,
+    "labor_per_pcs": 2017,
+    "total_labor_item": 1524852
+  },
+  {
+    "no": 57,
+    "name": "COVER HANDLE FRONT K25",
+    "po_qty": 0,
+    "uph": 50,
+    "hours_needed": 0,
+    "labor_per_pcs": 2017,
+    "total_labor_item": 0
+  },
+  {
+    "no": 58,
+    "name": "GARNISH FR",
+    "po_qty": 196,
+    "uph": 100,
+    "hours_needed": 1.96,
+    "labor_per_pcs": 1008,
+    "total_labor_item": 197568
+  },
+  {
+    "no": 59,
+    "name": "GAUGE HOPPER NETRAL 01",
+    "po_qty": 2000,
+    "uph": 50,
+    "hours_needed": 40,
+    "labor_per_pcs": 2017,
+    "total_labor_item": 4034000
+  },
+  {
+    "no": 60,
+    "name": "SWITCH BOX COVER 16 SAE",
+    "po_qty": 4000,
+    "uph": 100,
+    "hours_needed": 40,
+    "labor_per_pcs": 1008,
+    "total_labor_item": 4032000
+  },
+  {
+    "no": 61,
+    "name": "STAND BASE 12 LDA",
+    "po_qty": 0,
+    "uph": 100,
+    "hours_needed": 0,
+    "labor_per_pcs": 1008,
+    "total_labor_item": 0
+  },
+  {
+    "no": 62,
+    "name": "SWITCH COVER 301 CRJ",
+    "po_qty": 0,
+    "uph": 150,
+    "hours_needed": 0,
+    "labor_per_pcs": 672,
+    "total_labor_item": 0
+  },
+  {
+    "no": 63,
+    "name": "RR GRAB RAIL K1AL (AM)",
+    "po_qty": 222,
+    "uph": 55,
+    "hours_needed": 4.036363636363636,
+    "labor_per_pcs": 1833,
+    "total_labor_item": 406926
+  },
+  {
+    "no": 64,
+    "name": "SUB ASSY CASE AIR CLEANER KWN (K2VM)",
+    "po_qty": 82460,
+    "uph": 70,
+    "hours_needed": 1178,
+    "labor_per_pcs": 1441,
+    "total_labor_item": 118824860
+  },
+  {
+    "no": 65,
+    "name": "PROTECTOR MUFFLER K2SM",
+    "po_qty": 24000,
+    "uph": 70,
+    "hours_needed": 342.85714285714283,
+    "labor_per_pcs": 1441,
+    "total_labor_item": 34584000
+  },
+  {
+    "no": 66,
+    "name": "PROTECTOR MUFFLER K2SM (AM)",
+    "po_qty": 0,
+    "uph": 70,
+    "hours_needed": 0,
+    "labor_per_pcs": 1441,
+    "total_labor_item": 0
+  },
+  {
+    "no": 67,
+    "name": "CAP DEOXIDE BLUE",
+    "po_qty": 142800,
+    "uph": 250,
+    "hours_needed": 571.2,
+    "labor_per_pcs": 403,
+    "total_labor_item": 57548400
+  },
+  {
+    "no": 68,
+    "name": "CAP DEOXIDE PURPLE",
+    "po_qty": 30000,
+    "uph": 250,
+    "hours_needed": 120,
+    "labor_per_pcs": 403,
+    "total_labor_item": 12090000
+  }
+]

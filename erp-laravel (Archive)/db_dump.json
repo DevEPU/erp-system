@@ -1,0 +1,19 @@
+[
+    {
+        "id": 172,
+        "total_amount": 210000,
+        "budget_amount": "205000.00",
+        "borrowed_amount": "205000.00",
+        "updated_at": "2026-02-27 10:47:50",
+        "has_override_php": true,
+        "allocations": [
+            {
+                "id": 26,
+                "purchase_detail_id": 0,
+                "amount": "205000.00",
+                "is_borrowed_internal": 1,
+                "is_borrowed_external": 0
+            }
+        ]
+    }
+]

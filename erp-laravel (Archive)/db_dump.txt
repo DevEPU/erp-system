@@ -1,0 +1,15 @@
+FIELD: id | TYPE: bigint unsigned
+FIELD: product_id | TYPE: bigint unsigned
+FIELD: product_name | TYPE: varchar(255)
+FIELD: product_code | TYPE: varchar(255)
+FIELD: category_id | TYPE: bigint unsigned
+FIELD: product_unit | TYPE: varchar(255)
+FIELD: is_asset | TYPE: tinyint(1)
+FIELD: product_price | TYPE: int
+FIELD: supplier_id | TYPE: bigint unsigned
+FIELD: is_verify | TYPE: tinyint(1)
+FIELD: status | TYPE: varchar(255)
+FIELD: reason | TYPE: text
+FIELD: created_by | TYPE: bigint unsigned
+FIELD: created_at | TYPE: timestamp
+FIELD: updated_at | TYPE: timestamp

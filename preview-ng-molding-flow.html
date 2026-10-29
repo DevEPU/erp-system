@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview & Simulasi Alur NG Material vs NG Component - PT Eran Plastindo Utama</title>
+  
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@800;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --font-heading: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+      
+      --emerald-50: #ecfdf5;
+      --emerald-100: #d1fae5;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --emerald-700: #047857;
+      
+      --blue-50: #eff6ff;
+      --blue-100: #dbeafe;
+      --blue-500: #3b82f6;
+      --blue-600: #2563eb;
+      
+      --amber-50: #fffbeb;
+      --amber-100: #fef3c7;
+      --amber-500: #f59e0b;
+      --amber-600: #d97706;
+      
+      --red-50: #fef2f2;
+      --red-100: #fee2e2;
+      --red-500: #ef4444;
+      --red-600: #dc2626;
+
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      
+      --white: #ffffff;
+      
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--slate-50);
+      color: var(--slate-800);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 320px;
+      background-color: var(--slate-900);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 1.5rem;
+      border-right: 1px solid var(--slate-800);
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--slate-800);
+    }
+
+    .brand-icon {
+      background: linear-gradient(135deg, var(--emerald-500), var(--emerald-700));
+      padding: 0.6rem;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    }
+
+    .brand-name {
+      font-family: var(--font-heading);
+      font-weight: 950;
+      font-size: 1.2rem;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--emerald-500);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .menu-section {
+      margin-bottom: 1.75rem;
+    }
+
+    .menu-label {
+      font-size: 0.65rem;
+      font-weight: 900;
+      color: var(--slate-500);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: var(--slate-400);
+      text-decoration: none;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .menu-item:hover {
+      color: var(--white);
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    .menu-item.active {
+      color: var(--white);
+      background-color: var(--emerald-600);
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+    }
+
+    /* Main Container */
+    .main {
+      margin-left: 320px;
+      flex: 1;
+      padding: 3rem;
+      max-width: 1400px;
+    }
+
+    .header {
+      margin-bottom: 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-title {
+      font-family: var(--font-heading);
+      font-weight: 900;
+      font-size: 2.25rem;
+      color: var(--slate-900);
+      letter-spacing: -0.03em;
+    }
+
+    .header-title span {
+      color: var(--emerald-600);
+    }
+
+    .header-desc {
+      color: var(--slate-500);
+      font-weight: 500;
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+    }
+
+    /* Tab Switcher */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards */
+    .grid-dashboard {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+    }
+
+    .grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background-color: var(--white);
+      border-radius: 24px;
+      border: 1px solid var(--slate-200);
+      box-shadow: var(--shadow-sm);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--slate-100);
+      padding-bottom: 1rem;
+    }
+
+    .card-title {
+      font-family: var(--font-heading);
+      font-weight: 900;
+      font-size: 1.25rem;
+      color: var(--slate-900);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card-subtitle {
+      font-size: 0.8rem;
+      color: var(--slate-400);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Stock Display Panel */
+    .stock-badge-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .stock-badge-card {
+      background-color: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 16px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .stock-badge-title {
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--slate-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stock-badge-value {
+      font-size: 1.75rem;
+      font-family: var(--font-heading);
+      font-weight: 900;
+      color: var(--slate-900);
+      margin-top: 0.25rem;
+    }
+
+    .stock-badge-unit {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--slate-500);
+      margin-left: 0.25rem;
+    }
+
+    /* Flowchart / SVG Diagram */
+    .flowchart-container {
+      background-color: var(--slate-900);
+      border-radius: 20px;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      position: relative;
+      min-height: 250px;
+    }
+
+    .flow-line {
+      stroke-dasharray: 8;
+      animation: dash 1s linear infinite;
+    }
+
+    @keyframes dash {
+      to {
+        stroke-dashoffset: -16;
+      }
+    }
+
+    .glow-effect {
+      filter: drop-shadow(0 0 4px var(--emerald-500));
+    }
+
+    /* Forms */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: var(--slate-500);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .form-select, .form-input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--slate-200);
+      background-color: var(--slate-50);
+      border-radius: 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--slate-800);
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .form-select:focus, .form-input:focus {
+      border-color: var(--emerald-500);
+      background-color: var(--white);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    }
+
+    /* Custom Switch button */
+    .switch-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--slate-50);
+      padding: 1rem;
+      border-radius: 16px;
+      border: 1px solid var(--slate-200);
+      margin-bottom: 1.5rem;
+    }
+
+    .switch-label-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .switch-title {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--slate-800);
+    }
+
+    .switch-desc {
+      font-size: 0.75rem;
+      color: var(--slate-400);
+      font-weight: 500;
+    }
+
+    .switch-btn {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 28px;
+    }
+
+    .switch-btn input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--slate-300);
+      transition: .4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--emerald-500);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      border-radius: 16px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background-color: var(--slate-950);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--emerald-600);
+      box-shadow: 0 8px 16px rgba(5, 150, 105, 0.15);
+    }
+
+    .btn-emerald {
+      background-color: var(--emerald-600);
+      color: var(--white);
+    }
+
+    .btn-emerald:hover {
+      background-color: var(--emerald-700);
+    }
+
+    .btn-secondary {
+      background-color: var(--slate-100);
+      color: var(--slate-600);
+      border: 1px solid var(--slate-200);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--slate-200);
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid var(--slate-200);
+      border-radius: 16px;
+      background-color: var(--white);
+    }
+
+    .table-spec {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .table-spec th {
+      background-color: var(--slate-50);
+      padding: 1rem;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--slate-400);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .table-spec td {
+      padding: 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--slate-700);
+      border-bottom: 1px solid var(--slate-100);
+    }
+
+    .table-spec tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Status badge styles */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+
+    .status-emerald {
+      background-color: var(--emerald-50);
+      color: var(--emerald-700);
+      border: 1px solid var(--emerald-100);
+    }
+
+    .status-amber {
+      background-color: var(--amber-50);
+      color: var(--amber-700);
+      border: 1px solid var(--amber-100);
+    }
+
+    .status-blue {
+      background-color: var(--blue-50);
+      color: var(--blue-700);
+      border: 1px solid var(--blue-100);
+    }
+
+    .status-red {
+      background-color: var(--red-50);
+      color: var(--red-700);
+      border: 1px solid var(--red-100);
+    }
+
+    .status-slate {
+      background-color: var(--slate-100);
+      color: var(--slate-600);
+      border: 1px solid var(--slate-200);
+    }
+
+    /* Database Logs */
+    .db-logs {
+      background-color: var(--slate-900);
+      border-radius: 20px;
+      padding: 1.5rem;
+      color: #9cdcfe;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      line-height: 1.5;
+      overflow-y: auto;
+      max-height: 300px;
+      border: 1px solid var(--slate-800);
+    }
+
+    .db-logs .keyword { color: #569cd6; font-weight: bold; }
+    .db-logs .string { color: #ce9178; }
+    .db-logs .number { color: #b5cea8; }
+    .db-logs .comment { color: #6a9955; font-style: italic; }
+    .db-logs .success-mark { color: var(--emerald-500); font-weight: bold; }
+
+    /* Scenario selection bar */
+    .scenario-bar {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .scenario-btn {
+      flex: 1;
+      padding: 1rem;
+      border-radius: 16px;
+      border: 1px solid var(--slate-200);
+      background-color: var(--white);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      text-align: left;
+      transition: all 0.2s ease;
+    }
+
+    .scenario-btn:hover {
+      border-color: var(--slate-400);
+      background-color: var(--slate-50);
+    }
+
+    .scenario-btn.active {
+      border-color: var(--emerald-500);
+      background-color: var(--emerald-50)/30;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    }
+
+    .scenario-title {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: var(--slate-900);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .scenario-desc {
+      font-size: 0.7rem;
+      color: var(--slate-500);
+      font-weight: 500;
+    }
+
+    /* Modal dialog */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-container {
+      background-color: var(--white);
+      width: 100%;
+      max-width: 600px;
+      border-radius: 28px;
+      border: 1px solid var(--slate-200);
+      box-shadow: var(--shadow-xl);
+      padding: 2rem;
+      transform: scale(0.95);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-backdrop.open .modal-container {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--slate-100);
+      padding-bottom: 1rem;
+    }
+
+    .alert-banner {
+      padding: 1rem 1.25rem;
+      border-radius: 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      line-height: 1.4;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .alert-info {
+      background-color: var(--blue-50);
+      color: var(--blue-700);
+      border: 1px solid var(--blue-100);
+    }
+
+    .alert-amber {
+      background-color: var(--amber-50);
+      color: var(--amber-700);
+      border: 1px solid var(--amber-100);
+    }
+
+    .alert-red {
+      background-color: var(--red-50);
+      color: var(--red-700);
+      border: 1px solid var(--red-100);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">
+        <i data-lucide="factory" class="text-white" style="width: 24px; height: 24px;"></i>
+      </div>
+      <div>
+        <h1 class="brand-name">ERP System EPU</h1>
+        <span class="brand-subtitle">PT Eran Plastindo Utama</span>
+      </div>
+    </div>
+
+    <div class="menu-section">
+      <span class="menu-label">Navigasi Alur Kerja</span>
+      
+      <div class="menu-item active" onclick="switchTab('overview', this)">
+        <i data-lucide="info"></i>
+        <span>1. Peta & Deskripsi Alur</span>
+      </div>
+
+      <div class="menu-item" onclick="switchTab('operator-terminal', this)">
+        <i data-lucide="cpu"></i>
+        <span>2. Input Hasil Cetak (Molding)</span>
+      </div>
+
+      <div class="menu-item" onclick="switchTab('warehouse-terminal', this)">
+        <i data-lucide="arrow-right-left"></i>
+        <span>3. Gudang Matkom (Kirim Ulang)</span>
+      </div>
+
+      <div class="menu-item" onclick="switchTab('audit-logs', this)">
+        <i data-lucide="activity"></i>
+        <span>4. Status & Riwayat Crusher</span>
+      </div>
+    </div>
+
+    <div class="menu-section" style="margin-top: auto;">
+      <span class="menu-label">Mode Preview / Simulasi</span>
+      <button class="btn btn-secondary" onclick="resetSimulator()" style="padding: 0.6rem 1rem; border-radius: 12px; font-size: 0.75rem;">
+        <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+        Reset Simulasi Stok
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    
+    <!-- Top Header -->
+    <div class="header">
+      <div>
+        <h2 class="header-title">Simulasi Realisasi <span>NG Material & NG Component</span></h2>
+        <p class="header-desc">Simulasi interaktif sebelum pengkodean riil pada sistem ERP PT Eran Plastindo Utama.</p>
+      </div>
+      <div id="simulation-status">
+        <span class="status-badge status-emerald"><i data-lucide="play-circle" style="width: 12px; height: 12px;"></i> Simulator Aktif</span>
+      </div>
+    </div>
+
+    <!-- TAB 1: OVERVIEW -->
+    <div id="tab-overview" class="tab-content active">
+      
+      <!-- Visual Stocks Overview Cards -->
+      <div class="grid-3col">
+        <div class="stock-badge-card" style="border-left: 4px solid var(--blue-500)">
+          <span class="stock-badge-title">Gudang Bahan Baku (MATKOM)</span>
+          <div class="stock-badge-value" id="stock-matkom-resin">2,500 <span class="stock-badge-unit">Kg</span></div>
+          <div class="stock-badge-value" id="stock-matkom-comp" style="font-size: 1.25rem; margin-top: 0.25rem;">1,500 <span class="stock-badge-unit">Pcs (Insert)</span></div>
+        </div>
+
+        <div class="stock-badge-card" style="border-left: 4px solid var(--amber-500)">
+          <span class="stock-badge-title">Stok Lantai Produksi (Mixing/Prep)</span>
+          <div class="stock-badge-value" id="stock-prod-resin">500 <span class="stock-badge-unit">Kg</span></div>
+          <div class="stock-badge-value" id="stock-prod-comp" style="font-size: 1.25rem; margin-top: 0.25rem;">200 <span class="stock-badge-unit">Pcs (Insert)</span></div>
+        </div>
+
+        <div class="stock-badge-card" style="border-left: 4px solid var(--emerald-500)">
+          <span class="stock-badge-title">Gudang Barang Jadi (WHFG)</span>
+          <div class="stock-badge-value" id="stock-fg">1,200 <span class="stock-badge-unit">Set FG</span></div>
+          <div style="font-size: 0.75rem; color: var(--slate-400); font-weight: 700; margin-top: auto; display: flex; justify-content: space-between;">
+            <span>Crusher: <strong id="stock-crusher" class="text-slate-800">0 Kg</strong></span>
+            <span>Klaim Supplier: <strong id="stock-claim" class="text-red-600">0 Pcs</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Map & Diagram -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-subtitle">Peta Aliran Stok Riil</span>
+            <h3 class="card-title"><i data-lucide="git-branch"></i> Diagram Interaktif Alur Transaksi</h3>
+          </div>
+          <div>
+            <span class="text-xs text-slate-400 font-semibold">Pilih Skenario Di Bawah Untuk Melihat Animasi</span>
+          </div>
+        </div>
+
+        <div class="scenario-bar">
+          <button class="scenario-btn active" id="scen-normal" onclick="activateScenario('normal')">
+            <span class="scenario-title"><i data-lucide="check" class="text-emerald-500"></i> Produksi Sukses (OK)</span>
+            <span class="scenario-desc">Material & Component dikonversi jadi SFG/FG dan dikirim ke WHFG.</span>
+          </button>
+          
+          <button class="scenario-btn" id="scen-ng-mat" onclick="activateScenario('ng-mat')">
+            <span class="scenario-title"><i data-lucide="flame" class="text-amber-500"></i> Kasus 1: NG Material</span>
+            <span class="scenario-desc">Resin rusak dimasukkan ke Crusher. Komponen diselamatkan di Produksi.</span>
+          </button>
+
+          <button class="scenario-btn" id="scen-ng-comp" onclick="activateScenario('ng-comp')">
+            <span class="scenario-title"><i data-lucide="alert-triangle" class="text-red-500"></i> Kasus 2: NG Component</span>
+            <span class="scenario-desc">Komponen rusak dikirim ke MATKOM (klaim). Minta Kirim Ulang.</span>
+          </button>
+        </div>
+
+        <div class="flowchart-container">
+          <svg width="100%" height="220" viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg">
+            <!-- WH MATKOM -->
+            <rect x="20" y="70" width="140" height="80" rx="10" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+            <text x="90" y="105" fill="#ffffff" font-size="12" font-weight="bold" font-family="Inter" text-anchor="middle">Gudang MATKOM</text>
+            <text x="90" y="125" fill="#94a3b8" font-size="10" font-family="Inter" text-anchor="middle">(Warehouse 1)</text>
+
+            <!-- GUDANG PRODUKSI -->
+            <rect x="260" y="70" width="150" height="80" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2" id="box-prod"/>
+            <text x="335" y="105" fill="#ffffff" font-size="12" font-weight="bold" font-family="Inter" text-anchor="middle">Gudang Produksi</text>
+            <text x="335" y="125" fill="#3b82f6" font-size="10" font-family="Inter" text-anchor="middle">(Warehouse 2)</text>
+
+            <!-- GUDANG FG -->
+            <rect x="620" y="70" width="150" height="80" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2" id="box-fg"/>
+            <text x="695" y="105" fill="#ffffff" font-size="12" font-weight="bold" font-family="Inter" text-anchor="middle">Gudang FG (WHFG)</text>
+            <text x="695" y="125" fill="#10b981" font-size="10" font-family="Inter" text-anchor="middle">(Warehouse 3)</text>
+
+            <!-- CRUSHER -->
+            <rect x="460" y="10" width="110" height="50" rx="8" fill="#0f172a" stroke="#f59e0b" stroke-width="2" id="box-crusher"/>
+            <text x="515" y="32" fill="#f59e0b" font-size="10" font-weight="bold" font-family="Inter" text-anchor="middle">CRUSHER</text>
+            <text x="515" y="44" fill="#94a3b8" font-size="8" font-family="Inter" text-anchor="middle">(Regrind area)</text>
+
+            <!-- KLAIM SUPPLIER (VENDORS) -->
+            <rect x="180" y="160" width="120" height="50" rx="8" fill="#450a0a" stroke="#ef4444" stroke-width="2" id="box-claim"/>
+            <text x="240" y="185" fill="#ef4444" font-size="10" font-weight="bold" font-family="Inter" text-anchor="middle">RETUR / KLAIM</text>
+            <text x="240" y="197" fill="#fca5a5" font-size="8" font-family="Inter" text-anchor="middle">(Karantina Cacat)</text>
+
+            <!-- FLOW LINES -->
+            <!-- 1. MATKOM -> Produksi (Bahan Baku) -->
+            <path d="M 160 110 L 260 110" stroke="#94a3b8" stroke-width="2" fill="none" marker-end="url(#arrow)" id="line-mat-prod"/>
+            
+            <!-- 2. Produksi -> WHFG (Product OK) -->
+            <path d="M 410 110 L 620 110" stroke="#10b981" stroke-width="3" fill="none" class="flow-line glow-effect" id="line-prod-fg"/>
+            
+            <!-- 3. Produksi -> Crusher (Resin NG) -->
+            <path d="M 335 70 L 335 35 L 460 35" stroke="#f59e0b" stroke-width="2" fill="none" class="flow-line" id="line-prod-crush" style="display: none;"/>
+
+            <!-- 4. Crusher -> Matkom (Regrind Resin) -->
+            <path d="M 515 10 L 515 3 L 90 3 L 90 70" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4" fill="none" id="line-crush-mat" style="display: none;"/>
+
+            <!-- 5. Produksi -> Karantina Klaim (Component NG) -->
+            <path d="M 280 150 L 280 160" stroke="#ef4444" stroke-width="2" fill="none" class="flow-line" id="line-prod-claim" style="display: none;"/>
+
+            <!-- 6. Karantina Klaim -> MATKOM -->
+            <path d="M 180 185 L 90 185 L 90 150" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4" fill="none" id="line-claim-mat" style="display: none;"/>
+
+            <!-- Arrow definition -->
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+              </marker>
+            </defs>
+          </svg>
+        </div>
+
+        <div class="alert-banner alert-info" id="scenario-explanation">
+          <i data-lucide="info" style="flex-shrink: 0;"></i>
+          <div>
+            <strong>Produksi Berjalan Normal (OK):</strong> Semua material Resin (ABS/PP) dan Komponen Logam yang digunakan dihitung secara proporsional. Setelah diproduksi, stok bahan baku di Gudang Produksi (WH 2) dikurangi, dan digantikan oleh penambahan stok Barang Jadi (FG) di Gudang Utama (WHFG).
+          </div>
+        </div>
+      </div>
+
+      <!-- Logic Explanation Card -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-subtitle">Analisis Sistem & Implementasi</span>
+            <h3 class="card-title"><i data-lucide="help-circle"></i> Mengapa Fitur Ini Penting?</h3>
+          </div>
+        </div>
+        
+        <div style="line-height: 1.6; font-size: 0.9rem; space-y-4">
+          <p style="margin-bottom: 1rem">
+            Pada industri plastic injection yang menggunakan <strong>Insert Molding</strong> (misalnya mencetak plastik dudukan kaca spion yang menyatu dengan sekrup logam), sering terjadi kegagalan proses (NG). Kegagalan ini dibagi menjadi dua kategori berdasarkan letak kerusakannya:
+          </p>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem;">
+            <div style="background-color: var(--slate-50); padding: 1.25rem; border-radius: 16px; border: 1px solid var(--slate-200)">
+              <strong style="color: var(--amber-600); display: block; margin-bottom: 0.5rem;">1. Cacat Material (NG Plastik)</strong>
+              Plastik cetakan meluber, kurang matang, atau baret, namun sekrup logam (insert component) di dalamnya **tidak rusak**. Logam tersebut bisa dicabut kembali, dicuci, dan **dipakai lagi** di lantai produksi.<br><br>
+              <strong>Efek Sistem:</strong> Hanya stok Resin yang berkurang permanen. Komponen dikembalikan ke stok lantai produksi (Gudang Produksi). Plastik rijek dihancurkan di Crusher (kembali ke MATKOM sebagai resin gilingan).
+            </div>
+            
+            <div style="background-color: var(--slate-50); padding: 1.25rem; border-radius: 16px; border: 1px solid var(--slate-200)">
+              <strong style="color: var(--red-600); display: block; margin-bottom: 0.5rem;">2. Cacat Komponen (NG Inserts)</strong>
+              Sekrup logam berkarat, bengkok, dratnya dol, atau patah saat proses injection sehingga produk gagal total.<br><br>
+              <strong>Efek Sistem:</strong> Plastik rijek masuk crusher (optional), sementara komponen logam yang cacat **dikembalikan ke Gudang Utama (MATKOM)** untuk diproses klaim ke vendor supplier. Produksi meminta komponen baru ke Gudang MATKOM tanpa memesan resin baru.
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 2: OPERATOR TERMINAL -->
+    <div id="tab-operator-terminal" class="tab-content">
+      <div class="grid-dashboard">
+        
+        <!-- Input Form -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <span class="card-subtitle">Terminal Mesin Molding</span>
+              <h3 class="card-title"><i data-lucide="terminal"></i> Input Realisasi Produksi Harian</h3>
+            </div>
+          </div>
+
+          <form id="molding-realization-form" onsubmit="handleMoldingSubmit(event)">
+            <div class="form-group">
+              <label class="form-label">Pilih Rencana Produksi (PrO) Aktif</label>
+              <select class="form-select" id="op-pro-id" onchange="loadProDetails(this.value)">
+                <option value="PRO-001">PRO/EPU/26/06/0001 - HOLDER MIRROR RH 29702 (Insert Molding)</option>
+                <option value="PRO-002">PRO/EPU/26/06/0002 - COVER MIRROR BACK LH (Standard Molding)</option>
+              </select>
+            </div>
+
+            <!-- PrO detail summary box -->
+            <div style="background-color: var(--slate-50); padding: 1rem; border-radius: 16px; border: 1px solid var(--slate-200); margin-bottom: 1.5rem; display: flex; justify-content: space-between; font-size: 0.8rem;">
+              <div>
+                <span class="text-slate-400 font-bold block" style="font-size: 0.65rem; text-transform: uppercase;">Item Cetak:</span>
+                <span id="op-product-name" class="font-bold text-slate-800">HOLDER MIRROR RH 29702-C0100 SAPTA SC</span>
+              </div>
+              <div style="text-align: right">
+                <span class="text-slate-400 font-bold block" style="font-size: 0.65rem; text-transform: uppercase;">Sisa Target:</span>
+                <span id="op-target-qty" class="font-bold text-slate-800">250 Pcs</span>
+              </div>
+            </div>
+
+            <!-- Dynamic Molding Type Switch -->
+            <div class="switch-container">
+              <div class="switch-label-block">
+                <span class="switch-title">Gunakan Logika Insert Molding</span>
+                <span class="switch-desc">Aktifkan jika produk memiliki part sisipan logam/insert dari BOM.</span>
+              </div>
+              <label class="switch-btn">
+                <input type="checkbox" id="op-insert-molding" checked onchange="toggleInsertSection(this.checked)">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="grid-3col" style="margin-bottom: 1.5rem;">
+              <div class="form-group">
+                <label class="form-label">Qty Hasil OK (Pcs)</label>
+                <input type="number" class="form-input text-center" id="op-qty-ok" value="50" min="0" oninput="calculateCycleTotals()">
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Qty Hasil Cacat/NG (Pcs)</label>
+                <input type="number" class="form-input text-center" id="op-qty-ng" value="10" min="0" oninput="calculateCycleTotals()">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Total Cycle Cetak</label>
+                <input type="text" class="form-input text-center" id="op-total-cycle" value="60" disabled style="background-color: var(--slate-100);">
+              </div>
+            </div>
+
+            <!-- Insert Component Salvage Table -->
+            <div id="insert-salvage-section" style="margin-bottom: 2rem;">
+              <span class="form-label">Audit Komponen Insert dari Qty NG (<span id="ng-cycle-count">10</span> Pcs)</span>
+              
+              <div class="table-container">
+                <table class="table-spec">
+                  <thead>
+                    <tr>
+                      <th>Nama Komponen Insert</th>
+                      <th>Kode Part</th>
+                      <th style="text-align: center;">Komponen Cacat (NG)</th>
+                      <th style="text-align: center;">Komponen Selamat (OK)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <strong>SUB ASSY STAY RH THREAD ASDOM</strong>
+                        <div style="font-size: 0.65rem; color: var(--slate-400); margin-top: 0.25rem;">Pemakaian BOM: 1 Pcs / Product</div>
+                      </td>
+                      <td>EPST-KASDTLBLK</td>
+                      <td style="text-align: center; width: 140px;">
+                        <input type="number" class="form-input text-center" id="comp-ng-qty" value="2" min="0" max="10" oninput="updateSalvageQty(this.value)" style="padding: 0.5rem;">
+                      </td>
+                      <td style="text-align: center; width: 140px;">
+                        <span id="comp-salvaged-qty" class="font-black text-emerald-600" style="font-size: 1.1rem;">8</span> Pcs
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="text-xs text-slate-400 font-medium mt-2" style="display: flex; gap: 0.25rem; align-items: center;">
+                <i data-lucide="help-circle" style="width: 12px; height: 12px;"></i>
+                <span>Komponen yang selamat akan otomatis dikembalikan ke stok lantai produksi (Gudang Produksi).</span>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+              <i data-lucide="check-square"></i>
+              Submit Realisasi Output
+            </button>
+          </form>
+        </div>
+
+        <!-- Stock state details -->
+        <div>
+          <div class="card" style="padding: 1.5rem;">
+            <span class="card-subtitle">Stok Saat Ini (Simulasi)</span>
+            
+            <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+              <div style="border-bottom: 1px solid var(--slate-100); padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
+                <span class="text-slate-400 font-bold block" style="font-size: 0.7rem; text-transform: uppercase;">1. GUDANG PRODUKSI (WH 2)</span>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-top: 0.25rem;">
+                  <span>Resin PP Compound:</span>
+                  <strong id="sim-prod-resin">500 Kg</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-top: 0.25rem;">
+                  <span>Sub Assy Stay:</span>
+                  <strong id="sim-prod-comp">200 Pcs</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-top: 0.25rem;">
+                  <span>Stok WIP OK Spion:</span>
+                  <strong id="sim-prod-wip" class="text-emerald-600">0 Pcs</strong>
+                </div>
+              </div>
+
+              <div style="border-bottom: 1px solid var(--slate-100); padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
+                <span class="text-slate-400 font-bold block" style="font-size: 0.7rem; text-transform: uppercase;">2. GUDANG MATKOM (WH 1)</span>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-top: 0.25rem;">
+                  <span>Resin Regrind (Crusher):</span>
+                  <strong id="sim-matkom-regrind">0 Kg</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-top: 0.25rem;">
+                  <span>Karantina Komponen Rusak:</span>
+                  <strong id="sim-matkom-claim" class="text-red-500">0 Pcs</strong>
+                </div>
+              </div>
+
+              <div>
+                <span class="text-slate-400 font-bold block" style="font-size: 0.7rem; text-transform: uppercase;">3. Draf Kirim Ulang (Replacement)</span>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-top: 0.25rem;">
+                  <span>Status Permintaan:</span>
+                  <strong id="sim-repl-status" class="text-slate-400">TIDAK ADA</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-top: 0.25rem;">
+                  <span>Qty Pengganti Logam:</span>
+                  <strong id="sim-repl-qty">0 Pcs</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card" style="padding: 1.5rem; background-color: var(--slate-900); color: #fff;">
+            <span class="card-subtitle" style="color: var(--slate-500);">Log database simulasi</span>
+            <div id="sim-db-log" class="db-logs" style="margin-top: 0.75rem; max-height: 180px;">
+              // Menunggu aksi operator...
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 3: WAREHOUSE TERMINAL -->
+    <div id="tab-warehouse-terminal" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-subtitle">Terminal Gudang Utama</span>
+            <h3 class="card-title"><i data-lucide="package-open"></i> Log Karantina Retur & Permintaan Pengganti</h3>
+          </div>
+        </div>
+
+        <div class="alert-banner alert-amber">
+          <i data-lucide="alert-circle" style="flex-shrink: 0; margin-top: 0.25rem;"></i>
+          <div>
+            <strong>Pemberitahuan Gudang:</strong> Halaman ini mensimulasikan peran staf di Gudang MATKOM (WH 1). Ketika ada laporan component NG saat molding, sistem otomatis membuat antrean request penggantian agar stok di area produksi kembali sesuai target.
+          </div>
+        </div>
+
+        <h4 style="font-family: var(--font-heading); font-weight: 800; font-size: 1.05rem; margin-bottom: 1rem; color: var(--slate-900);">
+          1. Antrean Pengiriman Komponen Pengganti (Re-issuance Request)
+        </h4>
+
+        <div class="table-container" style="margin-bottom: 2rem;">
+          <table class="table-spec">
+            <thead>
+              <tr>
+                <th>No. Tiket</th>
+                <th>Referensi WO</th>
+                <th>Nama Komponen</th>
+                <th>Kuantitas Cacat</th>
+                <th>Status</th>
+                <th style="text-align: center;">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="wh-replacement-table">
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 2rem;" class="text-slate-400 font-bold uppercase tracking-wider">
+                  Belum ada laporan kerusakan komponen dari operator cetak.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4 style="font-family: var(--font-heading); font-weight: 800; font-size: 1.05rem; margin-bottom: 1rem; color: var(--slate-900);">
+          2. Log Karantina Komponen Cacat (Menunggu Retur Vendor Claim)
+        </h4>
+
+        <div class="table-container">
+          <table class="table-spec">
+            <thead>
+              <tr>
+                <th>Tanggal Masuk</th>
+                <th>Kode Barang</th>
+                <th>Deskripsi Barang</th>
+                <th>No. Lot Produksi</th>
+                <th>Kuantitas</th>
+                <th>Status Karantina</th>
+              </tr>
+            </thead>
+            <tbody id="wh-quarantine-table">
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 2rem;" class="text-slate-400 font-bold uppercase tracking-wider">
+                  Stok karantina kosong.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: AUDIT LOGS -->
+    <div id="tab-audit-logs" class="tab-content">
+      
+      <!-- Crusher logs and regrind records -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-subtitle">Daftar Audit Daur Ulang</span>
+            <h3 class="card-title"><i data-lucide="layers"></i> Log Mesin Crusher & Regrind Resin</h3>
+          </div>
+        </div>
+
+        <div class="table-container">
+          <table class="table-spec">
+            <thead>
+              <tr>
+                <th>ID Log</th>
+                <th>Referensi Hasil Cetak</th>
+                <th>Nama Resin Original</th>
+                <th>Berat Regrind (Kg)</th>
+                <th>Status Log</th>
+                <th>Waktu Crusher</th>
+              </tr>
+            </thead>
+            <tbody id="crusher-log-table">
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 2rem;" class="text-slate-400 font-bold uppercase tracking-wider">
+                  Belum ada aktivitas daur ulang (crusher).
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SQL code structure preview -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-subtitle">Struktur Kode Backend (Express.js)</span>
+            <h3 class="card-title"><i data-lucide="code"></i> Rancangan Skema & Query Logika Baru</h3>
+          </div>
+        </div>
+
+        <div class="db-logs" style="max-height: 400px; font-size: 0.8rem;">
+<span class="comment">// 1. Struktur Skema Database Baru (Tabel Penampung Karantina Klaim)</span>
+<span class="keyword">CREATE TABLE</span> <span class="string">vendor_claims</span> (
+    id <span class="keyword">BIGINT</span> <span class="keyword">PRIMARY KEY AUTO_INCREMENT</span>,
+    production_output_id <span class="keyword">BIGINT</span>,
+    product_id <span class="keyword">BIGINT</span>,
+    qty_ng_component <span class="keyword">INT</span>,
+    status <span class="string">'QUARANTINED'</span> | <span class="string">'RETURNED_TO_VENDOR'</span>,
+    created_at <span class="keyword">TIMESTAMP</span>,
+    updated_at <span class="keyword">TIMESTAMP</span>
+);
+
+<span class="comment">// 2. Query Transaksi untuk Kasus 1: NG Material</span>
+<span class="comment">// Hanya mengurangi Resin di Produksi, mengembalikan Komponen ke Produksi, dan memindahkan Resin NG ke Crusher</span>
+<span class="keyword">START TRANSACTION</span>;
+<span class="comment">-- Potong seluruh material input dari Gudang Produksi</span>
+<span class="keyword">UPDATE</span> warehouse_stocks <span class="keyword">SET</span> qty_stock = qty_stock - <span class="number">0.48</span> <span class="keyword">WHERE</span> product_id = <span class="number">5</span> <span class="keyword">AND</span> warehouse_id = <span class="number">2</span>; <span class="comment">-- Resin</span>
+<span class="keyword">UPDATE</span> warehouse_stocks <span class="keyword">SET</span> qty_stock = qty_stock - <span class="number">10</span> <span class="keyword">WHERE</span> product_id = <span class="number">12</span> <span class="keyword">AND</span> warehouse_id = <span class="number">2</span>; <span class="comment">-- Component</span>
+
+<span class="comment">-- Kembalikan Komponen yang diselamatkan (10 Pcs) ke Gudang Produksi (Net Change = 0)</span>
+<span class="keyword">UPDATE</span> warehouse_stocks <span class="keyword">SET</span> qty_stock = qty_stock + <span class="number">10</span> <span class="keyword">WHERE</span> product_id = <span class="number">12</span> <span class="keyword">AND</span> warehouse_id = <span class="number">2</span>;
+
+<span class="comment">-- Giling Resin plastik NG dan kembalikan ke MATKOM (Regrind)</span>
+<span class="keyword">UPDATE</span> warehouse_stocks <span class="keyword">SET</span> qty_stock = qty_stock + <span class="number">0.48</span> <span class="keyword">WHERE</span> product_id = <span class="number">5</span> <span class="keyword">AND</span> warehouse_id = <span class="number">1</span>;
+<span class="keyword">INSERT INTO</span> crusher_logs (production_output_id, component_product_id, qty_ng_component, qty_regrind_resin, action)
+<span class="keyword">VALUES</span> (<span class="number">14</span>, <span class="keyword">NULL</span>, <span class="number">0</span>, <span class="number">0.48</span>, <span class="string">'Crushed and Returned to Matkom (Regrind)'</span>);
+<span class="keyword">COMMIT</span>;
+
+<span class="comment">// 3. Query Transaksi untuk Kasus 2: NG Component</span>
+<span class="comment">// Komponen cacat dikembalikan ke MATKOM (karantina klaim) dan dibuatkan antrean re-issuance (Kirim Ulang)</span>
+<span class="keyword">START TRANSACTION</span>;
+<span class="comment">-- Komponen Cacat (2 Pcs) dikembalikan ke MATKOM Karantina</span>
+<span class="keyword">UPDATE</span> warehouse_stocks <span class="keyword">SET</span> qty_stock = qty_stock + <span class="number">2</span> <span class="keyword">WHERE</span> product_id = <span class="number">12</span> <span class="keyword">AND</span> warehouse_id = <span class="number">1</span>; <span class="comment">-- Stok Karantina Vendor</span>
+<span class="keyword">INSERT INTO</span> vendor_claims (production_output_id, product_id, qty_ng_component, status) 
+<span class="keyword">VALUES</span> (<span class="number">15</span>, <span class="number">12</span>, <span class="number">2</span>, <span class="string">'QUARANTINED'</span>);
+
+<span class="comment">-- Buat tiket permintaan kirim ulang di sistem</span>
+<span class="keyword">INSERT INTO</span> material_issuance_replacements (wo_id, product_id, qty_requested, status) 
+<span class="keyword">VALUES</span> (<span class="number">3</span>, <span class="number">12</span>, <span class="number">2</span>, <span class="string">'PENDING'</span>);
+<span class="keyword">COMMIT</span>;
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Modal barcode scanner simulator for warehouse -->
+  <div class="modal-backdrop" id="barcode-modal">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3 class="modal-title" style="font-family: var(--font-heading); font-weight: 900; font-size: 1.15rem;">
+          <i data-lucide="scan-line" class="text-emerald-600"></i> Verifikasi Pengiriman Barang Pengganti
+        </h3>
+        <button class="btn btn-secondary" onclick="closeModal()" style="width: auto; padding: 0.5rem 0.75rem; border-radius: 10px;">[X]</button>
+      </div>
+
+      <div class="alert-banner alert-info">
+        <i data-lucide="info" style="flex-shrink: 0;"></i>
+        <div>
+          Scan lot material barcode dengan format <code style="font-family: var(--font-mono); font-weight: bold; background: rgba(0,0,0,0.05); padding: 2px 4px; border-radius: 4px;">[KODE_BARANG]|[NO_LOT]|[QTY]</code> untuk memotong stok riil MATKOM dan mengirimkannya ke area Produksi.
+        </div>
+      </div>
+
+      <form onsubmit="handleBarcodeSubmit(event)">
+        <input type="hidden" id="modal-repl-id">
+        <div class="form-group">
+          <label class="form-label">Kode & Nama Barang</label>
+          <input type="text" class="form-input" id="modal-product-info" disabled style="background-color: var(--slate-100);">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Kuantitas Kirim Ulang</label>
+          <input type="text" class="form-input" id="modal-qty-info" disabled style="background-color: var(--slate-100);">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Scan Barcode Label Lot</label>
+          <div style="display: flex; gap: 0.5rem;">
+            <input type="text" class="form-input" id="modal-barcode-input" placeholder="Tembak barcode di sini..." required>
+            <button type="button" class="btn btn-secondary" onclick="simulateBarcode()" style="width: auto; white-space: nowrap;">Simulasi Scan</button>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+          <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+          <button type="submit" class="btn btn-emerald">Kirim Pengganti</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // In-memory simulation state
+    let state = {
+      stocks: {
+        matkom: {
+          resin: 2500, // Kg
+          comp: 1500,  // Pcs
+          regrind: 0,  // Kg (from crusher)
+          claim: 0     // Pcs (NG components quarantined)
+        },
+        prod: {
+          resin: 500,  // Kg
+          comp: 200,   // Pcs
+          wip: 0       // Pcs OK WIP produced
+        },
+        fg: 1200,      // Pcs Finished Goods
+      },
+      replacements: [],
+      crusherLogs: [],
+      quarantines: [],
+      lastTicketId: 100,
+      lastLogId: 500
+    };
+
+    // Load initial stock numbers on screen
+    updateStockDisplay();
+
+    function updateStockDisplay() {
+      // Summary cards
+      document.getElementById('stock-matkom-resin').innerHTML = `${state.stocks.matkom.resin.toLocaleString()} <span class="stock-badge-unit">Kg</span>`;
+      document.getElementById('stock-matkom-comp').innerHTML = `${state.stocks.matkom.comp.toLocaleString()} <span class="stock-badge-unit">Pcs (Insert)</span>`;
+      
+      document.getElementById('stock-prod-resin').innerHTML = `${state.stocks.prod.resin.toLocaleString()} <span class="stock-badge-unit">Kg</span>`;
+      document.getElementById('stock-prod-comp').innerHTML = `${state.stocks.prod.comp.toLocaleString()} <span class="stock-badge-unit">Pcs (Insert)</span>`;
+      
+      document.getElementById('stock-fg').innerHTML = `${state.stocks.fg.toLocaleString()} <span class="stock-badge-unit">Set FG</span>`;
+      document.getElementById('stock-crusher').innerText = `${state.stocks.matkom.regrind} Kg`;
+      document.getElementById('stock-claim').innerText = `${state.stocks.matkom.claim} Pcs`;
+
+      // Simulator stocks sidebar/detail
+      document.getElementById('sim-prod-resin').innerText = `${state.stocks.prod.resin} Kg`;
+      document.getElementById('sim-prod-comp').innerText = `${state.stocks.prod.comp} Pcs`;
+      document.getElementById('sim-prod-wip').innerText = `${state.stocks.prod.wip} Pcs`;
+      document.getElementById('sim-matkom-regrind').innerText = `${state.stocks.matkom.regrind} Kg`;
+      document.getElementById('sim-matkom-claim').innerText = `${state.stocks.matkom.claim} Pcs`;
+
+      // Replacements status
+      const activeRepl = state.replacements.find(r => r.status === 'PENDING');
+      if (activeRepl) {
+        document.getElementById('sim-repl-status').innerText = 'MENUNGGU KIRIM';
+        document.getElementById('sim-repl-status').className = 'text-amber-500';
+        document.getElementById('sim-repl-qty').innerText = `${activeRepl.qty} Pcs`;
+      } else {
+        document.getElementById('sim-repl-status').innerText = 'TIDAK ADA';
+        document.getElementById('sim-repl-status').className = 'text-slate-400';
+        document.getElementById('sim-repl-qty').innerText = '0 Pcs';
+      }
+    }
+
+    function switchTab(tabId, el) {
+      // Deactivate all menus
+      document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+      // Activate clicked
+      el.classList.add('active');
+
+      // Hide all contents
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      // Show target
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+    }
+
+    function resetSimulator() {
+      state.stocks.matkom.resin = 2500;
+      state.stocks.matkom.comp = 1500;
+      state.stocks.matkom.regrind = 0;
+      state.stocks.matkom.claim = 0;
+      state.stocks.prod.resin = 500;
+      state.stocks.prod.comp = 200;
+      state.stocks.prod.wip = 0;
+      state.stocks.fg = 1200;
+      state.replacements = [];
+      state.crusherLogs = [];
+      state.quarantines = [];
+      
+      updateStockDisplay();
+      renderTables();
+      
+      document.getElementById('sim-db-log').innerHTML = '// Simulator berhasil di-reset.';
+      alert('Simulator stok berhasil dikembalikan ke posisi awal!');
+    }
+
+    function loadProDetails(proCode) {
+      if (proCode === 'PRO-001') {
+        document.getElementById('op-product-name').innerText = 'HOLDER MIRROR RH 29702-C0100 SAPTA SC';
+        document.getElementById('op-target-qty').innerText = '250 Pcs';
+        document.getElementById('op-insert-molding').checked = true;
+        toggleInsertSection(true);
+      } else {
+        document.getElementById('op-product-name').innerText = 'COVER MIRROR BACK LH (PLASTIC ONLY)';
+        document.getElementById('op-target-qty').innerText = '400 Pcs';
+        document.getElementById('op-insert-molding').checked = false;
+        toggleInsertSection(false);
+      }
+      calculateCycleTotals();
+    }
+
+    function toggleInsertSection(checked) {
+      const section = document.getElementById('insert-salvage-section');
+      if (checked) {
+        section.style.display = 'block';
+      } else {
+        section.style.display = 'none';
+      }
+    }
+
+    function calculateCycleTotals() {
+      const qtyOk = Number(document.getElementById('op-qty-ok').value) || 0;
+      const qtyNg = Number(document.getElementById('op-qty-ng').value) || 0;
+      document.getElementById('op-total-cycle').value = qtyOk + qtyNg;
+      
+      // Update maximum of component NG based on qty NG
+      document.getElementById('ng-cycle-count').innerText = qtyNg;
+      document.getElementById('comp-ng-qty').max = qtyNg;
+      
+      // If component NG exceeds total NG, adjust down
+      if (Number(document.getElementById('comp-ng-qty').value) > qtyNg) {
+        document.getElementById('comp-ng-qty').value = qtyNg;
+      }
+      
+      updateSalvageQty(document.getElementById('comp-ng-qty').value);
+    }
+
+    function updateSalvageQty(ngVal) {
+      const qtyNg = Number(document.getElementById('op-qty-ng').value) || 0;
+      const compNg = Number(ngVal) || 0;
+      const salvaged = Math.max(0, qtyNg - compNg);
+      document.getElementById('comp-salvaged-qty').innerText = salvaged;
+    }
+
+    // Handles the molding report from Operator Terminal
+    function handleMoldingSubmit(e) {
+      e.preventDefault();
+      
+      const proSelect = document.getElementById('op-pro-id');
+      const proCode = proSelect.options[proSelect.selectedIndex].text.split(' - ')[0];
+      const isInsert = document.getElementById('op-insert-molding').checked;
+      
+      const qtyOk = Number(document.getElementById('op-qty-ok').value) || 0;
+      const qtyNg = Number(document.getElementById('op-qty-ng').value) || 0;
+      const compNg = isInsert ? (Number(document.getElementById('comp-ng-qty').value) || 0) : 0;
+      const compSalvaged = Math.max(0, qtyNg - compNg);
+
+      if (qtyOk <= 0 && qtyNg <= 0) {
+        alert('Realisasi qty harus di atas 0!');
+        return;
+      }
+
+      // Check stock availability in Gudang Produksi before running
+      const resinPerCycle = 0.048; // Kg
+      const totalResinNeeded = (qtyOk + qtyNg) * resinPerCycle;
+      const totalCompNeeded = isInsert ? (qtyOk + qtyNg) : 0;
+
+      if (state.stocks.prod.resin < totalResinNeeded) {
+        alert(`Gagal! Stok Resin di Produksi tidak mencukupi. Dibutuhkan: ${totalResinNeeded.toFixed(2)} Kg, Tersedia: ${state.stocks.prod.resin} Kg.`);
+        return;
+      }
+
+      if (isInsert && state.stocks.prod.comp < totalCompNeeded) {
+        alert(`Gagal! Stok Komponen Logam di Produksi tidak mencukupi. Dibutuhkan: ${totalCompNeeded} Pcs, Tersedia: ${state.stocks.prod.comp} Pcs.`);
+        return;
+      }
+
+      // Stock deduction updates (Produksi Floor)
+      state.stocks.prod.resin -= totalResinNeeded;
+      if (isInsert) {
+        state.stocks.prod.comp -= totalCompNeeded;
+      }
+
+      // 1. WIP OK goes to Produksi floor stock
+      state.stocks.prod.wip += qtyOk;
+
+      let logMessage = `// REALISASI TRANSAKSI SUBMITTED [${proCode}]\n`;
+      logMessage += `DEDUCT Stock Prod Resin: <span class="number">${totalResinNeeded.toFixed(2)}</span> Kg\n`;
+      if (isInsert) {
+        logMessage += `DEDUCT Stock Prod Insert: <span class="number">${totalCompNeeded}</span> Pcs\n`;
+      }
+      logMessage += `ADD Stock Prod WIP OK: <span class="number">${qtyOk}</span> Pcs\n`;
+
+      // 2. NG Material (Resin goes to crusher regrind)
+      if (qtyNg > 0) {
+        const resinRegrindQty = qtyNg * resinPerCycle;
+        state.stocks.matkom.regrind += resinRegrindQty; // Add to regrind stock in WH Matkom
+        
+        // Log to crusher
+        const newLogId = ++state.lastLogId;
+        state.crusherLogs.push({
+          id: `CL-${newLogId}`,
+          proRef: proCode,
+          originalResin: 'PP COMPOUND (EPPP-MCOMPONRC)',
+          weight: resinRegrindQty,
+          status: 'SUCCESS_REGRIND',
+          time: new Date().toLocaleTimeString()
+        });
+
+        logMessage += `<span class="success-mark">✓</span> CRUSHER: Resin NG ${resinRegrindQty.toFixed(2)} Kg dihancurkan & kembali ke MATKOM sebagai regrind.\n`;
+
+        // 3. Component Salvage / Damaged
+        if (isInsert) {
+          // Components salvaged (stay in Produksi)
+          state.stocks.prod.comp += compSalvaged;
+          logMessage += `<span class="success-mark">✓</span> SALVAGE: ${compSalvaged} Pcs komponen insert diselamatkan kembali di Gudang Produksi.\n`;
+
+          // Components NG (returned to WH Matkom for claim)
+          if (compNg > 0) {
+            state.stocks.matkom.claim += compNg; // Quarantined at Matkom
+            
+            state.quarantines.push({
+              date: new Date().toISOString().split('T')[0],
+              code: 'EPST-KASDTLBLK',
+              name: 'SUB ASSY STAY RH THREAD ASDOM',
+              lot: `LOT-${new Date().getFullYear()}${(new Date().getMonth()+1)}-NG`,
+              qty: compNg,
+              status: 'QUARANTINED'
+            });
+
+            // Trigger re-issuance request ticket
+            const newTicketId = ++state.lastTicketId;
+            state.replacements.push({
+              id: `REQ-${newTicketId}`,
+              woRef: `WO/EPU/26/06/0001`,
+              productName: 'SUB ASSY STAY RH THREAD ASDOM',
+              productCode: 'EPST-KASDTLBLK',
+              qty: compNg,
+              status: 'PENDING'
+            });
+
+            logMessage += `<span class="error-mark">✗</span> CLAIM: ${compNg} Pcs komponen logam rusak dimasukkan ke Karantina MATKOM. Tiket kirim ulang REQ-${newTicketId} dibuat.\n`;
+          }
+        }
+      }
+
+      document.getElementById('sim-db-log').innerHTML = logMessage;
+      
+      updateStockDisplay();
+      renderTables();
+      alert('Transaksi realisasi output mesin berhasil di-submit!');
+    }
+
+    function renderTables() {
+      // Render Warehouse replacements
+      const replBody = document.getElementById('wh-replacement-table');
+      if (state.replacements.length === 0) {
+        replBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2rem;" class="text-slate-400 font-bold uppercase tracking-wider">Belum ada laporan kerusakan komponen dari operator cetak.</td></tr>`;
+      } else {
+        replBody.innerHTML = state.replacements.map(r => `
+          <tr>
+            <td><strong>${r.id}</strong></td>
+            <td><span class="status-badge status-slate">${r.woRef}</span></td>
+            <td>
+              <strong>${r.productName}</strong>
+              <div style="font-size: 0.7rem; color: var(--slate-400); margin-top: 0.1rem;">Code: ${r.productCode}</div>
+            </td>
+            <td style="text-align: center;"><strong>${r.qty} Pcs</strong></td>
+            <td>
+              <span class="status-badge ${r.status === 'PENDING' ? 'status-amber' : 'status-emerald'}">
+                <i data-lucide="${r.status === 'PENDING' ? 'clock' : 'check-circle'}" style="width: 10px; height: 10px;"></i> ${r.status}
+              </span>
+            </td>
+            <td style="text-align: center;">
+              ${r.status === 'PENDING' 
+                ? `<button class="btn btn-emerald" onclick="openReplacementModal('${r.id}', '${r.productCode}', '${r.productName}', ${r.qty})" style="padding: 0.5rem 1rem; font-size: 0.7rem; width: auto; border-radius: 8px;">Kirim Pengganti</button>` 
+                : `<span class="text-xs text-emerald-600 font-bold">Terkirim</span>`
+              }
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      // Render Warehouse quarantines
+      const quarBody = document.getElementById('wh-quarantine-table');
+      if (state.quarantines.length === 0) {
+        quarBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2rem;" class="text-slate-400 font-bold uppercase tracking-wider">Stok karantina kosong.</td></tr>`;
+      } else {
+        quarBody.innerHTML = state.quarantines.map(q => `
+          <tr>
+            <td>${q.date}</td>
+            <td><code style="font-family: var(--font-mono); font-size: 0.75rem;">${q.code}</code></td>
+            <td><strong>${q.name}</strong></td>
+            <td>${q.lot}</td>
+            <td><strong class="text-red-500">${q.qty} Pcs</strong></td>
+            <td><span class="status-badge status-red">Karantina Klaim</span></td>
+          </tr>
+        `).join('');
+      }
+
+      // Render Crusher logs
+      const crushBody = document.getElementById('crusher-log-table');
+      if (state.crusherLogs.length === 0) {
+        crushBody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 2rem;" class="text-slate-400 font-bold uppercase tracking-wider">Belum ada aktivitas daur ulang (crusher).</td></tr>`;
+      } else {
+        crushBody.innerHTML = state.crusherLogs.map(c => `
+          <tr>
+            <td><strong>${c.id}</strong></td>
+            <td><span class="status-badge status-blue">${c.proRef}</span></td>
+            <td>${c.originalResin}</td>
+            <td><strong>${c.weight.toFixed(2)} Kg</strong></td>
+            <td><span class="status-badge status-emerald">Crushed OK</span></td>
+            <td>${c.time}</td>
+          </tr>
+        `).join('');
+      }
+
+      // Reinitialize Lucide icons in generated HTML
+      lucide.createIcons();
+    }
+
+    // Modal barcode functions
+    function openReplacementModal(id, code, name, qty) {
+      document.getElementById('modal-repl-id').value = id;
+      document.getElementById('modal-product-info').value = `${code} - ${name}`;
+      document.getElementById('modal-qty-info').value = `${qty} Pcs`;
+      document.getElementById('modal-barcode-input').value = '';
+      
+      document.getElementById('barcode-modal').classList.add('open');
+    }
+
+    function closeModal() {
+      document.getElementById('barcode-modal').classList.remove('open');
+    }
+
+    function simulateBarcode() {
+      const code = document.getElementById('modal-product-info').value.split(' - ')[0];
+      const qty = document.getElementById('modal-qty-info').value.split(' ')[0];
+      const lotNo = `LOT-${new Date().getFullYear()}${String(new Date().getMonth()+1).padStart(2,'0')}-00${Math.floor(Math.random()*9)+1}`;
+      
+      document.getElementById('modal-barcode-input').value = `${code}|${lotNo}|${qty}`;
+    }
+
+    function handleBarcodeSubmit(e) {
+      e.preventDefault();
+      const id = document.getElementById('modal-repl-id').value;
+      const barcode = document.getElementById('modal-barcode-input').value;
+      const parts = barcode.split('|');
+
+      if (parts.length < 3) {
+        alert('Format barcode tidak valid! Harus: [KodeBarang]|[NoLot]|[Kuantitas]');
+        return;
+      }
+
+      const [itemCode, lotNo, qtyStr] = parts;
+      const qty = Number(qtyStr) || 0;
+
+      // Find the replacement ticket
+      const replIndex = state.replacements.findIndex(r => r.id === id);
+      if (replIndex === -1) return;
+      const ticket = state.replacements[replIndex];
+
+      if (itemCode.toUpperCase() !== ticket.productCode.toUpperCase()) {
+        alert(`Kesalahan Barcode! Kode barang "${itemCode}" tidak cocok dengan permintaan "${ticket.productCode}".`);
+        return;
+      }
+
+      if (state.stocks.matkom.comp < qty) {
+        alert(`Gagal! Stok komponen utama di MATKOM tidak cukup untuk pengiriman ulang. Tersedia: ${state.stocks.matkom.comp} Pcs.`);
+        return;
+      }
+
+      // Process stock deduction in MATKOM and transfer to Gudang Produksi
+      state.stocks.matkom.comp -= qty;
+      state.stocks.prod.comp += qty;
+
+      // Update ticket status
+      state.replacements[replIndex].status = 'SHIPPED';
+
+      updateStockDisplay();
+      renderTables();
+      closeModal();
+      
+      // Update Operator page log if present
+      document.getElementById('sim-db-log').innerHTML += `\n// PENGIRIMAN UANG KOMPONEN SUKSES\nMATKOM deduct: <span class="number">${qty}</span> Pcs\nPROD add: <span class="number">${qty}</span> Pcs\n`;
+      
+      alert(`Berhasil mengirimkan ${qty} Pcs komponen pengganti ke Gudang Produksi!`);
+    }
+
+    // Active visual flow scenario transitions
+    function activateScenario(type) {
+      // Toggle scenario button UI
+      document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`scen-${type}`).classList.add('active');
+
+      const expl = document.getElementById('scenario-explanation');
+      
+      // Hide all dynamic flow paths by default
+      document.getElementById('line-prod-crush').style.display = 'none';
+      document.getElementById('line-crush-mat').style.display = 'none';
+      document.getElementById('line-prod-claim').style.display = 'none';
+      document.getElementById('line-claim-mat').style.display = 'none';
+      
+      // Default lines resets
+      document.getElementById('line-prod-fg').setAttribute('stroke', '#10b981');
+      document.getElementById('box-prod').setAttribute('stroke', '#3b82f6');
+
+      if (type === 'normal') {
+        document.getElementById('line-prod-fg').style.display = 'block';
+        expl.className = 'alert-banner alert-info';
+        expl.innerHTML = `<i data-lucide="info" style="flex-shrink:0;"></i><div><strong>Produksi Berjalan Normal (OK):</strong> Semua material Resin (ABS/PP) dan Komponen Logam yang digunakan dihitung secara proporsional. Setelah diproduksi, stok bahan baku di Gudang Produksi (WH 2) dikurangi, dan digantikan oleh penambahan stok Barang Jadi (FG) di Gudang Utama (WHFG).</div>`;
+      } 
+      else if (type === 'ng-mat') {
+        document.getElementById('line-prod-fg').setAttribute('stroke', '#cbd5e1'); // dimmer FG line
+        document.getElementById('line-prod-crush').style.display = 'block';
+        document.getElementById('line-crush-mat').style.display = 'block';
+        
+        expl.className = 'alert-banner alert-amber';
+        expl.innerHTML = `<i data-lucide="flame" style="flex-shrink:0;"></i><div><strong>Logika Kasus 1: NG Material (Plastik Cacat, Logam OK):</strong> Kegagalan terletak pada lelehan plastik. Komponen insert logam dicopot dan <em>tetap berada di Gudang Produksi</em> untuk dipakai ulang (tidak dibuang). Plastik cacat dimasukkan ke Crusher, lalu dikirim kembali ke MATKOM sebagai resin gilingan (Regrind).</div>`;
+      } 
+      else if (type === 'ng-comp') {
+        document.getElementById('line-prod-fg').setAttribute('stroke', '#cbd5e1');
+        document.getElementById('line-prod-claim').style.display = 'block';
+        document.getElementById('line-claim-mat').style.display = 'block';
+        
+        expl.className = 'alert-banner alert-red';
+        expl.innerHTML = `<i data-lucide="alert-triangle" style="flex-shrink:0;"></i><div><strong>Logika Kasus 2: NG Component (Logam Cacat):</strong> Logam insert rusak saat injection. Operator memisahkan logam tersebut dan <em>mengembalikannya ke MATKOM (Karantina Klaim)</em>. Sistem otomatis memicu antrean tiket penggantian agar MATKOM mengirimkan insert logam baru untuk melanjutkan target WO.</div>`;
+      }
+
+      // Re-trigger icons in explanation banner
+      lucide.createIcons();
+    }
+  </script>
+
+</body>
+</html>

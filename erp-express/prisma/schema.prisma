@@ -1,0 +1,2046 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model adjusted_products {
+  id            BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+  adjustment_id BigInt      @db.UnsignedBigInt
+  product_id    BigInt      @db.UnsignedBigInt
+  quantity      Int
+  type          String      @db.VarChar(255)
+  created_at    DateTime?   @db.Timestamp(0)
+  updated_at    DateTime?   @db.Timestamp(0)
+  adjustments   adjustments @relation(fields: [adjustment_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "adjusted_products_adjustment_id_foreign")
+
+  @@index([adjustment_id], map: "adjusted_products_adjustment_id_foreign")
+}
+
+model adjustments {
+  id                BigInt              @id @default(autoincrement()) @db.UnsignedBigInt
+  date              DateTime            @db.Date
+  reference         String              @db.VarChar(255)
+  note              String?             @db.Text
+  created_at        DateTime?           @db.Timestamp(0)
+  updated_at        DateTime?           @db.Timestamp(0)
+  adjusted_products adjusted_products[]
+}
+
+model approval_request_logs {
+  id                  Int                          @id @default(autoincrement()) @db.UnsignedInt
+  approval_request_id BigInt                       @db.UnsignedBigInt
+  user_id             BigInt?                      @db.UnsignedBigInt
+  action              approval_request_logs_action
+  comment             String?                      @db.Text
+  level               Int?                         @db.UnsignedInt
+  created_at          DateTime?                    @db.Timestamp(0)
+  updated_at          DateTime?                    @db.Timestamp(0)
+}
+
+model approval_requests {
+  id                Int                      @id @default(autoincrement())
+  requestable_type  String?                  @db.VarChar(255)
+  requestable_id    BigInt?                  @db.UnsignedBigInt
+  approval_types_id BigInt                   @db.UnsignedBigInt
+  approval_rules_id BigInt?                  @db.UnsignedBigInt
+  amount            Decimal                  @db.Decimal(20, 2)
+  current_level     Int?                     @db.UnsignedInt
+  status            approval_requests_status
+  created_by        BigInt?                  @db.UnsignedBigInt
+  created_at        DateTime?                @db.Timestamp(0)
+  updated_at        DateTime?                @db.Timestamp(0)
+}
+
+model approval_rule_levels {
+  id                  BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
+  approval_rules_id   BigInt                @db.UnsignedBigInt
+  level               String                @db.VarChar(255)
+  amount_limit        Decimal               @db.Decimal(15, 0)
+  is_active           Boolean
+  created_at          DateTime              @db.Timestamp(0)
+  updated_at          DateTime              @db.Timestamp(0)
+  approval_rule_users approval_rule_users[]
+
+  @@index([approval_rules_id], map: "approval_rules_id")
+}
+
+model approval_rule_users {
+  id                      BigInt                   @id @default(autoincrement()) @db.UnsignedBigInt
+  approval_rule_levels_id BigInt                   @db.UnsignedBigInt
+  user_id                 BigInt                   @db.UnsignedBigInt
+  role                    approval_rule_users_role
+  sequence                Int                      @default(0)
+  is_active               Boolean                  @default(true)
+  created_at              DateTime?                @db.Timestamp(0)
+  updated_at              DateTime?                @db.Timestamp(0)
+  approval_rule_levels    approval_rule_levels     @relation(fields: [approval_rule_levels_id], references: [id], onUpdate: Restrict, map: "fk_approval_rule_level")
+
+  @@index([approval_rule_levels_id], map: "categories_category_code_unique")
+  @@index([user_id], map: "user_id")
+}
+
+model approval_rules {
+  id                BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  approval_types_id BigInt    @unique(map: "approval_type_id") @db.UnsignedBigInt
+  rule_name         String?   @db.VarChar(255)
+  is_active         Boolean
+  created_at        DateTime? @db.Timestamp(0)
+  updated_at        DateTime? @db.Timestamp(0)
+
+  @@index([approval_types_id], map: "categories_category_code_unique")
+}
+
+model approval_types {
+  id            BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  approval_code String    @unique(map: "categories_category_code_unique") @db.VarChar(255)
+  approval_name String    @db.VarChar(255)
+  created_at    DateTime? @db.Timestamp(0)
+  updated_at    DateTime? @db.Timestamp(0)
+}
+
+model budget_details {
+  id               BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  master_budget_id BigInt     @db.UnsignedBigInt
+  category_id      BigInt     @db.UnsignedBigInt
+  category_name    String     @db.VarChar(255)
+  budget           Decimal    @db.Decimal(15, 0)
+  percentage       Decimal    @default(0.00) @db.Decimal(8, 2)
+  used_amount      Decimal    @default(0.00) @db.Decimal(15, 2)
+  created_at       DateTime   @db.Timestamp(0)
+  updated_at       DateTime   @db.Timestamp(0)
+  categories       categories @relation(fields: [category_id], references: [id], onUpdate: Restrict, map: "budget_details_categories_id")
+
+  @@unique([master_budget_id, category_id], map: "master_budget_id")
+  @@index([category_id], map: "budget_details_categories_id")
+}
+
+model categories {
+  id                                BigInt                              @id @default(autoincrement()) @db.UnsignedBigInt
+  category_code                     String                              @unique(map: "categories_category_code_unique") @db.VarChar(255)
+  category_name                     String                              @db.VarChar(255)
+  created_at                        DateTime?                           @db.Timestamp(0)
+  updated_at                        DateTime?                           @db.Timestamp(0)
+  budget_details                    budget_details[]
+  products                          products[]
+  purchase_budget_allocations       purchase_budget_allocations[]
+  user_product_group_has_categories user_product_group_has_categories[]
+}
+
+model currencies {
+  id                 BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  currency_name      String          @db.VarChar(255)
+  code               String          @db.VarChar(255)
+  symbol             String          @db.VarChar(255)
+  thousand_separator String          @db.VarChar(255)
+  decimal_separator  String          @db.VarChar(255)
+  exchange_rate      Int?
+  created_at         DateTime?       @db.Timestamp(0)
+  updated_at         DateTime?       @db.Timestamp(0)
+  bank_accounts      bank_accounts[]
+}
+
+model customers {
+  id             BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  customer_name  String         @db.VarChar(255)
+  customer_email String         @db.VarChar(255)
+  customer_phone String         @db.VarChar(255)
+  city           String         @db.VarChar(255)
+  country        String         @db.VarChar(255)
+  address        String         @db.Text
+  created_at     DateTime?      @db.Timestamp(0)
+  updated_at     DateTime?      @db.Timestamp(0)
+  quotations     quotations[]
+  sale_returns   sale_returns[]
+  sales          sales[]
+}
+
+model departments {
+  id              BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+  department_code String       @unique(map: "categories_category_code_unique") @db.VarChar(255)
+  department_name String       @db.VarChar(255)
+  created_at      DateTime?    @db.Timestamp(0)
+  updated_at      DateTime?    @db.Timestamp(0)
+  warehouses      warehouses[]
+}
+
+model expense_categories {
+  id                   BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  category_name        String     @db.VarChar(255)
+  category_description String?    @db.Text
+  created_at           DateTime?  @db.Timestamp(0)
+  updated_at           DateTime?  @db.Timestamp(0)
+  expenses             expenses[]
+}
+
+model expenses {
+  id                 BigInt             @id @default(autoincrement()) @db.UnsignedBigInt
+  category_id        BigInt             @db.UnsignedBigInt
+  date               DateTime           @db.Date
+  reference          String             @db.VarChar(255)
+  details            String?            @db.Text
+  amount             Int
+  created_at         DateTime?          @db.Timestamp(0)
+  updated_at         DateTime?          @db.Timestamp(0)
+  expense_categories expense_categories @relation(fields: [category_id], references: [id], onUpdate: NoAction, map: "expenses_category_id_foreign")
+
+  @@index([category_id], map: "expenses_category_id_foreign")
+}
+
+model failed_jobs {
+  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid       String   @unique(map: "failed_jobs_uuid_unique") @db.VarChar(255)
+  connection String   @db.Text
+  queue      String   @db.Text
+  payload    String   @db.LongText
+  exception  String   @db.LongText
+  failed_at  DateTime @default(now()) @db.Timestamp(0)
+}
+
+model master_budget {
+  id                  Int                  @id @default(autoincrement())
+  no_budgeting        String               @db.VarChar(255)
+  tgl_penyusunan      DateTime             @db.Date
+  bulan               String               @db.VarChar(255)
+  periode_awal        DateTime             @db.Date
+  periode_akhir       DateTime             @db.Date
+  department_id       BigInt
+  is_mandatory        Boolean              @default(false)
+  description         String?              @db.Text
+  grandtotal          Decimal              @db.Decimal(18, 0)
+  total_percentage    Decimal              @default(0.00) @db.Decimal(8, 2)
+  target_sales_id     BigInt?              @db.UnsignedBigInt
+  target_sales_amount Decimal              @default(0.00) @db.Decimal(15, 2)
+  used_amount         Decimal              @db.Decimal(18, 0)
+  reserved_amount     Decimal              @db.Decimal(18, 0)
+  status              master_budget_status
+  approval_request_id BigInt?              @db.UnsignedBigInt
+  created_at          DateTime             @db.Timestamp(0)
+  updated_at          DateTime             @db.Timestamp(0)
+  created_by          Int?
+  target_sales        target_sales?        @relation(fields: [target_sales_id], references: [id], onUpdate: NoAction, map: "master_budget_target_sales_id_foreign")
+
+  @@index([target_sales_id], map: "master_budget_target_sales_id_foreign")
+}
+
+model media {
+  id                    BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  model_type            String    @db.VarChar(255)
+  model_id              BigInt    @db.UnsignedBigInt
+  uuid                  String?   @unique(map: "media_uuid_unique") @db.Char(36)
+  collection_name       String    @db.VarChar(255)
+  name                  String    @db.VarChar(255)
+  file_name             String    @db.VarChar(255)
+  mime_type             String?   @db.VarChar(255)
+  disk                  String    @db.VarChar(255)
+  conversions_disk      String?   @db.VarChar(255)
+  size                  BigInt    @db.UnsignedBigInt
+  manipulations         Json
+  custom_properties     Json
+  generated_conversions Json
+  responsive_images     Json
+  order_column          Int?      @db.UnsignedInt
+  created_at            DateTime? @db.Timestamp(0)
+  updated_at            DateTime? @db.Timestamp(0)
+
+  @@index([model_type, model_id], map: "media_model_type_model_id_index")
+}
+
+model migrations {
+  id        Int    @id @default(autoincrement()) @db.UnsignedInt
+  migration String @db.VarChar(255)
+  batch     Int
+}
+
+model model_has_permissions {
+  permission_id BigInt      @db.UnsignedBigInt
+  model_type    String      @db.VarChar(255)
+  model_id      BigInt      @db.UnsignedBigInt
+  permissions   permissions @relation(fields: [permission_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "model_has_permissions_permission_id_foreign")
+
+  @@id([permission_id, model_id, model_type])
+  @@index([model_id, model_type], map: "model_has_permissions_model_id_model_type_index")
+}
+
+model model_has_roles {
+  role_id    BigInt @db.UnsignedBigInt
+  model_type String @db.VarChar(255)
+  model_id   BigInt @db.UnsignedBigInt
+  roles      roles  @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "model_has_roles_role_id_foreign")
+
+  @@id([role_id, model_id, model_type])
+  @@index([model_id, model_type], map: "model_has_roles_model_id_model_type_index")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model password_resets {
+  email      String    @db.VarChar(255)
+  token      String    @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+
+  @@index([email], map: "password_resets_email_index")
+  @@ignore
+}
+
+model permissions {
+  id                               BigInt                             @id @default(autoincrement()) @db.UnsignedBigInt
+  name                             String                             @db.VarChar(255)
+  guard_name                       String                             @db.VarChar(255)
+  created_at                       DateTime?                          @db.Timestamp(0)
+  updated_at                       DateTime?                          @db.Timestamp(0)
+  model_has_permissions            model_has_permissions[]
+  permission_group_has_permissions permission_group_has_permissions[]
+  role_has_permissions             role_has_permissions[]
+
+  @@unique([name, guard_name], map: "permissions_name_guard_name_unique")
+}
+
+model pphs {
+  id          BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name        String    @db.VarChar(255)
+  rate        Float     @default(0.00)
+  description String?   @db.VarChar(255)
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+}
+
+model ppns {
+  id          BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name        String    @db.VarChar(255)
+  rate        Float     @default(0.00)
+  description String?   @db.VarChar(255)
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+}
+
+model product_requests {
+  id            BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  product_id    BigInt?   @db.UnsignedBigInt
+  is_mandatory  Boolean   @default(false)
+  product_name  String    @db.VarChar(255)
+  product_code  String?   @db.VarChar(255)
+  category_id   BigInt?   @db.UnsignedBigInt
+  product_unit  String    @db.VarChar(255)
+  is_asset      Boolean   @default(false)
+  product_price Int?
+  supplier_id   BigInt?   @db.UnsignedBigInt
+  is_verify     Boolean   @default(false)
+  status        String    @default("pending") @db.VarChar(255)
+  reason        String?   @db.Text
+  created_by    BigInt?   @db.UnsignedBigInt
+  created_at    DateTime? @db.Timestamp(0)
+  updated_at    DateTime? @db.Timestamp(0)
+  products      products? @relation(fields: [product_id], references: [id], onUpdate: NoAction, map: "product_requests_product_id_foreign")
+
+  @@index([product_id], map: "product_requests_product_id_foreign")
+}
+
+model products {
+  id                              BigInt                            @id @default(autoincrement()) @db.UnsignedBigInt
+  is_asset                        Boolean                           @default(false)
+  category_id                     BigInt                            @db.UnsignedBigInt
+  is_mandatory                    Boolean                           @default(false)
+  product_name                    String                            @db.VarChar(255)
+  product_type                    String?                           @db.VarChar(100)
+  bom_code                        String?                           @db.VarChar(100)
+  product_code                    String?                           @unique(map: "products_product_code_unique") @db.VarChar(255)
+  product_barcode_symbology       String?                           @db.VarChar(255)
+  product_quantity                Int
+  min_qty                         Int?                              @default(0)
+  max_qty                         Int?                              @default(0)
+  product_price                   Int
+  product_unit                    String?                           @db.VarChar(255)
+  product_stock_alert             Int
+  product_order_tax               Int?
+  product_tax_type                Int?                              @db.TinyInt
+  product_note                    String?                           @db.Text
+  created_at                      DateTime?                         @db.Timestamp(0)
+  updated_at                      DateTime?                         @db.Timestamp(0)
+  supplier_id                     BigInt?                           @db.UnsignedBigInt
+  part_number                     String?                           @db.VarChar(255)
+  tax_item_code                   String?                           @db.VarChar(255)
+  goods_receipt_details           goods_receipt_details[]
+  material_issuance_details       material_issuance_details[]
+  product_locations               product_locations[]
+  product_requests                product_requests[]
+  product_suppliers               product_suppliers[]
+  product_units                   product_units[]
+  categories                      categories                        @relation(fields: [category_id], references: [id], onUpdate: NoAction, map: "products_category_id_foreign")
+  purchase_details                purchase_details[]
+  purchase_invoice_details        purchase_invoice_details[]
+  purchase_order_details          purchase_order_details[]
+  purchase_return_details         purchase_return_details[]
+  quotation_details               quotation_details[]
+  sale_details                    sale_details[]
+  sale_return_details             sale_return_details[]
+  stock_opname_details            stock_opname_details[]
+  user_product_group_has_products user_product_group_has_products[]
+  warehouse_stocks                warehouse_stocks[]
+  work_order_materials            work_order_materials[]
+  work_orders                     work_orders[]
+
+  @@index([category_id], map: "products_category_id_foreign")
+}
+
+model purchase_budget_allocations {
+  id                      BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+  purchase_id             BigInt      @db.UnsignedBigInt
+  purchase_detail_id      BigInt      @db.UnsignedBigInt
+  source_master_budget_id BigInt      @db.UnsignedBigInt
+  source_budget_detail_id BigInt?     @db.UnsignedBigInt
+  target_category_id      BigInt?     @db.UnsignedBigInt
+  amount                  Decimal     @default(0.00) @db.Decimal(15, 2)
+  is_borrowed_internal    Boolean     @default(false)
+  is_borrowed_external    Boolean     @default(false)
+  is_applied              Boolean     @default(false)
+  created_at              DateTime?   @db.Timestamp(0)
+  updated_at              DateTime?   @db.Timestamp(0)
+  purchases               purchases   @relation(fields: [purchase_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_budget_allocations_purchase_id_foreign")
+  categories              categories? @relation(fields: [target_category_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_budget_allocations_target_category_id_foreign")
+
+  @@index([purchase_id], map: "purchase_budget_allocations_purchase_id_foreign")
+  @@index([target_category_id], map: "purchase_budget_allocations_target_category_id_foreign")
+}
+
+model purchase_details {
+  id                      BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  purchase_id             BigInt    @db.UnsignedBigInt
+  product_id              BigInt?   @db.UnsignedBigInt
+  product_name            String    @db.VarChar(255)
+  product_code            String    @db.VarChar(255)
+  quantity                Int
+  price                   Int
+  unit_price              Int
+  product_unit            String    @db.VarChar(255)
+  sub_total               Int
+  is_asset                Boolean   @default(false)
+  product_discount_amount Int       @default(0)
+  product_discount_type   String    @default("fixed") @db.VarChar(255)
+  product_tax_amount      Int       @default(0)
+  created_at              DateTime? @db.Timestamp(0)
+  updated_at              DateTime? @db.Timestamp(0)
+  products                products? @relation(fields: [product_id], references: [id], onUpdate: NoAction, map: "purchase_details_product_id_foreign")
+  purchases               purchases @relation(fields: [purchase_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_details_purchase_id_foreign")
+
+  @@index([product_id], map: "purchase_details_product_id_foreign")
+  @@index([purchase_id], map: "purchase_details_purchase_id_foreign")
+}
+
+model purchase_payments {
+  id             BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  purchase_id    BigInt    @db.UnsignedBigInt
+  amount         Int
+  date           DateTime  @db.Date
+  reference      String    @db.VarChar(255)
+  payment_method String    @db.VarChar(255)
+  note           String?   @db.Text
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+  purchases      purchases @relation(fields: [purchase_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_payments_purchase_id_foreign")
+
+  @@index([purchase_id], map: "purchase_payments_purchase_id_foreign")
+}
+
+model purchase_return_details {
+  id                      BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  purchase_return_id      BigInt           @db.UnsignedBigInt
+  product_id              BigInt?          @db.UnsignedBigInt
+  product_name            String           @db.VarChar(255)
+  product_code            String           @db.VarChar(255)
+  quantity                Int
+  price                   Int
+  unit_price              Int
+  sub_total               Int
+  product_discount_amount Int
+  product_discount_type   String           @default("fixed") @db.VarChar(255)
+  product_tax_amount      Int
+  created_at              DateTime?        @db.Timestamp(0)
+  updated_at              DateTime?        @db.Timestamp(0)
+  products                products?        @relation(fields: [product_id], references: [id], onUpdate: NoAction, map: "purchase_return_details_product_id_foreign")
+  purchase_returns        purchase_returns @relation(fields: [purchase_return_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_return_details_purchase_return_id_foreign")
+
+  @@index([product_id], map: "purchase_return_details_product_id_foreign")
+  @@index([purchase_return_id], map: "purchase_return_details_purchase_return_id_foreign")
+}
+
+model purchase_return_payments {
+  id                 BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  purchase_return_id BigInt           @db.UnsignedBigInt
+  amount             Int
+  date               DateTime         @db.Date
+  reference          String           @db.VarChar(255)
+  payment_method     String           @db.VarChar(255)
+  note               String?          @db.Text
+  created_at         DateTime?        @db.Timestamp(0)
+  updated_at         DateTime?        @db.Timestamp(0)
+  purchase_returns   purchase_returns @relation(fields: [purchase_return_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "purchase_return_payments_purchase_return_id_foreign")
+
+  @@index([purchase_return_id], map: "purchase_return_payments_purchase_return_id_foreign")
+}
+
+model purchase_returns {
+  id                       BigInt                     @id @default(autoincrement()) @db.UnsignedBigInt
+  date                     DateTime                   @db.Date
+  reference                String                     @db.VarChar(255)
+  supplier_id              BigInt?                    @db.UnsignedBigInt
+  supplier_name            String                     @db.VarChar(255)
+  tax_percentage           Int                        @default(0)
+  tax_amount               Int                        @default(0)
+  discount_percentage      Int                        @default(0)
+  discount_amount          Int                        @default(0)
+  shipping_amount          Int                        @default(0)
+  total_amount             Int
+  paid_amount              Int
+  due_amount               Int
+  status                   String                     @db.VarChar(255)
+  payment_status           String                     @db.VarChar(255)
+  payment_method           String                     @db.VarChar(255)
+  note                     String?                    @db.Text
+  created_at               DateTime?                  @db.Timestamp(0)
+  updated_at               DateTime?                  @db.Timestamp(0)
+  purchase_return_details  purchase_return_details[]
+  purchase_return_payments purchase_return_payments[]
+  suppliers                suppliers?                 @relation(fields: [supplier_id], references: [id], onUpdate: NoAction, map: "purchase_returns_supplier_id_foreign")
+
+  @@index([supplier_id], map: "purchase_returns_supplier_id_foreign")
+}
+
+model purchases {
+  id                          BigInt                        @id @default(autoincrement()) @db.UnsignedBigInt
+  date                        DateTime?                     @db.Date
+  reference                   String?                       @unique(map: "reference") @db.VarChar(255)
+  supplier_id                 BigInt?                       @db.UnsignedBigInt
+  supplier_name               String?                       @db.VarChar(255)
+  department_id               BigInt?
+  users_id                    BigInt?
+  tax_percentage              Int                           @default(0)
+  tax_amount                  Int                           @default(0)
+  discount_percentage         Int                           @default(0)
+  discount_amount             Int                           @default(0)
+  shipping_amount             Int                           @default(0)
+  total_amount                Int?
+  budget_amount               Decimal                       @default(0.00) @db.Decimal(15, 2)
+  mandatory_amount            Decimal                       @default(0.00) @db.Decimal(15, 2)
+  non_mandatory_amount        Decimal                       @default(0.00) @db.Decimal(15, 2)
+  borrowed_amount             Decimal                       @default(0.00) @db.Decimal(15, 2)
+  asset_amount                BigInt                        @default(0) @db.UnsignedBigInt
+  master_budget_value         Int?
+  master_budget_remaining     Int?
+  master_budget_id            BigInt?
+  borrowed_master_budget_id   BigInt?                       @db.UnsignedBigInt
+  paid_amount                 Int?
+  due_amount                  Int?
+  status                      purchases_status?
+  payment_status              String?                       @db.VarChar(255)
+  payment_method              String?                       @db.VarChar(255)
+  note                        String?                       @db.Text
+  created_at                  DateTime?                     @db.Timestamp(0)
+  updated_at                  DateTime?                     @db.Timestamp(0)
+  closed_at                   DateTime?                     @db.Timestamp(0)
+  closed_by                   BigInt?                       @db.UnsignedBigInt
+  is_closed                   Boolean                       @default(false)
+  po_id                       BigInt?                       @db.UnsignedBigInt
+  pr_type                     String?                       @default("normal") @db.VarChar(255)
+  purchase_budget_allocations purchase_budget_allocations[]
+  purchase_details            purchase_details[]
+  purchase_payments           purchase_payments[]
+  suppliers                   suppliers?                    @relation(fields: [supplier_id], references: [id], onUpdate: NoAction, map: "purchases_supplier_id_foreign")
+
+  @@index([supplier_id], map: "purchases_supplier_id_foreign")
+}
+
+model quotation_details {
+  id                      BigInt     @id @default(autoincrement()) @db.UnsignedBigInt
+  quotation_id            BigInt     @db.UnsignedBigInt
+  product_id              BigInt?    @db.UnsignedBigInt
+  product_name            String     @db.VarChar(255)
+  product_code            String     @db.VarChar(255)
+  quantity                Int
+  price                   Int
+  unit_price              Int
+  sub_total               Int
+  product_discount_amount Int
+  product_discount_type   String     @default("fixed") @db.VarChar(255)
+  product_tax_amount      Int
+  created_at              DateTime?  @db.Timestamp(0)
+  updated_at              DateTime?  @db.Timestamp(0)
+  products                products?  @relation(fields: [product_id], references: [id], onUpdate: NoAction, map: "quotation_details_product_id_foreign")
+  quotations              quotations @relation(fields: [quotation_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "quotation_details_quotation_id_foreign")
+
+  @@index([product_id], map: "quotation_details_product_id_foreign")
+  @@index([quotation_id], map: "quotation_details_quotation_id_foreign")
+}
+
+model quotations {
+  id                  BigInt              @id @default(autoincrement()) @db.UnsignedBigInt
+  date                DateTime            @db.Date
+  reference           String              @db.VarChar(255)
+  customer_id         BigInt?             @db.UnsignedBigInt
+  customer_name       String              @db.VarChar(255)
+  tax_percentage      Int                 @default(0)
+  tax_amount          Int                 @default(0)
+  discount_percentage Int                 @default(0)
+  discount_amount     Int                 @default(0)
+  shipping_amount     Int                 @default(0)
+  total_amount        Int
+  status              String              @db.VarChar(255)
+  note                String?             @db.Text
+  created_at          DateTime?           @db.Timestamp(0)
+  updated_at          DateTime?           @db.Timestamp(0)
+  quotation_details   quotation_details[]
+  customers           customers?          @relation(fields: [customer_id], references: [id], onUpdate: NoAction, map: "quotations_customer_id_foreign")
+
+  @@index([customer_id], map: "quotations_customer_id_foreign")
+}
+
+model role_has_permissions {
+  permission_id BigInt      @db.UnsignedBigInt
+  role_id       BigInt      @db.UnsignedBigInt
+  permissions   permissions @relation(fields: [permission_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "role_has_permissions_permission_id_foreign")
+  roles         roles       @relation(fields: [role_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "role_has_permissions_role_id_foreign")
+
+  @@id([permission_id, role_id])
+  @@index([role_id], map: "role_has_permissions_role_id_foreign")
+}
+
+model roles {
+  id                   BigInt                 @id @default(autoincrement()) @db.UnsignedBigInt
+  name                 String                 @db.VarChar(255)
+  guard_name           String                 @db.VarChar(255)
+  created_at           DateTime?              @db.Timestamp(0)
+  updated_at           DateTime?              @db.Timestamp(0)
+  model_has_roles      model_has_roles[]
+  role_has_permissions role_has_permissions[]
+
+  @@unique([name, guard_name], map: "roles_name_guard_name_unique")
+}
+
+model sale_details {
+  id                      BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  sale_id                 BigInt    @db.UnsignedBigInt
+  product_id              BigInt?   @db.UnsignedBigInt
+  product_name            String    @db.VarChar(255)
+  product_code            String    @db.VarChar(255)
+  quantity                Int
+  price                   Int
+  unit_price              Int
+  sub_total               Int
+  product_discount_amount Int
+  product_discount_type   String    @default("fixed") @db.VarChar(255)
+  product_tax_amount      Int
+  created_at              DateTime? @db.Timestamp(0)
+  updated_at              DateTime? @db.Timestamp(0)
+  products                products? @relation(fields: [product_id], references: [id], onUpdate: NoAction, map: "sale_details_product_id_foreign")
+  sales                   sales     @relation(fields: [sale_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "sale_details_sale_id_foreign")
+
+  @@index([product_id], map: "sale_details_product_id_foreign")
+  @@index([sale_id], map: "sale_details_sale_id_foreign")
+}
+
+model sale_payments {
+  id             BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  sale_id        BigInt    @db.UnsignedBigInt
+  amount         Int
+  date           DateTime  @db.Date
+  reference      String    @db.VarChar(255)
+  payment_method String    @db.VarChar(255)
+  note           String?   @db.Text
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+  sales          sales     @relation(fields: [sale_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "sale_payments_sale_id_foreign")
+
+  @@index([sale_id], map: "sale_payments_sale_id_foreign")
+}
+
+model sale_return_details {
+  id                      BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+  sale_return_id          BigInt       @db.UnsignedBigInt
+  product_id              BigInt?      @db.UnsignedBigInt
+  product_name            String       @db.VarChar(255)
+  product_code            String       @db.VarChar(255)
+  quantity                Int
+  price                   Int
+  unit_price              Int
+  sub_total               Int
+  product_discount_amount Int
+  product_discount_type   String       @default("fixed") @db.VarChar(255)
+  product_tax_amount      Int
+  created_at              DateTime?    @db.Timestamp(0)
+  updated_at              DateTime?    @db.Timestamp(0)
+  products                products?    @relation(fields: [product_id], references: [id], onUpdate: NoAction, map: "sale_return_details_product_id_foreign")
+  sale_returns            sale_returns @relation(fields: [sale_return_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "sale_return_details_sale_return_id_foreign")
+
+  @@index([product_id], map: "sale_return_details_product_id_foreign")
+  @@index([sale_return_id], map: "sale_return_details_sale_return_id_foreign")
+}
+
+model sale_return_payments {
+  id             BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+  sale_return_id BigInt       @db.UnsignedBigInt
+  amount         Int
+  date           DateTime     @db.Date
+  reference      String       @db.VarChar(255)
+  payment_method String       @db.VarChar(255)
+  note           String?      @db.Text
+  created_at     DateTime?    @db.Timestamp(0)
+  updated_at     DateTime?    @db.Timestamp(0)
+  sale_returns   sale_returns @relation(fields: [sale_return_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "sale_return_payments_sale_return_id_foreign")
+
+  @@index([sale_return_id], map: "sale_return_payments_sale_return_id_foreign")
+}
+
+model sale_returns {
+  id                   BigInt                 @id @default(autoincrement()) @db.UnsignedBigInt
+  date                 DateTime               @db.Date
+  reference            String                 @db.VarChar(255)
+  customer_id          BigInt?                @db.UnsignedBigInt
+  customer_name        String                 @db.VarChar(255)
+  tax_percentage       Int                    @default(0)
+  tax_amount           Int                    @default(0)
+  discount_percentage  Int                    @default(0)
+  discount_amount      Int                    @default(0)
+  shipping_amount      Int                    @default(0)
+  total_amount         Int
+  paid_amount          Int
+  due_amount           Int
+  status               String                 @db.VarChar(255)
+  payment_status       String                 @db.VarChar(255)
+  payment_method       String                 @db.VarChar(255)
+  note                 String?                @db.Text
+  created_at           DateTime?              @db.Timestamp(0)
+  updated_at           DateTime?              @db.Timestamp(0)
+  sale_return_details  sale_return_details[]
+  sale_return_payments sale_return_payments[]
+  customers            customers?             @relation(fields: [customer_id], references: [id], onUpdate: NoAction, map: "sale_returns_customer_id_foreign")
+
+  @@index([customer_id], map: "sale_returns_customer_id_foreign")
+}
+
+model sales {
+  id                  BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  date                DateTime        @db.Date
+  reference           String          @db.VarChar(255)
+  customer_id         BigInt?         @db.UnsignedBigInt
+  customer_name       String          @db.VarChar(255)
+  tax_percentage      Int             @default(0)
+  tax_amount          Int             @default(0)
+  discount_percentage Int             @default(0)
+  discount_amount     Int             @default(0)
+  shipping_amount     Int             @default(0)
+  total_amount        Int
+  paid_amount         Int
+  due_amount          Int
+  status              String          @db.VarChar(255)
+  payment_status      String          @db.VarChar(255)
+  payment_method      String          @db.VarChar(255)
+  note                String?         @db.Text
+  created_at          DateTime?       @db.Timestamp(0)
+  updated_at          DateTime?       @db.Timestamp(0)
+  sale_details        sale_details[]
+  sale_payments       sale_payments[]
+  customers           customers?      @relation(fields: [customer_id], references: [id], onUpdate: NoAction, map: "sales_customer_id_foreign")
+
+  @@index([customer_id], map: "sales_customer_id_foreign")
+}
+
+model settings {
+  id                        BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  company_name              String    @db.VarChar(255)
+  company_email             String    @db.VarChar(255)
+  company_phone             String    @db.VarChar(255)
+  site_logo                 String?   @db.VarChar(255)
+  default_currency_id       Int
+  default_currency_position String    @db.VarChar(255)
+  notification_email        String    @db.VarChar(255)
+  footer_text               String    @db.Text
+  company_address           String    @db.Text
+  created_at                DateTime? @db.Timestamp(0)
+  updated_at                DateTime? @db.Timestamp(0)
+}
+
+model suppliers {
+  id                        BigInt                      @id @default(autoincrement()) @db.UnsignedBigInt
+  supplier_name             String                      @db.VarChar(255)
+  supplier_email            String                      @db.VarChar(255)
+  supplier_phone            String                      @db.VarChar(255)
+  city                      String                      @db.VarChar(255)
+  country                   String                      @db.VarChar(255)
+  address                   String                      @db.Text
+  created_at                DateTime?                   @db.Timestamp(0)
+  updated_at                DateTime?                   @db.Timestamp(0)
+  supplier_code             String?                     @db.VarChar(255)
+  fax                       String?                     @db.VarChar(255)
+  contact_person            String?                     @db.VarChar(255)
+  npwp                      String?                     @db.VarChar(255)
+  ppn_id                    BigInt?                     @db.UnsignedBigInt
+  pph_id                    BigInt?                     @db.UnsignedBigInt
+  is_active                 Boolean                     @default(true)
+  currency_id               BigInt?                     @db.UnsignedBigInt
+  region                    String?                     @db.VarChar(255)
+  group_id                  BigInt?                     @db.UnsignedBigInt
+  payment_term_id           BigInt?                     @db.UnsignedBigInt
+  goods_receipts            goods_receipts[]
+  material_issuance_details material_issuance_details[]
+  product_suppliers         product_suppliers[]
+  purchase_invoices         purchase_invoices[]
+  purchase_orders           purchase_orders[]
+  purchase_returns          purchase_returns[]
+  purchases                 purchases[]
+  stock_opname_details      stock_opname_details[]
+  supplier_groups           supplier_groups?            @relation(fields: [group_id], references: [id])
+  payment_terms             payment_terms?              @relation(fields: [payment_term_id], references: [id])
+  warehouse_stocks          warehouse_stocks[]
+
+  @@index([group_id], map: "suppliers_group_id_fkey")
+  @@index([payment_term_id], map: "suppliers_payment_term_id_fkey")
+}
+
+model target_sales {
+  id            BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  reference     String?         @db.VarChar(255)
+  month         Int             @db.UnsignedTinyInt
+  year          Int             @db.Year
+  target_amount Decimal         @db.Decimal(15, 2)
+  description   String?         @db.Text
+  status        String          @default("Pending") @db.VarChar(255)
+  created_by    BigInt?         @db.UnsignedBigInt
+  created_at    DateTime?       @db.Timestamp(0)
+  updated_at    DateTime?       @db.Timestamp(0)
+  master_budget master_budget[]
+}
+
+model units {
+  id              BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name            String?   @db.VarChar(255)
+  short_name      String?   @db.VarChar(255)
+  operator        String?   @db.VarChar(255)
+  operation_value Int?
+  created_at      DateTime? @db.Timestamp(0)
+  updated_at      DateTime? @db.Timestamp(0)
+}
+
+model uploads {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  folder     String    @db.VarChar(255)
+  filename   String    @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model user_categories {
+  id            Int      @id @default(autoincrement())
+  user_id       BigInt   @db.UnsignedBigInt
+  department_id BigInt?  @db.UnsignedBigInt
+  category_id   BigInt?  @db.UnsignedBigInt
+  product_id    BigInt?  @db.UnsignedBigInt
+  created_at    DateTime @db.Timestamp(0)
+  updated_at    DateTime @db.Timestamp(0)
+}
+
+model users {
+  id                BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  department_id     BigInt?   @db.UnsignedBigInt
+  user_categories   BigInt?
+  name              String    @db.VarChar(255)
+  email             String    @unique(map: "users_email_unique") @db.VarChar(255)
+  email_verified_at DateTime? @db.Timestamp(0)
+  password          String    @db.VarChar(255)
+  is_active         Boolean
+  remember_token    String?   @db.VarChar(100)
+  signature         String?   @db.VarChar(255)
+  created_at        DateTime? @db.Timestamp(0)
+  updated_at        DateTime? @db.Timestamp(0)
+}
+
+model supplier_groups {
+  id          BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+  code        String      @unique @db.VarChar(255)
+  name        String      @db.VarChar(255)
+  description String?     @db.Text
+  created_at  DateTime?   @db.Timestamp(0)
+  updated_at  DateTime?   @db.Timestamp(0)
+  suppliers   suppliers[]
+}
+
+model payment_terms {
+  id                BigInt              @id @default(autoincrement()) @db.UnsignedBigInt
+  name              String              @unique @db.VarChar(255)
+  days              Int                 @default(0)
+  description       String?             @db.Text
+  created_at        DateTime?           @db.Timestamp(0)
+  updated_at        DateTime?           @db.Timestamp(0)
+  purchase_invoices purchase_invoices[]
+  suppliers         suppliers[]
+}
+
+model purchase_orders {
+  id                     BigInt                   @id @default(autoincrement()) @db.UnsignedBigInt
+  reference              String                   @unique(map: "po_reference") @db.VarChar(255)
+  date                   DateTime                 @db.Date
+  etd                    DateTime?                @db.Date
+  supplier_id            BigInt                   @db.UnsignedBigInt
+  pr_id                  BigInt?                  @db.UnsignedBigInt
+  department_id          BigInt?
+  users_id               BigInt?
+  status                 String                   @default("Pending") @db.VarChar(255)
+  is_closed              Boolean                  @default(false)
+  closed_at              DateTime?                @db.Timestamp(0)
+  closed_by              BigInt?                  @db.UnsignedBigInt
+  tax_percentage         Int                      @default(0)
+  tax_amount             Int                      @default(0)
+  ppn_id                 BigInt?                  @db.UnsignedBigInt
+  pph_id                 BigInt?                  @db.UnsignedBigInt
+  discount_percentage    Int                      @default(0)
+  discount_amount        Int                      @default(0)
+  shipping_amount        Int                      @default(0)
+  total_amount           Int
+  payment_term_id        BigInt?                  @db.UnsignedBigInt
+  note                   String?                  @db.Text
+  shipping_address       String?                  @db.Text
+  created_at             DateTime?                @db.Timestamp(0)
+  updated_at             DateTime?                @db.Timestamp(0)
+  dpp_amount             Int                      @default(0)
+  goods_receipts         goods_receipts[]
+  purchase_invoices      purchase_invoices[]
+  purchase_order_details purchase_order_details[]
+  suppliers              suppliers                @relation(fields: [supplier_id], references: [id])
+
+  @@index([supplier_id], map: "purchase_orders_supplier_id_fkey")
+}
+
+model purchase_order_details {
+  id                      BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  po_id                   BigInt          @db.UnsignedBigInt
+  product_id              BigInt?         @db.UnsignedBigInt
+  pr_detail_id            BigInt?         @db.UnsignedBigInt
+  product_name            String          @db.VarChar(255)
+  product_code            String?         @db.VarChar(255)
+  quantity                Int
+  price                   Int
+  unit_price              Int
+  product_unit            String          @db.VarChar(255)
+  sub_total               Int
+  is_asset                Boolean         @default(false)
+  product_discount_amount Int             @default(0)
+  product_discount_type   String          @default("fixed") @db.VarChar(255)
+  product_tax_amount      Int             @default(0)
+  created_at              DateTime?       @db.Timestamp(0)
+  updated_at              DateTime?       @db.Timestamp(0)
+  purchase_orders         purchase_orders @relation(fields: [po_id], references: [id], onDelete: Cascade)
+  products                products?       @relation(fields: [product_id], references: [id])
+
+  @@index([po_id], map: "purchase_order_details_po_id_fkey")
+  @@index([product_id], map: "purchase_order_details_product_id_fkey")
+}
+
+model goods_receipts {
+  id                    BigInt                  @id @default(autoincrement()) @db.UnsignedBigInt
+  reference             String                  @unique(map: "gr_reference") @db.VarChar(255)
+  bpb_number            String?                 @db.VarChar(255)
+  date                  DateTime                @db.Date
+  supplier_id           BigInt                  @db.UnsignedBigInt
+  po_id                 BigInt?                 @db.UnsignedBigInt
+  pr_id                 BigInt?                 @db.UnsignedBigInt
+  department_id         BigInt?                 @db.UnsignedBigInt
+  status                String                  @default("Completed") @db.VarChar(255)
+  note                  String?                 @db.Text
+  users_id              BigInt?
+  created_at            DateTime?               @db.Timestamp(0)
+  updated_at            DateTime?               @db.Timestamp(0)
+  po_date               DateTime?               @db.Date
+  received_date         DateTime?               @db.Date
+  shipping_address      String?                 @db.Text
+  goods_receipt_details goods_receipt_details[]
+  purchase_orders       purchase_orders?        @relation(fields: [po_id], references: [id])
+  suppliers             suppliers               @relation(fields: [supplier_id], references: [id])
+  purchase_invoices     purchase_invoices[]
+
+  @@index([po_id], map: "goods_receipts_po_id_fkey")
+  @@index([supplier_id], map: "goods_receipts_supplier_id_fkey")
+}
+
+model goods_receipt_details {
+  id             BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  gr_id          BigInt         @db.UnsignedBigInt
+  product_id     BigInt?        @db.UnsignedBigInt
+  product_name   String         @db.VarChar(255)
+  product_code   String         @db.VarChar(255)
+  qty_ordered    Int            @default(0)
+  qty_received   Int
+  product_unit   String         @db.VarChar(255)
+  created_at     DateTime?      @db.Timestamp(0)
+  updated_at     DateTime?      @db.Timestamp(0)
+  goods_receipts goods_receipts @relation(fields: [gr_id], references: [id], onDelete: Cascade)
+  products       products?      @relation(fields: [product_id], references: [id])
+
+  @@index([gr_id], map: "goods_receipt_details_gr_id_fkey")
+  @@index([product_id], map: "goods_receipt_details_product_id_fkey")
+}
+
+model purchase_invoices {
+  id                       BigInt                     @id @default(autoincrement()) @db.UnsignedBigInt
+  reference                String                     @unique(map: "pi_reference") @db.VarChar(255)
+  invoice_reference        String?                    @db.VarChar(255)
+  date                     DateTime                   @db.Date
+  invoice_date             DateTime?                  @db.Date
+  supplier_id              BigInt                     @db.UnsignedBigInt
+  po_id                    BigInt?                    @db.UnsignedBigInt
+  gr_id                    BigInt?                    @db.UnsignedBigInt
+  gr_ids                   String?                    @db.Text
+  payment_term_id          BigInt?                    @db.UnsignedBigInt
+  due_date                 DateTime?                  @db.Date
+  status                   String                     @default("Unpaid") @db.VarChar(255)
+  tax_percentage           Int                        @default(0)
+  tax_amount               Int                        @default(0)
+  discount_percentage      Int                        @default(0)
+  discount_amount          Int                        @default(0)
+  shipping_amount          Int                        @default(0)
+  total_amount             Int
+  paid_amount              Int                        @default(0)
+  due_amount               Int
+  note                     String?                    @db.Text
+  users_id                 BigInt?
+  created_at               DateTime?                  @db.Timestamp(0)
+  updated_at               DateTime?                  @db.Timestamp(0)
+  department_id            BigInt?
+  shipping_address         String?                    @db.Text
+  ap_payment_invoices      ap_payment_invoices[]
+  purchase_invoice_details purchase_invoice_details[]
+  goods_receipts           goods_receipts?            @relation(fields: [gr_id], references: [id])
+  payment_terms            payment_terms?             @relation(fields: [payment_term_id], references: [id])
+  purchase_orders          purchase_orders?           @relation(fields: [po_id], references: [id])
+  suppliers                suppliers                  @relation(fields: [supplier_id], references: [id])
+
+  @@index([gr_id], map: "purchase_invoices_gr_id_fkey")
+  @@index([payment_term_id], map: "purchase_invoices_payment_term_id_fkey")
+  @@index([po_id], map: "purchase_invoices_po_id_fkey")
+  @@index([supplier_id], map: "purchase_invoices_supplier_id_fkey")
+}
+
+model purchase_invoice_details {
+  id                 BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  invoice_id         BigInt            @db.UnsignedBigInt
+  product_id         BigInt?           @db.UnsignedBigInt
+  product_name       String            @db.VarChar(255)
+  product_code       String            @db.VarChar(255)
+  quantity           Int
+  price              Int
+  unit_price         Int
+  product_unit       String            @db.VarChar(255)
+  sub_total          Int
+  ppn_id             BigInt?           @db.UnsignedBigInt
+  pph_id             BigInt?           @db.UnsignedBigInt
+  product_tax_amount Int               @default(0)
+  created_at         DateTime?         @db.Timestamp(0)
+  updated_at         DateTime?         @db.Timestamp(0)
+  purchase_invoices  purchase_invoices @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
+  products           products?         @relation(fields: [product_id], references: [id])
+
+  @@index([invoice_id], map: "purchase_invoice_details_invoice_id_fkey")
+  @@index([product_id], map: "purchase_invoice_details_product_id_fkey")
+}
+
+model chart_of_accounts {
+  id                  BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
+  code                String                @unique @db.VarChar(255)
+  name                String                @db.VarChar(255)
+  type                String                @db.VarChar(255)
+  is_active           Boolean               @default(true)
+  created_at          DateTime?             @db.Timestamp(0)
+  updated_at          DateTime?             @db.Timestamp(0)
+  journal_entry_lines journal_entry_lines[]
+}
+
+model journal_entries {
+  id                  BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
+  reference           String                @unique @db.VarChar(255)
+  date                DateTime              @db.Date
+  description         String?               @db.Text
+  source_type         String?               @db.VarChar(255)
+  source_id           BigInt?               @db.UnsignedBigInt
+  posted_at           DateTime?             @db.Timestamp(0)
+  created_at          DateTime?             @db.Timestamp(0)
+  updated_at          DateTime?             @db.Timestamp(0)
+  journal_entry_lines journal_entry_lines[]
+}
+
+model journal_entry_lines {
+  id                BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  journal_id        BigInt            @db.UnsignedBigInt
+  account_id        BigInt            @db.UnsignedBigInt
+  debit             Decimal           @default(0.00) @db.Decimal(15, 2)
+  credit            Decimal           @default(0.00) @db.Decimal(15, 2)
+  description       String?           @db.Text
+  created_at        DateTime?         @db.Timestamp(0)
+  updated_at        DateTime?         @db.Timestamp(0)
+  chart_of_accounts chart_of_accounts @relation(fields: [account_id], references: [id])
+  journal_entries   journal_entries   @relation(fields: [journal_id], references: [id], onDelete: Cascade)
+
+  @@index([account_id], map: "journal_entry_lines_account_id_fkey")
+  @@index([journal_id], map: "journal_entry_lines_journal_id_fkey")
+}
+
+model permission_groups {
+  id                               BigInt                             @id @default(autoincrement()) @db.UnsignedBigInt
+  name                             String                             @unique(map: "permission_groups_name_unique") @db.VarChar(255)
+  created_at                       DateTime?                          @db.Timestamp(0)
+  updated_at                       DateTime?                          @db.Timestamp(0)
+  permission_group_has_permissions permission_group_has_permissions[]
+}
+
+model permission_group_has_permissions {
+  permission_id       BigInt            @db.UnsignedBigInt
+  permission_group_id BigInt            @db.UnsignedBigInt
+  permission_groups   permission_groups @relation(fields: [permission_group_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "pghp_group_id_foreign")
+  permissions         permissions       @relation(fields: [permission_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "pghp_permission_id_foreign")
+
+  @@id([permission_id, permission_group_id])
+  @@index([permission_group_id], map: "pghp_group_id_foreign")
+}
+
+model user_product_groups {
+  id                                BigInt                              @id @default(autoincrement()) @db.UnsignedBigInt
+  name                              String                              @unique(map: "user_product_groups_name_unique") @db.VarChar(255)
+  created_at                        DateTime?                           @db.Timestamp(0)
+  updated_at                        DateTime?                           @db.Timestamp(0)
+  user_product_group_has_categories user_product_group_has_categories[]
+  user_product_group_has_products   user_product_group_has_products[]
+}
+
+model user_product_group_has_categories {
+  group_id            BigInt              @db.UnsignedBigInt
+  category_id         BigInt              @db.UnsignedBigInt
+  categories          categories          @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "upghc_category_id_foreign")
+  user_product_groups user_product_groups @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "upghc_group_id_foreign")
+
+  @@id([group_id, category_id])
+  @@index([category_id], map: "upghc_category_id_foreign")
+}
+
+model user_product_group_has_products {
+  group_id            BigInt              @db.UnsignedBigInt
+  product_id          BigInt              @db.UnsignedBigInt
+  user_product_groups user_product_groups @relation(fields: [group_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "upghp_group_id_foreign")
+  products            products            @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "upghp_product_id_foreign")
+
+  @@id([group_id, product_id])
+  @@index([product_id], map: "upghp_product_id_foreign")
+}
+
+model ap_payment_banks {
+  id               BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+  payment_id       BigInt      @db.UnsignedBigInt
+  account_id       BigInt      @db.UnsignedBigInt
+  bank_name        String?     @db.VarChar(255)
+  currency_id      BigInt?     @db.UnsignedBigInt
+  rate             Decimal?    @default(1.00) @db.Decimal(15, 2)
+  amount           Decimal     @default(0.00) @db.Decimal(15, 2)
+  transaction_type String?     @default("Keluar Kas") @db.VarChar(50)
+  is_liquid        Boolean?    @default(true)
+  giro_number      String?     @db.VarChar(255)
+  due_date         DateTime?   @db.Date
+  journal_id       BigInt?     @db.UnsignedBigInt
+  note             String?     @db.Text
+  ap_payments      ap_payments @relation(fields: [payment_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "ap_payment_banks_ibfk_1")
+
+  @@index([payment_id], map: "payment_id")
+}
+
+model ap_payment_invoices {
+  id                BigInt            @id @default(autoincrement()) @db.UnsignedBigInt
+  payment_id        BigInt            @db.UnsignedBigInt
+  invoice_id        BigInt            @db.UnsignedBigInt
+  amount_paid       Decimal           @default(0.00) @db.Decimal(15, 2)
+  ap_payments       ap_payments       @relation(fields: [payment_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "ap_payment_invoices_ibfk_1")
+  purchase_invoices purchase_invoices @relation(fields: [invoice_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "ap_payment_invoices_ibfk_2")
+
+  @@index([invoice_id], map: "invoice_id")
+  @@index([payment_id], map: "payment_id")
+}
+
+model ap_payments {
+  id                  BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
+  reference           String                @unique(map: "reference") @db.VarChar(255)
+  date                DateTime              @db.Date
+  supplier_id         BigInt                @db.UnsignedBigInt
+  total_amount        Decimal               @default(0.00) @db.Decimal(15, 2)
+  note                String?               @db.Text
+  department_id       BigInt?               @db.UnsignedBigInt
+  currency_id         BigInt?               @db.UnsignedBigInt
+  rate                Decimal?              @default(1.0000) @db.Decimal(18, 4)
+  users_id            BigInt?               @db.UnsignedBigInt
+  created_at          DateTime?             @default(now()) @db.Timestamp(0)
+  updated_at          DateTime?             @default(now()) @db.Timestamp(0)
+  ap_payment_banks    ap_payment_banks[]
+  ap_payment_invoices ap_payment_invoices[]
+}
+
+model bank_accounts {
+  id             BigInt                      @id @default(autoincrement()) @db.UnsignedBigInt
+  code           String                      @db.VarChar(50)
+  name           String                      @db.VarChar(255)
+  address        String?                     @db.Text
+  phone          String?                     @db.VarChar(50)
+  note           String?                     @db.Text
+  account_number String?                     @db.VarChar(100)
+  status         bank_accounts_status?       @default(Active)
+  currency_id    BigInt?                     @db.UnsignedBigInt
+  account_type   bank_accounts_account_type? @default(Bank)
+  created_at     DateTime?                   @default(now()) @db.Timestamp(0)
+  updated_at     DateTime?                   @default(now()) @db.Timestamp(0)
+  currencies     currencies?                 @relation(fields: [currency_id], references: [id], onUpdate: NoAction, map: "bank_accounts_ibfk_1")
+
+  @@index([currency_id], map: "currency_id")
+}
+
+model bom_items {
+  id             Int       @id @default(autoincrement())
+  bom_id         Int
+  parent_item_id Int?
+  item_type      String    @db.VarChar(20)
+  warehouse_id   Int?
+  product_code   String    @db.VarChar(100)
+  part_number    String?   @db.VarChar(100)
+  product_name   String    @db.VarChar(255)
+  qty            Decimal   @db.Decimal(15, 4)
+  unit           String?   @db.VarChar(20)
+  price          Decimal?  @default(0.00) @db.Decimal(15, 2)
+  created_at     DateTime? @default(now()) @db.Timestamp(0)
+  boms           boms      @relation(fields: [bom_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_bom_items_bom")
+
+  @@index([bom_id], map: "fk_bom_items_bom")
+}
+
+model boms {
+  id                  Int         @id @default(autoincrement())
+  bom_code            String      @unique(map: "bom_code") @db.VarChar(100)
+  bom_name            String      @db.VarChar(255)
+  description         String?     @db.Text
+  username            String?     @db.VarChar(100)
+  status              String?     @default("Aktif") @db.VarChar(20)
+  target_warehouse_id Int?
+  finished_good_code  String?     @db.VarChar(100)
+  finished_good_name  String?     @db.VarChar(255)
+  finished_good_unit  String?     @db.VarChar(20)
+  finished_good_qty   Decimal?    @default(1.0000) @db.Decimal(15, 4)
+  is_dismantling      Int?        @default(0) @db.TinyInt
+  created_at          DateTime?   @default(now()) @db.Timestamp(0)
+  updated_at          DateTime?   @default(now()) @db.Timestamp(0)
+  bom_items           bom_items[]
+}
+
+model customer_forecast_details {
+  id                  BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
+  forecast_id         BigInt                @db.UnsignedBigInt
+  product_id          BigInt?               @db.UnsignedBigInt
+  product_name        String                @db.VarChar(255)
+  product_code        String?               @db.VarChar(255)
+  product_unit        String?               @db.VarChar(50)
+  forecast_qty        Int                   @default(0)
+  price               Decimal               @default(0.00) @db.Decimal(15, 2)
+  sub_total           Decimal               @default(0.00) @db.Decimal(18, 2)
+  remark              String?               @db.VarChar(255)
+  created_at          DateTime?             @default(now()) @db.Timestamp(0)
+  updated_at          DateTime?             @default(now()) @db.Timestamp(0)
+  customer_forecasts  customer_forecasts    @relation(fields: [forecast_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "customer_forecast_details_ibfk_1")
+  customer_po_details customer_po_details[]
+
+  @@index([forecast_id], map: "forecast_id")
+}
+
+model customer_forecasts {
+  id                        BigInt                      @id @default(autoincrement()) @db.UnsignedBigInt
+  reference                 String                      @unique(map: "reference") @db.VarChar(255)
+  customer_id               BigInt?                     @db.UnsignedBigInt
+  doc_date                  DateTime?                   @db.Date
+  salesman_id               Int?
+  warehouse_id              Int?
+  currency_id               BigInt?                     @db.UnsignedBigInt
+  exchange_rate             Decimal                     @default(1.0000) @db.Decimal(15, 4)
+  total_qty                 Int                         @default(0)
+  total_amount              Decimal                     @default(0.00) @db.Decimal(18, 2)
+  month                     Int?
+  year                      Int?
+  note                      String?                     @db.Text
+  status                    String?                     @default("Draft") @db.VarChar(50)
+  created_at                DateTime?                   @default(now()) @db.Timestamp(0)
+  updated_at                DateTime?                   @default(now()) @db.Timestamp(0)
+  customer_forecast_details customer_forecast_details[]
+}
+
+model customer_po {
+  id                  BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
+  reference           String                @unique(map: "reference") @db.VarChar(255)
+  customer_id         BigInt?               @db.UnsignedBigInt
+  salesman_id         Int?
+  no_po_customer      String?               @db.VarChar(255)
+  tanggal_po          DateTime?             @db.Date
+  delivery_date       DateTime?             @db.Date
+  ship_to_address     String?               @db.Text
+  top_days            Int                   @default(0)
+  due_date            DateTime?             @db.Date
+  currency_id         BigInt?               @db.UnsignedBigInt
+  exchange_rate       Decimal               @default(1.0000) @db.Decimal(15, 4)
+  sub_total           Decimal               @default(0.00) @db.Decimal(18, 2)
+  discount_percent    Decimal               @default(0.00) @db.Decimal(8, 2)
+  discount_amount     Decimal               @default(0.00) @db.Decimal(18, 2)
+  tax_percent         Decimal               @default(0.00) @db.Decimal(8, 2)
+  tax_amount          Decimal               @default(0.00) @db.Decimal(18, 2)
+  grand_total         Decimal               @default(0.00) @db.Decimal(18, 2)
+  total_qty           Int                   @default(0)
+  note                String?               @db.Text
+  status              String?               @default("Draft") @db.VarChar(50)
+  created_at          DateTime?             @default(now()) @db.Timestamp(0)
+  updated_at          DateTime?             @default(now()) @db.Timestamp(0)
+  customer_po_details customer_po_details[]
+}
+
+model customer_po_details {
+  id                        BigInt                     @id @default(autoincrement()) @db.UnsignedBigInt
+  po_id                     BigInt                     @db.UnsignedBigInt
+  forecast_detail_id        BigInt?                    @db.UnsignedBigInt
+  product_id                BigInt?                    @db.UnsignedBigInt
+  product_name              String                     @db.VarChar(255)
+  product_code              String?                    @db.VarChar(255)
+  product_unit              String?                    @db.VarChar(50)
+  po_qty                    Int                        @default(0)
+  price                     Decimal                    @default(0.00) @db.Decimal(15, 2)
+  discount_percent          Decimal                    @default(0.00) @db.Decimal(8, 2)
+  discount_amount           Decimal                    @default(0.00) @db.Decimal(18, 2)
+  sub_total                 Decimal                    @default(0.00) @db.Decimal(15, 2)
+  remark                    String?                    @db.VarChar(255)
+  created_at                DateTime?                  @default(now()) @db.Timestamp(0)
+  updated_at                DateTime?                  @default(now()) @db.Timestamp(0)
+  customer_po               customer_po                @relation(fields: [po_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "customer_po_details_ibfk_1")
+  customer_forecast_details customer_forecast_details? @relation(fields: [forecast_detail_id], references: [id], onUpdate: NoAction, map: "customer_po_details_ibfk_2")
+  order_sheet_details       order_sheet_details[]
+
+  @@index([forecast_detail_id], map: "forecast_detail_id")
+  @@index([po_id], map: "po_id")
+}
+
+model grup_customer {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(100)
+  description String?   @db.Text
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model jurnal_ar {
+  id                    Int       @id @default(autoincrement())
+  reference             String    @unique(map: "reference") @db.VarChar(50)
+  customer_id           Int?
+  transaction_reference String?   @db.VarChar(100)
+  debit                 Decimal?  @default(0.00) @db.Decimal(15, 2)
+  credit                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  date                  DateTime  @db.Date
+  description           String?   @db.Text
+  created_at            DateTime? @default(now()) @db.Timestamp(0)
+  updated_at            DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model jurnal_penjualan {
+  id                Int       @id @default(autoincrement())
+  reference         String    @unique(map: "reference") @db.VarChar(50)
+  customer_id       Int?
+  invoice_reference String?   @db.VarChar(100)
+  debit             Decimal?  @default(0.00) @db.Decimal(15, 2)
+  credit            Decimal?  @default(0.00) @db.Decimal(15, 2)
+  date              DateTime  @db.Date
+  description       String?   @db.Text
+  created_at        DateTime? @default(now()) @db.Timestamp(0)
+  updated_at        DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model komisi_per_item {
+  id           Int       @id @default(autoincrement())
+  salesman_id  Int?
+  product_id   Int?
+  product_name String?   @db.VarChar(255)
+  product_code String?   @db.VarChar(100)
+  komisi_type  String?   @default("percentage") @db.VarChar(30)
+  komisi_value Decimal?  @default(0.0000) @db.Decimal(10, 4)
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model material_issuance_details {
+  id                 Int                @id @default(autoincrement())
+  issuance_id        Int
+  product_id         BigInt             @db.UnsignedBigInt
+  supplier_id        BigInt?            @db.UnsignedBigInt
+  qty_to_issue       Decimal            @default(0.00) @db.Decimal(15, 2)
+  created_at         DateTime?          @default(now()) @db.Timestamp(0)
+  updated_at         DateTime?          @default(now()) @db.Timestamp(0)
+  material_issuances material_issuances @relation(fields: [issuance_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "material_issuance_details_ibfk_1")
+  products           products           @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "material_issuance_details_ibfk_2")
+  suppliers          suppliers?         @relation(fields: [supplier_id], references: [id], onUpdate: NoAction, map: "material_issuance_details_ibfk_3")
+
+  @@index([issuance_id], map: "issuance_id")
+  @@index([product_id], map: "product_id")
+  @@index([supplier_id], map: "supplier_id")
+}
+
+model material_issuances {
+  id                        Int                         @id @default(autoincrement())
+  reference                 String                      @unique(map: "reference") @db.VarChar(255)
+  date                      DateTime                    @db.Date
+  work_order_id             Int
+  status                    String                      @default("Draft") @db.VarChar(50)
+  note                      String?                     @db.Text
+  created_at                DateTime?                   @default(now()) @db.Timestamp(0)
+  updated_at                DateTime?                   @default(now()) @db.Timestamp(0)
+  material_issuance_details material_issuance_details[]
+  work_orders               work_orders                 @relation(fields: [work_order_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "material_issuances_ibfk_1")
+
+  @@index([work_order_id], map: "work_order_id")
+}
+
+model order_sheet_details {
+  id                  BigInt               @id @default(autoincrement()) @db.UnsignedBigInt
+  os_id               BigInt               @db.UnsignedBigInt
+  po_detail_id        BigInt?              @db.UnsignedBigInt
+  product_id          BigInt?              @db.UnsignedBigInt
+  product_name        String               @db.VarChar(255)
+  product_code        String?              @db.VarChar(255)
+  product_unit        String?              @db.VarChar(50)
+  os_qty              Int                  @default(0)
+  price               Decimal              @default(0.00) @db.Decimal(15, 2)
+  sub_total           Decimal              @default(0.00) @db.Decimal(15, 2)
+  created_at          DateTime?            @default(now()) @db.Timestamp(0)
+  updated_at          DateTime?            @default(now()) @db.Timestamp(0)
+  order_sheets        order_sheets         @relation(fields: [os_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "order_sheet_details_ibfk_1")
+  customer_po_details customer_po_details? @relation(fields: [po_detail_id], references: [id], onUpdate: NoAction, map: "order_sheet_details_ibfk_2")
+
+  @@index([os_id], map: "os_id")
+  @@index([po_detail_id], map: "po_detail_id")
+}
+
+model order_sheets {
+  id                  BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
+  reference           String                @unique(map: "reference") @db.VarChar(255)
+  customer_id         BigInt?               @db.UnsignedBigInt
+  period_month        Int?
+  period_year         Int?
+  delivery_date       DateTime?             @db.Date
+  total_qty           Int                   @default(0)
+  note                String?               @db.Text
+  status              String?               @default("Draft") @db.VarChar(50)
+  created_at          DateTime?             @default(now()) @db.Timestamp(0)
+  updated_at          DateTime?             @default(now()) @db.Timestamp(0)
+  order_sheet_details order_sheet_details[]
+}
+
+model penagihan_piutang {
+  id                Int       @id @default(autoincrement())
+  reference         String    @unique(map: "reference") @db.VarChar(50)
+  customer_id       Int?
+  invoice_reference String?   @db.VarChar(100)
+  amount            Decimal?  @default(0.00) @db.Decimal(15, 2)
+  due_date          DateTime? @db.Date
+  note              String?   @db.Text
+  status            String?   @default("Pending") @db.VarChar(20)
+  created_at        DateTime? @default(now()) @db.Timestamp(0)
+  updated_at        DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model penerimaan_piutang {
+  id                  Int       @id @default(autoincrement())
+  reference           String    @unique(map: "reference") @db.VarChar(50)
+  customer_id         Int?
+  penagihan_reference String?   @db.VarChar(100)
+  amount_received     Decimal?  @default(0.00) @db.Decimal(15, 2)
+  payment_method      String?   @db.VarChar(50)
+  received_date       DateTime  @db.Date
+  note                String?   @db.Text
+  status              String?   @default("Draft") @db.VarChar(20)
+  created_at          DateTime? @default(now()) @db.Timestamp(0)
+  updated_at          DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model penjualan_langsung {
+  id                         Int                          @id @default(autoincrement())
+  reference                  String                       @unique(map: "reference") @db.VarChar(50)
+  customer_id                Int?
+  date                       DateTime                     @db.Date
+  note                       String?                      @db.Text
+  status                     String?                      @default("Draft") @db.VarChar(20)
+  created_at                 DateTime?                    @default(now()) @db.Timestamp(0)
+  updated_at                 DateTime?                    @default(now()) @db.Timestamp(0)
+  penjualan_langsung_details penjualan_langsung_details[]
+}
+
+model penjualan_langsung_details {
+  id                 Int                @id @default(autoincrement())
+  sales_id           Int
+  product_id         Int?
+  product_name       String             @db.VarChar(255)
+  product_code       String?            @db.VarChar(100)
+  product_unit       String?            @db.VarChar(50)
+  qty                Decimal?           @default(0.00) @db.Decimal(15, 2)
+  price              Decimal?           @default(0.00) @db.Decimal(15, 2)
+  sub_total          Decimal?           @default(0.00) @db.Decimal(15, 2)
+  created_at         DateTime?          @default(now()) @db.Timestamp(0)
+  updated_at         DateTime?          @default(now()) @db.Timestamp(0)
+  penjualan_langsung penjualan_langsung @relation(fields: [sales_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "penjualan_langsung_details_ibfk_1")
+
+  @@index([sales_id], map: "sales_id")
+}
+
+model penjualan_via_sj {
+  id                       Int                        @id @default(autoincrement())
+  reference                String                     @unique(map: "reference") @db.VarChar(50)
+  customer_id              Int?
+  sj_reference             String?                    @db.VarChar(100)
+  date                     DateTime                   @db.Date
+  note                     String?                    @db.Text
+  status                   String?                    @default("Draft") @db.VarChar(20)
+  created_at               DateTime?                  @default(now()) @db.Timestamp(0)
+  updated_at               DateTime?                  @default(now()) @db.Timestamp(0)
+  penjualan_via_sj_details penjualan_via_sj_details[]
+}
+
+model penjualan_via_sj_details {
+  id               Int              @id @default(autoincrement())
+  sales_id         Int
+  product_id       Int?
+  product_name     String           @db.VarChar(255)
+  product_code     String?          @db.VarChar(100)
+  product_unit     String?          @db.VarChar(50)
+  qty              Decimal?         @default(0.00) @db.Decimal(15, 2)
+  price            Decimal?         @default(0.00) @db.Decimal(15, 2)
+  sub_total        Decimal?         @default(0.00) @db.Decimal(15, 2)
+  created_at       DateTime?        @default(now()) @db.Timestamp(0)
+  updated_at       DateTime?        @default(now()) @db.Timestamp(0)
+  penjualan_via_sj penjualan_via_sj @relation(fields: [sales_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "penjualan_via_sj_details_ibfk_1")
+
+  @@index([sales_id], map: "sales_id")
+}
+
+model penjualan_via_so {
+  id                       Int                        @id @default(autoincrement())
+  reference                String                     @unique(map: "reference") @db.VarChar(50)
+  customer_id              Int?
+  order_sheet_ref          String?                    @db.VarChar(100)
+  date                     DateTime                   @db.Date
+  note                     String?                    @db.Text
+  status                   String?                    @default("Draft") @db.VarChar(20)
+  created_at               DateTime?                  @default(now()) @db.Timestamp(0)
+  updated_at               DateTime?                  @default(now()) @db.Timestamp(0)
+  penjualan_via_so_details penjualan_via_so_details[]
+}
+
+model penjualan_via_so_details {
+  id               Int              @id @default(autoincrement())
+  sales_id         Int
+  product_id       Int?
+  product_name     String           @db.VarChar(255)
+  product_code     String?          @db.VarChar(100)
+  product_unit     String?          @db.VarChar(50)
+  qty              Decimal?         @default(0.00) @db.Decimal(15, 2)
+  price            Decimal?         @default(0.00) @db.Decimal(15, 2)
+  sub_total        Decimal?         @default(0.00) @db.Decimal(15, 2)
+  created_at       DateTime?        @default(now()) @db.Timestamp(0)
+  updated_at       DateTime?        @default(now()) @db.Timestamp(0)
+  penjualan_via_so penjualan_via_so @relation(fields: [sales_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "penjualan_via_so_details_ibfk_1")
+
+  @@index([sales_id], map: "sales_id")
+}
+
+model product_locations {
+  id           BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+  product_id   BigInt      @db.UnsignedBigInt
+  warehouse_id Int?
+  aisle        String?     @db.VarChar(100)
+  stock        Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  min_qty      Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  max_qty      Decimal?    @default(0.0000) @db.Decimal(15, 4)
+  created_at   DateTime?   @default(now()) @db.Timestamp(0)
+  updated_at   DateTime?   @default(now()) @db.Timestamp(0)
+  products     products    @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "product_locations_ibfk_1")
+  warehouses   warehouses? @relation(fields: [warehouse_id], references: [id], onUpdate: NoAction, map: "product_locations_ibfk_2")
+
+  @@index([product_id], map: "product_id")
+  @@index([warehouse_id], map: "warehouse_id")
+}
+
+model product_suppliers {
+  id                   Int       @id @default(autoincrement())
+  product_id           BigInt    @db.UnsignedBigInt
+  supplier_id          BigInt    @db.UnsignedBigInt
+  supplier_part_number String?   @db.VarChar(255)
+  purchase_price       Decimal?  @default(0.00) @db.Decimal(15, 2)
+  sell_price           Decimal?  @default(0.00) @db.Decimal(15, 2)
+  min_qty              Decimal?  @default(0.00) @db.Decimal(15, 2)
+  max_qty              Decimal?  @default(0.00) @db.Decimal(15, 2)
+  is_primary           Boolean?  @default(false)
+  created_at           DateTime? @default(now()) @db.Timestamp(0)
+  updated_at           DateTime? @default(now()) @db.Timestamp(0)
+  product_name         String?   @db.VarChar(255)
+  product_code         String?   @db.VarChar(255)
+  product_type         String?   @db.VarChar(100)
+  category_id          BigInt?   @db.UnsignedBigInt
+  tax_item_code        String?   @db.VarChar(255)
+  bom_code             String?   @db.VarChar(100)
+  is_asset             Boolean?  @default(false)
+  is_mandatory         Boolean?  @default(false)
+  units_json           String?   @db.Text
+  products             products  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "product_suppliers_ibfk_1")
+  suppliers            suppliers @relation(fields: [supplier_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "product_suppliers_ibfk_2")
+
+  @@unique([product_id, supplier_id], map: "idx_product_supplier")
+  @@index([supplier_id], map: "supplier_id")
+}
+
+model product_types {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique(map: "name") @db.VarChar(100)
+  description String?   @db.Text
+  is_active   Int?      @default(1) @db.TinyInt
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model product_units {
+  id             BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  product_id     BigInt    @db.UnsignedBigInt
+  level          Int
+  barcode        String?   @db.VarChar(100)
+  unit_code      String?   @db.VarChar(100)
+  tax_unit       String?   @db.VarChar(100)
+  conversion_qty Decimal?  @default(1.0000) @db.Decimal(15, 4)
+  color          String?   @db.VarChar(100)
+  buy_price      Decimal?  @default(0.00) @db.Decimal(20, 2)
+  sell_price     Decimal?  @default(0.00) @db.Decimal(20, 2)
+  created_at     DateTime? @default(now()) @db.Timestamp(0)
+  updated_at     DateTime? @default(now()) @db.Timestamp(0)
+  products       products  @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "product_units_ibfk_1")
+
+  @@index([product_id], map: "product_id")
+}
+
+model retur_penjualan {
+  id                      Int                       @id @default(autoincrement())
+  reference               String                    @unique(map: "reference") @db.VarChar(50)
+  customer_id             Int?
+  invoice_reference       String?                   @db.VarChar(100)
+  return_date             DateTime                  @db.Date
+  reason                  String?                   @db.Text
+  status                  String?                   @default("Draft") @db.VarChar(20)
+  created_at              DateTime?                 @default(now()) @db.Timestamp(0)
+  updated_at              DateTime?                 @default(now()) @db.Timestamp(0)
+  retur_penjualan_details retur_penjualan_details[]
+}
+
+model retur_penjualan_details {
+  id              Int             @id @default(autoincrement())
+  retur_id        Int
+  product_id      Int?
+  product_name    String          @db.VarChar(255)
+  product_code    String?         @db.VarChar(100)
+  product_unit    String?         @db.VarChar(50)
+  qty_returned    Decimal?        @default(0.00) @db.Decimal(15, 2)
+  price           Decimal?        @default(0.00) @db.Decimal(15, 2)
+  sub_total       Decimal?        @default(0.00) @db.Decimal(15, 2)
+  created_at      DateTime?       @default(now()) @db.Timestamp(0)
+  retur_penjualan retur_penjualan @relation(fields: [retur_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "retur_penjualan_details_ibfk_1")
+
+  @@index([retur_id], map: "retur_id")
+}
+
+model retur_surat_jalan {
+  id                        Int                         @id @default(autoincrement())
+  reference                 String                      @unique(map: "reference") @db.VarChar(50)
+  customer_id               Int?
+  sj_reference              String?                     @db.VarChar(100)
+  return_date               DateTime                    @db.Date
+  reason                    String?                     @db.Text
+  status                    String?                     @default("Draft") @db.VarChar(20)
+  created_at                DateTime?                   @default(now()) @db.Timestamp(0)
+  updated_at                DateTime?                   @default(now()) @db.Timestamp(0)
+  retur_surat_jalan_details retur_surat_jalan_details[]
+}
+
+model retur_surat_jalan_details {
+  id                Int               @id @default(autoincrement())
+  retur_id          Int
+  product_id        Int?
+  product_name      String            @db.VarChar(255)
+  product_code      String?           @db.VarChar(100)
+  product_unit      String?           @db.VarChar(50)
+  qty_returned      Decimal?          @default(0.00) @db.Decimal(15, 2)
+  created_at        DateTime?         @default(now()) @db.Timestamp(0)
+  updated_at        DateTime?         @default(now()) @db.Timestamp(0)
+  retur_surat_jalan retur_surat_jalan @relation(fields: [retur_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "retur_surat_jalan_details_ibfk_1")
+
+  @@index([retur_id], map: "retur_id")
+}
+
+model rumus_komisi {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(100)
+  type        String?   @default("percentage") @db.VarChar(30)
+  value       Decimal?  @default(0.0000) @db.Decimal(10, 4)
+  min_sales   Decimal?  @default(0.00) @db.Decimal(15, 2)
+  max_sales   Decimal?  @db.Decimal(15, 2)
+  description String?   @db.Text
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model salesman {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(100)
+  code       String?   @unique(map: "code") @db.VarChar(30)
+  phone      String?   @db.VarChar(30)
+  email      String?   @db.VarChar(100)
+  area       String?   @db.VarChar(100)
+  is_active  Boolean?  @default(true)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model scan_product_log {
+  id           Int       @id @default(autoincrement())
+  product_id   Int?
+  product_name String?   @db.VarChar(255)
+  product_code String?   @db.VarChar(100)
+  customer_id  Int?
+  scan_type    String?   @default("check") @db.VarChar(30)
+  qty          Decimal?  @default(1.00) @db.Decimal(15, 2)
+  scan_date    DateTime? @default(now()) @db.Timestamp(0)
+  note         String?   @db.Text
+}
+
+model stock_opname_details {
+  id             Int           @id @default(autoincrement())
+  opname_id      Int
+  product_id     BigInt        @db.UnsignedBigInt
+  supplier_id    BigInt?       @db.UnsignedBigInt
+  qty_system     Decimal       @default(0.00) @db.Decimal(15, 2)
+  qty_physical   Decimal       @default(0.00) @db.Decimal(15, 2)
+  qty_difference Decimal       @default(0.00) @db.Decimal(15, 2)
+  created_at     DateTime?     @default(now()) @db.Timestamp(0)
+  updated_at     DateTime?     @default(now()) @db.Timestamp(0)
+  stock_opnames  stock_opnames @relation(fields: [opname_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "stock_opname_details_ibfk_1")
+  products       products      @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "stock_opname_details_ibfk_2")
+  suppliers      suppliers?    @relation(fields: [supplier_id], references: [id], onUpdate: NoAction, map: "stock_opname_details_ibfk_3")
+
+  @@index([opname_id], map: "opname_id")
+  @@index([product_id], map: "product_id")
+  @@index([supplier_id], map: "supplier_id")
+}
+
+model stock_opnames {
+  id                   Int                    @id @default(autoincrement())
+  reference            String                 @unique(map: "reference") @db.VarChar(255)
+  date                 DateTime               @db.Date
+  warehouse_id         Int
+  status               String                 @default("Draft") @db.VarChar(50)
+  note                 String?                @db.Text
+  created_at           DateTime?              @default(now()) @db.Timestamp(0)
+  updated_at           DateTime?              @default(now()) @db.Timestamp(0)
+  department_id        Int?
+  category_id          Int?
+  coa_id               Int?
+  stock_opname_details stock_opname_details[]
+  warehouses           warehouses             @relation(fields: [warehouse_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "stock_opnames_ibfk_1")
+
+  @@index([warehouse_id], map: "warehouse_id")
+}
+
+model surat_jalan {
+  id                  Int                   @id @default(autoincrement())
+  reference           String                @unique(map: "reference") @db.VarChar(50)
+  customer_id         Int?
+  order_sheet_ref     String?               @db.VarChar(100)
+  driver_name         String?               @db.VarChar(100)
+  vehicle_no          String?               @db.VarChar(20)
+  delivery_date       DateTime              @db.Date
+  note                String?               @db.Text
+  status              String?               @default("Draft") @db.VarChar(20)
+  created_at          DateTime?             @default(now()) @db.Timestamp(0)
+  updated_at          DateTime?             @default(now()) @db.Timestamp(0)
+  surat_jalan_details surat_jalan_details[]
+}
+
+model surat_jalan_details {
+  id            Int         @id @default(autoincrement())
+  sj_id         Int
+  product_id    Int?
+  product_name  String      @db.VarChar(255)
+  product_code  String?     @db.VarChar(100)
+  product_unit  String?     @db.VarChar(50)
+  qty_delivered Decimal?    @default(0.00) @db.Decimal(15, 2)
+  created_at    DateTime?   @default(now()) @db.Timestamp(0)
+  updated_at    DateTime?   @default(now()) @db.Timestamp(0)
+  surat_jalan   surat_jalan @relation(fields: [sj_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "surat_jalan_details_ibfk_1")
+
+  @@index([sj_id], map: "sj_id")
+}
+
+model tanda_terima {
+  id                Int       @id @default(autoincrement())
+  reference         String    @unique(map: "reference") @db.VarChar(50)
+  customer_id       Int?
+  invoice_reference String?   @db.VarChar(100)
+  received_by       String?   @db.VarChar(100)
+  receive_date      DateTime  @db.Date
+  note              String?   @db.Text
+  status            String?   @default("Draft") @db.VarChar(20)
+  created_at        DateTime? @default(now()) @db.Timestamp(0)
+  updated_at        DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model tipe_barang_jadi {
+  id          Int       @id @default(autoincrement())
+  code        String    @unique(map: "code") @db.VarChar(50)
+  name        String    @db.VarChar(100)
+  description String?   @db.Text
+  is_active   Int?      @default(1) @db.TinyInt
+  created_at  DateTime? @default(now()) @db.Timestamp(0)
+  updated_at  DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model tipe_customer {
+  id           Int       @id @default(autoincrement())
+  name         String    @db.VarChar(100)
+  description  String?   @db.Text
+  discount_pct Decimal?  @default(0.00) @db.Decimal(5, 2)
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model transaksi_ar {
+  id                Int       @id @default(autoincrement())
+  reference         String    @unique(map: "reference") @db.VarChar(50)
+  customer_id       Int?
+  invoice_reference String?   @db.VarChar(100)
+  amount            Decimal?  @default(0.00) @db.Decimal(15, 2)
+  payment_method    String?   @db.VarChar(50)
+  date              DateTime  @db.Date
+  note              String?   @db.Text
+  status            String?   @default("Draft") @db.VarChar(20)
+  created_at        DateTime? @default(now()) @db.Timestamp(0)
+  updated_at        DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model tutup_pending_so {
+  id           Int       @id @default(autoincrement())
+  reference    String    @unique(map: "reference") @db.VarChar(50)
+  customer_id  Int?
+  so_reference String?   @db.VarChar(100)
+  reason       String?   @db.Text
+  date         DateTime  @db.Date
+  status       String?   @default("Approved") @db.VarChar(20)
+  created_at   DateTime? @default(now()) @db.Timestamp(0)
+  updated_at   DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model warehouse_stocks {
+  id           Int        @id @default(autoincrement())
+  product_id   BigInt     @db.UnsignedBigInt
+  warehouse_id Int
+  supplier_id  BigInt?    @db.UnsignedBigInt
+  qty_stock    Decimal?   @default(0.00) @db.Decimal(15, 2)
+  created_at   DateTime?  @default(now()) @db.Timestamp(0)
+  updated_at   DateTime?  @default(now()) @db.Timestamp(0)
+  products     products   @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "warehouse_stocks_ibfk_1")
+  warehouses   warehouses @relation(fields: [warehouse_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "warehouse_stocks_ibfk_2")
+  suppliers    suppliers? @relation(fields: [supplier_id], references: [id], onUpdate: NoAction, map: "warehouse_stocks_ibfk_3")
+
+  @@index([product_id, warehouse_id, supplier_id], map: "idx_warehouse_stock_lookup")
+  @@index([supplier_id], map: "supplier_id")
+  @@index([warehouse_id], map: "warehouse_id")
+}
+
+model warehouses {
+  id                Int                 @id @default(autoincrement())
+  code              String              @unique(map: "code") @db.VarChar(50)
+  name              String              @db.VarChar(100)
+  short_name        String?             @db.VarChar(50)
+  description       String?             @db.Text
+  department_id     BigInt?             @db.UnsignedBigInt
+  is_transit        Boolean?            @default(false)
+  is_active         Boolean?            @default(true)
+  created_at        DateTime?           @default(now()) @db.Timestamp(0)
+  updated_at        DateTime?           @default(now()) @db.Timestamp(0)
+  product_locations product_locations[]
+  stock_opnames     stock_opnames[]
+  warehouse_stocks  warehouse_stocks[]
+  departments       departments?        @relation(fields: [department_id], references: [id], onUpdate: NoAction, map: "warehouses_ibfk_1")
+
+  @@index([department_id], map: "department_id")
+}
+
+model weekday_settings {
+  id         Int       @id @default(autoincrement())
+  day_name   String    @db.VarChar(20)
+  day_number Int
+  is_working Boolean?  @default(true)
+  start_time DateTime? @default(dbgenerated("'08:00:00'")) @db.Time(0)
+  end_time   DateTime? @default(dbgenerated("'17:00:00'")) @db.Time(0)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+}
+
+model work_order_materials {
+  id            Int         @id @default(autoincrement())
+  work_order_id Int
+  product_id    BigInt      @db.UnsignedBigInt
+  qty_required  Decimal     @default(0.00) @db.Decimal(15, 2)
+  qty_issued    Decimal     @default(0.00) @db.Decimal(15, 2)
+  created_at    DateTime?   @default(now()) @db.Timestamp(0)
+  updated_at    DateTime?   @default(now()) @db.Timestamp(0)
+  work_orders   work_orders @relation(fields: [work_order_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "work_order_materials_ibfk_1")
+  products      products    @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "work_order_materials_ibfk_2")
+
+  @@index([product_id], map: "product_id")
+  @@index([work_order_id], map: "work_order_id")
+}
+
+model work_orders {
+  id                   Int                    @id @default(autoincrement())
+  reference            String                 @unique(map: "reference") @db.VarChar(255)
+  date                 DateTime               @db.Date
+  parent_product_id    BigInt                 @db.UnsignedBigInt
+  target_qty           Decimal                @default(0.00) @db.Decimal(15, 2)
+  status               String                 @default("Pending") @db.VarChar(50)
+  note                 String?                @db.Text
+  created_at           DateTime?              @default(now()) @db.Timestamp(0)
+  updated_at           DateTime?              @default(now()) @db.Timestamp(0)
+  material_issuances   material_issuances[]
+  work_order_materials work_order_materials[]
+  products             products               @relation(fields: [parent_product_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "work_orders_ibfk_1")
+
+  @@index([parent_product_id], map: "parent_product_id")
+}
+
+enum approval_request_logs_action {
+  assigned
+  approved
+  rejected
+  comment
+  escalated
+}
+
+enum approval_rule_users_role {
+  requester
+  approver
+}
+
+enum approval_requests_status {
+  pending
+  approved
+  rejected
+  cancelled
+}
+
+enum master_budget_status {
+  pending
+  approved
+  rejected
+}
+
+enum purchases_status {
+  pending
+  approved
+  rejected
+}
+
+enum bank_accounts_status {
+  Active
+  Inactive
+}
+
+enum bank_accounts_account_type {
+  Bank
+  Cash
+}
+
+model mrps {
+  id               BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
+  po_customer_id   BigInt?       @db.UnsignedBigInt
+  reference_code   String        @db.VarChar(255)
+  time_frame_start DateTime      @db.Date
+  time_frame_end   DateTime      @db.Date
+  status           String        @db.VarChar(255) // Draft, Released, Closed
+  created_at       DateTime?     @db.Timestamp(0) @default(now())
+  updated_at       DateTime?     @db.Timestamp(0) @default(now()) @updatedAt
+  mrp_details      mrp_details[]
+}
+
+model mrp_details {
+  id              BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  mrp_id          BigInt    @db.UnsignedBigInt
+  product_id      BigInt    @db.UnsignedBigInt
+  qty_required    Int
+  qty_released_pr Int       @default(0)
+  created_at      DateTime? @db.Timestamp(0) @default(now())
+  updated_at      DateTime? @db.Timestamp(0) @default(now()) @updatedAt
+  mrp             mrps      @relation(fields: [mrp_id], references: [id], onDelete: Cascade)
+
+  @@index([mrp_id])
+}
+
+model planning_produksi {
+  id            BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  pro_code      String    @db.VarChar(255)
+  wo_id         BigInt?   @db.UnsignedBigInt
+  machine_id    BigInt?   @db.UnsignedBigInt
+  operator_name String?   @db.VarChar(255)
+  shift         Int
+  target_qty    Int
+  actual_qty    Int       @default(0)
+  start_date    DateTime  @db.Date
+  end_date      DateTime  @db.Date
+  status        String    @db.VarChar(255) // Rencana, Berjalan, Selesai
+  created_at    DateTime? @db.Timestamp(0) @default(now())
+  updated_at    DateTime? @db.Timestamp(0) @default(now()) @updatedAt
+}
+
+model vendor_delivery_schedules {
+  id                      BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  purchase_order_id       BigInt    @db.UnsignedBigInt
+  reference_code          String    @db.VarChar(255)
+  estimated_delivery_date DateTime @db.Date
+  actual_delivery_date    DateTime? @db.Date
+  status                  String    @db.VarChar(255) // Pending, In Transit, Arrived, Cancelled
+  notes                   String?   @db.Text
+  created_at              DateTime? @db.Timestamp(0) @default(now())
+  updated_at              DateTime? @db.Timestamp(0) @default(now()) @updatedAt
+}
+
+model material_realizations {
+  id            BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  work_order_id BigInt?   @db.UnsignedBigInt
+  status        String    @db.VarChar(255) // Draft, Transferred
+  created_at    DateTime? @db.Timestamp(0) @default(now())
+  updated_at    DateTime? @db.Timestamp(0) @default(now()) @updatedAt
+}
+
+model production_outputs {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  pro_id     BigInt    @db.UnsignedBigInt
+  qty_ok     Int
+  qty_ng     Int
+  status     String    @db.VarChar(255) // WIP, Verified_QC, Rejected
+  created_at DateTime? @db.Timestamp(0) @default(now())
+  updated_at DateTime? @db.Timestamp(0) @default(now()) @updatedAt
+}
+
+model crusher_logs {
+  id                   BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  production_output_id BigInt    @db.UnsignedBigInt
+  component_product_id BigInt?   @db.UnsignedBigInt
+  qty_ng_component     Int
+  qty_regrind_resin    Decimal?  @db.Decimal(15, 4)
+  action               String    @db.VarChar(255) // Returned to MATKOM, Disposed, Crushed and Returned to Matkom
+  created_at           DateTime? @db.Timestamp(0) @default(now())
+  updated_at           DateTime? @db.Timestamp(0) @default(now()) @updatedAt
+}
+

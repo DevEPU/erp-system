@@ -1,0 +1,14 @@
+PR ID: 173
+Total: 210000
+BudgetAmount: 205000.00
+Mandatory: 0.00
+NonMandatory: 205000.00
+BorrowAmount: 205000.00
+Created: 2026-02-27 10:59:29
+Updated: 2026-02-27 11:01:07
+
+Allocs:
+ Alloc 27, MB_ID: 141, Amt: 205000.00, DetailId: '0' (type integer), is_int: 1, is_ext: 0
+
+Alloc Collection Check:
+HasOverride: TRUE

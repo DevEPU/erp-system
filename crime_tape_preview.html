@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crime Tape Animation - Webflow Ultra Smooth 60FPS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=Oswald:wght@700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #f1f3f5;
+      --panel-bg: rgba(14, 16, 22, 0.92);
+      --panel-border: rgba(255, 255, 255, 0.12);
+      --accent: #ffd000;
+      --text-main: #ffffff;
+      --text-muted: #9ca3af;
+      --tape-gap: -35px;
+      --font-scale: 1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-color: var(--bg-color);
+      font-family: 'Inter', sans-serif;
+      color: #111;
+      transition: background-color 0.3s ease;
+    }
+
+    body.dark-mode {
+      --bg-color: #08090c;
+      color: #fff;
+    }
+
+    body.grid-mode {
+      --bg-color: #0c0e14;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(255, 208, 0, 0.08) 0%, transparent 65%),
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 100% 100%, 40px 40px, 40px 40px;
+      color: #fff;
+    }
+
+    /* Floating Header Controls */
+    header {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      width: calc(100% - 28px);
+      max-width: 1300px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--panel-border);
+      border-radius: 14px;
+      padding: 10px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    header.hidden-ui {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-50%) translateY(-30px);
+    }
+
+    .brand-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-icon {
+      width: 28px;
+      height: 28px;
+      background: #ffd000;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-size: 15px;
+      color: #000;
+      box-shadow: 0 0 14px rgba(255, 208, 0, 0.6);
+    }
+
+    .badge-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+    }
+
+    .badge-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .controls-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 5px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .control-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    select, input[type="text"], input[type="range"] {
+      background: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 11px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    select:focus, input[type="text"]:focus {
+      border-color: #ffd000;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn.btn-primary {
+      background: #ffd000;
+      color: #000;
+      border-color: #ffd000;
+      font-weight: 700;
+    }
+
+    /* FULL WIDTH OVERFLOW-HIDDEN TAPE STAGE */
+    .tape-stage {
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
+      position: relative;
+      overflow: hidden;
+      min-height: 520px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 90px 0 60px;
+      perspective: 1200px;
+    }
+
+    /* PURE CSS HARDWARE-ACCELERATED MARQUEE TAPE BANNER */
+    .tape-banner {
+      width: 116vw;
+      margin-left: -8vw;
+      margin-right: -8vw;
+      position: relative;
+      white-space: nowrap;
+      user-select: none;
+      padding: 16px 0;
+      cursor: default;
+      transition: transform 0.3s ease, margin 0.3s ease;
+      will-change: transform;
+    }
+
+    /* Realistic Plastic Tape Sheen & Borders */
+    .tape-yellow {
+      background: linear-gradient(180deg, #fff97a 0%, #ffd400 13%, #f5bc00 80%, #b88500 100%);
+      color: #000000;
+      box-shadow: 
+        inset 0 3px 0 rgba(255, 255, 255, 0.85),
+        inset 0 -3px 0 rgba(0, 0, 0, 0.28),
+        0 20px 35px rgba(0, 0, 0, 0.42);
+    }
+
+    .tape-lime {
+      background: linear-gradient(180deg, #e4ff8c 0%, #bbf340 16%, #9ad41c 82%, #6f9f0d 100%);
+      color: #000000;
+      box-shadow: 
+        inset 0 3px 0 rgba(255, 255, 255, 0.85),
+        inset 0 -3px 0 rgba(0, 0, 0, 0.28),
+        0 20px 35px rgba(0, 0, 0, 0.42);
+    }
+
+    .tape-white {
+      background: linear-gradient(180deg, #ffffff 0%, #fdfdfd 18%, #ebebeb 82%, #c9c9c9 100%);
+      color: #000000;
+      box-shadow: 
+        inset 0 3px 0 rgba(255, 255, 255, 0.9),
+        inset 0 -3px 0 rgba(0, 0, 0, 0.2),
+        0 22px 38px rgba(0, 0, 0, 0.45);
+    }
+
+    .tape-red {
+      background: linear-gradient(180deg, #ff8c8c 0%, #eb1c1c 15%, #b50c0c 82%, #7a0303 100%);
+      color: #ffffff;
+      box-shadow: 
+        inset 0 3px 0 rgba(255, 255, 255, 0.7),
+        inset 0 -3px 0 rgba(0, 0, 0, 0.4),
+        0 20px 35px rgba(0, 0, 0, 0.45);
+    }
+
+    .tape-mono {
+      background: #111111;
+      color: #ffffff;
+      box-shadow: 
+        inset 0 2px 0 rgba(255, 255, 255, 0.25),
+        0 20px 35px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ROTASI & POSISI PERSILANGAN RAPAT (TIght Intersecting Layout) */
+    .tape-1 {
+      transform: rotate(-3.5deg) translateZ(5px);
+      z-index: 1;
+    }
+
+    .tape-2 {
+      transform: rotate(2.8deg) translateZ(25px);
+      z-index: 3;
+      margin-top: var(--tape-gap); /* RAPAT / BERHIMPITAN SESUAI FOTO */
+    }
+
+    .tape-3 {
+      transform: rotate(-1.2deg) translateZ(10px);
+      z-index: 2;
+      margin-top: var(--tape-gap);
+    }
+
+    /* HARDWARE ACCELERATED GPU MARQUEE TRACK (IDENTIK DENGAN WEBFLOW) */
+    .tape-track {
+      display: flex;
+      width: max-content;
+      will-change: transform;
+    }
+
+    /* Animasi Ke Kiri (Tanpa Patah, Mengulang Mulus di 50%) */
+    .track-move-left {
+      animation: marqueeToLeft 24s linear infinite;
+    }
+
+    /* Animasi Ke Kanan */
+    .track-move-right {
+      animation: marqueeToRight 22s linear infinite;
+    }
+
+    @keyframes marqueeToLeft {
+      0% {
+        transform: translate3d(0, 0, 0);
+      }
+      100% {
+        transform: translate3d(-50%, 0, 0);
+      }
+    }
+
+    @keyframes marqueeToRight {
+      0% {
+        transform: translate3d(-50%, 0, 0);
+      }
+      100% {
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    /* KONTEN TEKS LEBIH BESAR & BOLD */
+    .tape-items-block {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .tape-text-item {
+      font-family: 'Anton', 'Oswald', Impact, sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      font-size: clamp(3rem, calc(5.5vw * var(--font-scale)), 4.8rem);
+      line-height: 1;
+      letter-spacing: 4px;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .bullet {
+      font-size: 0.6em;
+      opacity: 0.85;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    /* Floating toggle for fullscreen view */
+    .fs-toggle-btn {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 1000;
+      background: var(--panel-bg);
+      border: 1px solid var(--panel-border);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .fs-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Details Panel */
+    .details-panel {
+      width: calc(100% - 32px);
+      max-width: 1200px;
+      margin: 20px auto 50px;
+      background: var(--panel-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      color: #fff;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 14px;
+    }
+
+    .panel-header h2 {
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-pills {
+      display: flex;
+      gap: 8px;
+    }
+
+    .tab-pill {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-pill.active {
+      background: #ffd000;
+      color: #000;
+      border-color: #ffd000;
+    }
+
+    .code-preview-box {
+      background: #090a0f;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 16px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      line-height: 1.5;
+      color: #e5e7eb;
+      overflow-x: auto;
+      max-height: 300px;
+      position: relative;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .copy-btn:hover {
+      background: #ffd000;
+      color: #000;
+    }
+
+    .solution-highlights {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .highlight-card {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .highlight-card h3 {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffd000;
+      margin-bottom: 6px;
+    }
+
+    .highlight-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #10b981;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      display: none;
+      z-index: 9999;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Control Bar -->
+  <header id="mainHeader">
+    <div class="brand-badge">
+      <div class="badge-icon">⚡</div>
+      <div>
+        <div class="badge-title">Webflow Pure CSS Marquee (Ultra Smooth)</div>
+        <div class="badge-sub">Jarak Rapat • Font Besar • 100% Bebas Patah</div>
+      </div>
+    </div>
+
+    <div class="controls-wrapper">
+      <!-- Color Presets -->
+      <div class="control-group">
+        <span class="control-label">Warna</span>
+        <select id="colorPresetSelect">
+          <option value="police-yellow" selected>🟡 Police Yellow (Foto Asli)</option>
+          <option value="agency-lime">🟢 Webflow Lime & White</option>
+          <option value="hazard-red">🔴 Hazard Danger Red</option>
+          <option value="cyber-mono">⚪ Brutalist Mono</option>
+        </select>
+      </div>
+
+      <!-- Spacing / Jarak Antar Tape -->
+      <div class="control-group">
+        <span class="control-label">Jarak Pita</span>
+        <select id="spacingSelect">
+          <option value="tight" selected>Sangat Rapat (Overlapping)</option>
+          <option value="medium">Sedang (-20px)</option>
+          <option value="loose">Renggang (+15px)</option>
+        </select>
+      </div>
+
+      <!-- Ukuran Teks / Font Size Scale -->
+      <div class="control-group">
+        <span class="control-label">Ukuran Teks</span>
+        <select id="fontSizeSelect">
+          <option value="large" selected>Ekstra Besar (Default)</option>
+          <option value="giant">Giant / Jumbo (1.25x)</option>
+          <option value="medium">Standar (0.85x)</option>
+        </select>
+      </div>
+
+      <!-- Text Preset / Custom -->
+      <div class="control-group">
+        <span class="control-label">Teks</span>
+        <select id="textPresetSelect">
+          <option value="crime" selected>CRIME SCENE • DO NOT CROSS</option>
+          <option value="agency">WEB AGENCY • SEO AGENCY • DESIGN STUDIO</option>
+          <option value="custom">✍ Tulis Sendiri...</option>
+        </select>
+        <input type="text" id="customTextInput" placeholder="Ketik teks..." style="display: none; width: 140px;">
+      </div>
+
+      <!-- Speed Control -->
+      <div class="control-group">
+        <span class="control-label">Speed</span>
+        <input type="range" id="speedSlider" min="0" max="3" step="0.2" value="1" style="width: 55px;">
+        <span id="speedVal" style="font-size: 11px; color: #ffd000; width: 22px;">1x</span>
+      </div>
+
+      <!-- Background Switcher -->
+      <div class="control-group">
+        <span class="control-label">BG</span>
+        <select id="bgSelect">
+          <option value="light" selected>⚪ Studio Light</option>
+          <option value="dark">⚫ Noir Black</option>
+          <option value="grid">▦ Cyber Grid</option>
+        </select>
+      </div>
+
+      <!-- Play / Pause -->
+      <button class="btn" id="togglePlayBtn">⏸ Pause</button>
+    </div>
+  </header>
+
+  <!-- FULL BLEED TAPE SHOWCASE STAGE -->
+  <div class="tape-stage">
+    
+    <!-- PITA 1: MENYILANG KE BAWAH (Bergerak Ke Kiri) -->
+    <div class="tape-banner tape-yellow tape-1" id="tapeBanner1">
+      <div class="tape-track track-move-left" id="track1">
+        <!-- SET A (50% dari track) -->
+        <div class="tape-items-block" id="block1A">
+          <div class="tape-text-item">CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span> CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span></div>
+          <div class="tape-text-item">CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span> CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span></div>
+        </div>
+        <!-- SET B (50% klon duplikat untuk seamless loop 100% tanpa patah) -->
+        <div class="tape-items-block" id="block1B" aria-hidden="true">
+          <div class="tape-text-item">CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span> CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span></div>
+          <div class="tape-text-item">CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span> CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PITA 2: MENYILANG KE ATAS DI PALING DEPAN (Bergerak Ke Kanan, Saling Bertumpukan Rapat) -->
+    <div class="tape-banner tape-yellow tape-2" id="tapeBanner2">
+      <div class="tape-track track-move-right" id="track2">
+        <!-- SET A -->
+        <div class="tape-items-block" id="block2A">
+          <div class="tape-text-item">CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span> CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span></div>
+          <div class="tape-text-item">CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span> CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span></div>
+        </div>
+        <!-- SET B -->
+        <div class="tape-items-block" id="block2B" aria-hidden="true">
+          <div class="tape-text-item">CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span> CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span></div>
+          <div class="tape-text-item">CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span> CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PITA 3: PITA BAWAH RAPAT (Bergerak Ke Kiri) -->
+    <div class="tape-banner tape-yellow tape-3" id="tapeBanner3">
+      <div class="tape-track track-move-left" id="track3" style="animation-duration: 28s;">
+        <!-- SET A -->
+        <div class="tape-items-block" id="block3A">
+          <div class="tape-text-item">CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span> CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span></div>
+          <div class="tape-text-item">CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span> CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span></div>
+        </div>
+        <!-- SET B -->
+        <div class="tape-items-block" id="block3B" aria-hidden="true">
+          <div class="tape-text-item">CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span> CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span></div>
+          <div class="tape-text-item">CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span> CRIME SCENE <span class="bullet">•</span> DO NOT CROSS <span class="bullet">•</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toggle Fullscreen View Button -->
+  <button class="fs-toggle-btn" id="fsToggleBtn" onclick="toggleHeaderUI()">
+    <span id="fsIcon">👁</span> <span id="fsText">Sembunyikan Menu (Lihat Penuh)</span>
+  </button>
+
+  <!-- Technical Explanation & Implementation Panel -->
+  <div class="details-panel">
+    <div class="panel-header">
+      <h2><span>⚡</span> Arsitektur Persis Seperti Webflow (Smooth 60/120 FPS)</h2>
+      <div class="tab-pills">
+        <button class="tab-pill active" onclick="switchCodeTab('react')">React / Next.js Component</button>
+        <button class="tab-pill" onclick="switchCodeTab('html')">Pure HTML / CSS</button>
+      </div>
+    </div>
+
+    <div class="code-preview-box">
+      <button class="copy-btn" onclick="copySnippet()">Salin Kode</button>
+      <pre><code id="codeSnippetDisplay"></code></pre>
+    </div>
+
+    <div class="solution-highlights">
+      <div class="highlight-card">
+        <h3>🚀 100% GPU Hardware Accelerated</h3>
+        <p>Menggunakan arsitektur asli Webflow: <code>transform: translate3d(-50%, 0, 0)</code> murni CSS. Dijalankan langsung oleh GPU browser compositor thread tanpa intervensi JavaScript, menghasilkan gerakan 60/120/144 FPS yang sehalus sutra.</p>
+      </div>
+      <div class="highlight-card">
+        <h3>🔲 Jarak Rapat & Efek Tumpang Tindih</h3>
+        <p>Jarak vertikal antar pita didekatkan rapat (menggunakan margin negatif <code>-35px</code> s/d <code>-45px</code>), saling bersilangan di tengah dengan bayangan <code>box-shadow</code> alami persis seperti tali garis polisi asli pada foto.</p>
+      </div>
+      <div class="highlight-card">
+        <h3>🔤 Tipografi Ekstra Besar & Tegas</h3>
+        <p>Ukuran huruf diperbesar secara responsif menggunakan <code>clamp(3rem, 5.5vw, 4.8rem)</code> dengan font <em>Anton / Oswald</em> bold uppercase, memberikan dampak visual yang kuat dan dominan di layar.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Kode berhasil disalin ke clipboard!</div>
+
+  <!-- Control & Interaction Script -->
+  <script>
+    // State
+    let isPlaying = true;
+    let baseSpeed = 1;
+    let currentPhrase = "CRIME SCENE • DO NOT CROSS";
+
+    const track1 = document.getElementById('track1');
+    const track2 = document.getElementById('track2');
+    const track3 = document.getElementById('track3');
+
+    // Update text content in all blocks
+    function updateTextContent(phrase) {
+      currentPhrase = phrase;
+      const htmlBlock = `
+        <div class="tape-text-item">${phrase} <span class="bullet">•</span> ${phrase} <span class="bullet">•</span></div>
+        <div class="tape-text-item">${phrase} <span class="bullet">•</span> ${phrase} <span class="bullet">•</span></div>
+      `;
+      
+      document.getElementById('block1A').innerHTML = htmlBlock;
+      document.getElementById('block1B').innerHTML = htmlBlock;
+      document.getElementById('block2A').innerHTML = htmlBlock;
+      document.getElementById('block2B').innerHTML = htmlBlock;
+      document.getElementById('block3A').innerHTML = htmlBlock;
+      document.getElementById('block3B').innerHTML = htmlBlock;
+    }
+
+    // Play / Pause Toggle
+    const togglePlayBtn = document.getElementById('togglePlayBtn');
+    togglePlayBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      const state = isPlaying ? 'running' : 'paused';
+      track1.style.animationPlayState = state;
+      track2.style.animationPlayState = state;
+      track3.style.animationPlayState = state;
+      togglePlayBtn.textContent = isPlaying ? "⏸ Pause" : "▶ Resume";
+      togglePlayBtn.classList.toggle('btn-primary', !isPlaying);
+    });
+
+    // Speed Slider
+    const speedSlider = document.getElementById('speedSlider');
+    const speedVal = document.getElementById('speedVal');
+    speedSlider.addEventListener('input', (e) => {
+      baseSpeed = parseFloat(e.target.value);
+      speedVal.textContent = baseSpeed + 'x';
+      if (baseSpeed === 0) {
+        track1.style.animationPlayState = 'paused';
+        track2.style.animationPlayState = 'paused';
+        track3.style.animationPlayState = 'paused';
+      } else {
+        track1.style.animationPlayState = isPlaying ? 'running' : 'paused';
+        track2.style.animationPlayState = isPlaying ? 'running' : 'paused';
+        track3.style.animationPlayState = isPlaying ? 'running' : 'paused';
+        track1.style.animationDuration = (24 / baseSpeed) + 's';
+        track2.style.animationDuration = (22 / baseSpeed) + 's';
+        track3.style.animationDuration = (28 / baseSpeed) + 's';
+      }
+    });
+
+    // Spacing Selector (Jarak Antar Tape)
+    document.getElementById('spacingSelect').addEventListener('change', (e) => {
+      const val = e.target.value;
+      if (val === 'tight') {
+        document.documentElement.style.setProperty('--tape-gap', '-38px');
+      } else if (val === 'medium') {
+        document.documentElement.style.setProperty('--tape-gap', '-15px');
+      } else if (val === 'loose') {
+        document.documentElement.style.setProperty('--tape-gap', '15px');
+      }
+    });
+
+    // Font Size Scale Selector
+    document.getElementById('fontSizeSelect').addEventListener('change', (e) => {
+      const val = e.target.value;
+      if (val === 'giant') {
+        document.documentElement.style.setProperty('--font-scale', '1.25');
+      } else if (val === 'large') {
+        document.documentElement.style.setProperty('--font-scale', '1');
+      } else if (val === 'medium') {
+        document.documentElement.style.setProperty('--font-scale', '0.85');
+      }
+    });
+
+    // Color Theme Presets
+    const tape1 = document.getElementById('tapeBanner1');
+    const tape2 = document.getElementById('tapeBanner2');
+    const tape3 = document.getElementById('tapeBanner3');
+
+    document.getElementById('colorPresetSelect').addEventListener('change', (e) => {
+      const val = e.target.value;
+      tape1.className = 'tape-banner tape-1';
+      tape2.className = 'tape-banner tape-2';
+      tape3.className = 'tape-banner tape-3';
+
+      if (val === 'police-yellow') {
+        tape1.classList.add('tape-yellow');
+        tape2.classList.add('tape-yellow');
+        tape3.classList.add('tape-yellow');
+      } else if (val === 'agency-lime') {
+        tape1.classList.add('tape-lime');
+        tape2.classList.add('tape-white');
+        tape3.classList.add('tape-lime');
+      } else if (val === 'hazard-red') {
+        tape1.classList.add('tape-red');
+        tape2.classList.add('tape-white');
+        tape3.classList.add('tape-red');
+      } else if (val === 'cyber-mono') {
+        tape1.classList.add('tape-mono');
+        tape2.classList.add('tape-white');
+        tape3.classList.add('tape-mono');
+      }
+    });
+
+    // Text Presets / Custom
+    const textPresetSelect = document.getElementById('textPresetSelect');
+    const customTextInput = document.getElementById('customTextInput');
+
+    textPresetSelect.addEventListener('change', (e) => {
+      const val = e.target.value;
+      if (val === 'crime') {
+        customTextInput.style.display = 'none';
+        updateTextContent("CRIME SCENE • DO NOT CROSS");
+      } else if (val === 'agency') {
+        customTextInput.style.display = 'none';
+        updateTextContent("WEB AGENCY • SEO AGENCY • DESIGN STUDIO");
+      } else if (val === 'custom') {
+        customTextInput.style.display = 'inline-block';
+        customTextInput.focus();
+      }
+    });
+
+    customTextInput.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      if (val) {
+        updateTextContent(val.toUpperCase());
+      }
+    });
+
+    // Background Mode
+    document.getElementById('bgSelect').addEventListener('change', (e) => {
+      const val = e.target.value;
+      document.body.classList.remove('dark-mode', 'grid-mode');
+      if (val === 'dark') {
+        document.body.classList.add('dark-mode');
+      } else if (val === 'grid') {
+        document.body.classList.add('grid-mode');
+      }
+    });
+
+    // Hide/Show Top Header UI for Full View
+    let headerHidden = false;
+    function toggleHeaderUI() {
+      headerHidden = !headerHidden;
+      const h = document.getElementById('mainHeader');
+      const icon = document.getElementById('fsIcon');
+      const txt = document.getElementById('fsText');
+      if (headerHidden) {
+        h.classList.add('hidden-ui');
+        icon.textContent = "⚙";
+        txt.textContent = "Tampilkan Menu Kontrol";
+      } else {
+        h.classList.remove('hidden-ui');
+        icon.textContent = "👁";
+        txt.textContent = "Sembunyikan Menu (Lihat Penuh)";
+      }
+    }
+
+    // Snippets for Copying
+    const reactSnippet = `// components/WebflowCrimeTape.tsx
+'use client';
+
+import React from 'react';
+
+interface TapeProps {
+  phrase?: string;
+  speed?: number; // duration in seconds
+}
+
+export const WebflowCrimeTape: React.FC<TapeProps> = ({
+  phrase = 'CRIME SCENE • DO NOT CROSS',
+  speed = 22,
+}) => {
+  const content = (
+    <div className="flex items-center flex-shrink-0">
+      <div className="font-['Anton',sans-serif] font-black uppercase tracking-[4px] text-[clamp(3rem,5.5vw,4.8rem)] leading-none px-7 flex items-center gap-7">
+        {phrase} <span className="opacity-80 text-[0.6em]">•</span> {phrase} <span className="opacity-80 text-[0.6em]">•</span>
+      </div>
+      <div className="font-['Anton',sans-serif] font-black uppercase tracking-[4px] text-[clamp(3rem,5.5vw,4.8rem)] leading-none px-7 flex items-center gap-7">
+        {phrase} <span className="opacity-80 text-[0.6em]">•</span> {phrase} <span className="opacity-80 text-[0.6em]">•</span>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="relative w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden py-16 flex flex-col items-center">
+      
+      {/* Pita 1: Miring ke Bawah, Bergerak ke Kiri */}
+      <div className="w-[116vw] -ml-[8vw] -mr-[8vw] py-4 select-none rotate-[-3.5deg] z-10 bg-gradient-to-b from-[#fff97a] via-[#ffd400] to-[#b88500] text-black shadow-[inset_0_3px_0_rgba(255,255,255,0.85),inset_0_-3px_0_rgba(0,0,0,0.28),0_20px_35px_rgba(0,0,0,0.42)]">
+        <div className="flex w-max animate-marquee-left" style={{ animationDuration: \`\${speed}s\` }}>
+          {content}
+          {content}
+        </div>
+      </div>
+
+      {/* Pita 2: Miring ke Atas, Saling Bertumpukan Rapat (Menimpa Pita 1) */}
+      <div className="w-[116vw] -ml-[8vw] -mr-[8vw] py-4 select-none rotate-[2.8deg] z-30 -mt-[38px] bg-gradient-to-b from-[#fff97a] via-[#ffd400] to-[#b88500] text-black shadow-[inset_0_3px_0_rgba(255,255,255,0.85),inset_0_-3px_0_rgba(0,0,0,0.28),0_22px_38px_rgba(0,0,0,0.45)]">
+        <div className="flex w-max animate-marquee-right" style={{ animationDuration: \`\${speed - 2}s\` }}>
+          {content}
+          {content}
+        </div>
+      </div>
+
+      {/* Pita 3: Rapat di Bawah */}
+      <div className="w-[116vw] -ml-[8vw] -mr-[8vw] py-4 select-none rotate-[-1.2deg] z-20 -mt-[38px] bg-gradient-to-b from-[#fff97a] via-[#ffd400] to-[#b88500] text-black shadow-[inset_0_3px_0_rgba(255,255,255,0.85),inset_0_-3px_0_rgba(0,0,0,0.28),0_20px_35px_rgba(0,0,0,0.42)]">
+        <div className="flex w-max animate-marquee-left" style={{ animationDuration: \`\${speed + 4}s\` }}>
+          {content}
+          {content}
+        </div>
+      </div>
+
+    </div>
+  );
+};
+
+/* Tambahkan di tailwind.config.ts / CSS:
+@keyframes marquee-left {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+@keyframes marquee-right {
+  0% { transform: translate3d(-50%, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+.animate-marquee-left {
+  animation: marquee-left linear infinite;
+}
+.animate-marquee-right {
+  animation: marquee-right linear infinite;
+}
+*/`;
+
+    const htmlSnippet = `<!-- HTML Full-Bleed Edge-to-Edge Webflow Style Tape -->
+<style>
+.tape-stage {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  overflow: hidden;
+  padding: 60px 0;
+  display: flex;
+  flex-direction: column;
+}
+.tape-banner {
+  width: 116vw;
+  margin-left: -8vw;
+  padding: 16px 0;
+  white-space: nowrap;
+  user-select: none;
+  background: linear-gradient(180deg, #fff97a 0%, #ffd400 13%, #f5bc00 80%, #b88500 100%);
+  color: #000;
+  box-shadow: inset 0 3px 0 rgba(255,255,255,0.85), inset 0 -3px 0 rgba(0,0,0,0.28), 0 20px 35px rgba(0,0,0,0.42);
+}
+.tape-1 { transform: rotate(-3.5deg); z-index: 1; }
+.tape-2 { transform: rotate(2.8deg); z-index: 3; margin-top: -38px; } /* Rapat */
+.tape-3 { transform: rotate(-1.2deg); z-index: 2; margin-top: -38px; }
+
+.tape-track { display: flex; width: max-content; }
+.move-left { animation: toLeft 22s linear infinite; }
+.move-right { animation: toRight 20s linear infinite; }
+
+@keyframes toLeft {
+  0% { transform: translate3d(0,0,0); }
+  100% { transform: translate3d(-50%,0,0); }
+}
+@keyframes toRight {
+  0% { transform: translate3d(-50%,0,0); }
+  100% { transform: translate3d(0,0,0); }
+}
+.tape-item {
+  font-family: 'Anton', Impact, sans-serif;
+  font-size: clamp(3rem, 5.5vw, 4.8rem);
+  font-weight: 900;
+  letter-spacing: 4px;
+  padding: 0 28px;
+}
+</style>
+
+<div class="tape-stage">
+  <div class="tape-banner tape-1">
+    <div class="tape-track move-left">
+      <div class="tape-item">CRIME SCENE • DO NOT CROSS • CRIME SCENE • DO NOT CROSS •</div>
+      <div class="tape-item">CRIME SCENE • DO NOT CROSS • CRIME SCENE • DO NOT CROSS •</div>
+    </div>
+  </div>
+  <div class="tape-banner tape-2">
+    <div class="tape-track move-right">
+      <div class="tape-item">CRIME SCENE • DO NOT CROSS • CRIME SCENE • DO NOT CROSS •</div>
+      <div class="tape-item">CRIME SCENE • DO NOT CROSS • CRIME SCENE • DO NOT CROSS •</div>
+    </div>
+  </div>
+</div>`;
+
+    let currentSnippet = reactSnippet;
+
+    function switchCodeTab(type) {
+      document.querySelectorAll('.tab-pill').forEach(b => b.classList.remove('active'));
+      if (type === 'react') {
+        event.target.classList.add('active');
+        currentSnippet = reactSnippet;
+      } else {
+        event.target.classList.add('active');
+        currentSnippet = htmlSnippet;
+      }
+      document.getElementById('codeSnippetDisplay').textContent = currentSnippet;
+    }
+
+    document.getElementById('codeSnippetDisplay').textContent = reactSnippet;
+
+    function copySnippet() {
+      navigator.clipboard.writeText(currentSnippet).then(() => {
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 2500);
+      });
+    }
+  </script>
+</body>
+</html>

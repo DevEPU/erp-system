@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buku Panduan & Dokumentasi Lengkap ERP EPU</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #0284c7;
+      --primary-dark: #0f172a;
+      --slate: #64748b;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --emerald: #059669;
+      --amber: #d97706;
+      --rose: #e11d48;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--primary-dark);
+      line-height: 1.6;
+      padding: 0;
+    }
+    .header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #0369a1 100%);
+      color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 800; }
+    .header p { font-size: 1.15rem; opacity: 0.9; max-width: 850px; margin: 0 auto 1.5rem; }
+    .btn-print {
+      display: inline-block;
+      background: #38bdf8;
+      color: #0f172a;
+      padding: 0.6rem 1.4rem;
+      border-radius: 8px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+    .btn-print:hover { background: #7dd3fc; }
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+    .diagram-box {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .diagram-box h2 {
+      font-size: 1.6rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--primary-light);
+      padding-bottom: 0.5rem;
+    }
+    .macro-flow {
+      background: #0f172a;
+      color: #38bdf8;
+      font-family: "Fira Code", monospace;
+      padding: 1.5rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      white-space: pre;
+    }
+    .alur-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .alur-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      position: relative;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      transition: transform 0.15s ease;
+    }
+    .alur-card:hover { transform: translateY(-2px); }
+    .alur-badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      background: #e0f2fe;
+      color: #0369a1;
+      margin-bottom: 0.5rem;
+    }
+    .alur-card.in .alur-badge { background: #dcfce7; color: #15803d; }
+    .alur-card.out .alur-badge { background: #fee2e2; color: #b91c1c; }
+    .alur-card.inspection .alur-badge { background: #fef3c7; color: #b45309; }
+    .alur-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 0.5rem; }
+    .alur-route {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      background: #f1f5f9;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      margin-bottom: 0.6rem;
+    }
+    .route-arrow { color: var(--primary-light); font-weight: bold; }
+    .alur-doc { font-size: 0.85rem; color: var(--slate); margin-bottom: 0.5rem; }
+    .alur-desc { font-size: 0.9rem; color: #334155; }
+    
+    .module-section {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .module-header {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+    .module-code {
+      background: var(--primary);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.3rem 0.6rem;
+      border-radius: 6px;
+    }
+    .module-header h2 { font-size: 1.5rem; color: var(--primary); }
+    .module-summary { font-size: 1rem; color: var(--slate); margin-bottom: 1.5rem; }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.25rem;
+    }
+    .menu-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+    .menu-name { font-size: 1.05rem; color: var(--primary); margin-bottom: 0.2rem; }
+    .menu-path code {
+      font-size: 0.75rem;
+      background: #e2e8f0;
+      color: #334155;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+    .menu-desc { font-size: 0.88rem; color: #475569; margin-top: 0.6rem; }
+
+    @media print {
+      body { background: white; }
+      .btn-print { display: none; }
+      .header { padding: 1.5rem; background: var(--primary); }
+      .container { max-width: 100%; margin: 0; padding: 0; }
+      .module-section, .diagram-box { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+      .alur-grid, .menu-grid { display: block; }
+      .alur-card, .menu-card { margin-bottom: 1rem; page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>BUKU PANDUAN & DOKUMENTASI SISTEM ERP</h1>
+    <p>PT. EPU - Dokumentasi Komprehensif Arsitektur Sistem, Flowchart 16 Alur Manufaktur, dan Penjelasan Menyeluruh Seluruh Menu</p>
+    <button class="btn-print" onclick="window.print()">🖨️ Cetak atau Simpan sebagai PDF</button>
+  </header>
+
+  <div class="container">
+    <div class="diagram-box">
+      <h2>1. DIAGRAM ALIR MAKRO 16 ALUR OPERASIONAL (ACTUAL FLOW)</h2>
+      <div class="macro-flow">
+[SUPPLIER] 
+   │  (Alur 1 IN: Penerimaan Barang PO)
+   ▼
+[GUDANG MATKOM / BAHAN BAKU] ◄────────────── [ALUR 3 IN: Crusher Regrind]
+   │                                              ▲
+   │ (Alur 2 OUT: Realisasi WO)                   │ (Alur 9 OUT: Runner/Reject)
+   ▼                                              │
+[LANTAI PRODUKSI / MESIN] ─────────────► [MESIN CRUSHER]
+   │  ▲ (Alur 4 IN / 8 OUT: Retur Sisa)
+   │  │
+   │  └──────── [ALUR 7 IN: Terima Rework] ◄──────────┐
+   │                                                   │ (Reject Rework)
+   │ (Alur 6 OUT: Hasil Cetak)                         │
+   ▼                                                   │
+[QUALITY CONTROL / QC GATE] ───────────────────────────┴──────────┐
+   │                                                               │ (Reject Scrap)
+   │ (Alur 10: Inspeksi Lolos)                                     ▼
+   │                                                    [ALUR 12: NG & DISPOSAL]
+   ▼                                                               │
+[GUDANG FINISHED GOODS (FG)] ◄────── [ALUR 14 IN: Retur Klaim] ────┤
+   │                                 [ALUR 15 IN: SJ Balikan]      │ (Investigasi)
+   │ (Alur 16 OUT: Surat Jalan Kirim)                              ▼
+   ▼                                                    [ALUR 11: CLAIM INVESTIGATION]
+[CUSTOMER / PELANGGAN]
+      </div>
+
+      <h2 style="margin-top: 2rem;">2. RINCIAN SPESIFIKASI 16 ALUR MATERIAL & PRODUKSI</h2>
+      <div class="alur-grid">
+        
+    <div class="alur-card in">
+      <div class="alur-badge">ALUR-01 • IN</div>
+      <h3 class="alur-title">Penerimaan Barang Pembelian (Supplier ke Gudang MATKOM)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Supplier / Vendor Eksternal</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Gudang Bahan Baku / MATKOM / Store</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Surat Jalan Supplier & PO (Purchase Order)</p>
+      <p class="alur-desc">Penerimaan fisik material resin plastik, pewarna/pigment, packaging, dan insert komponen dari vendor eksternal. Petugas gudang memverifikasi kesesuaian fisik dengan PO dan Surat Jalan Supplier, mencatat nomor batch/lot, dan memasukkan barang ke stok gudang bahan baku.</p>
+    </div>
+  
+    <div class="alur-card out">
+      <div class="alur-badge">ALUR-02 • OUT</div>
+      <h3 class="alur-title">Realisasi Bahan Baku (Gudang MATKOM ke Lantai Produksi)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Gudang MATKOM / Store</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Lantai Produksi / Area Mesin Injeksi</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Work Order (SPK) & Formulir Realisasi Bahan Baku</p>
+      <p class="alur-desc">Pengeluaran bahan baku (resin murni, masterbatch, komponen insert) dari Gudang MATKOM yang diserahterimakan kepada operator mesin berdasarkan Work Order (WO). Mengurangi stok bahan baku di gudang MATKOM dan membebankan material ke WIP proses produksi.</p>
+    </div>
+  
+    <div class="alur-card in">
+      <div class="alur-badge">ALUR-03 • IN</div>
+      <h3 class="alur-title">Crusher ke MATKOM (Hasil Gilingan Plastik ke Gudang Bahan Baku)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Area Mesin Crusher / Daur Ulang</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Gudang Bahan Baku / MATKOM</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Bukti Penerimaan Material Crusher / Regrind Slip</p>
+      <p class="alur-desc">Penerimaan biji plastik daur ulang (regrind resin) hasil penghancuran runner, sprue, dan part reject di mesin crusher. Material ditimbang, dilabeli jenis resinnya, dan dimasukkan kembali ke persediaan bahan baku MATKOM untuk dicampur (blending) sesuai proporsi BOM standar.</p>
+    </div>
+  
+    <div class="alur-card in">
+      <div class="alur-badge">ALUR-04 • IN</div>
+      <h3 class="alur-title">Produksi ke MATKOM (Retur Sisa Bahan Baku dari Produksi)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Lantai Produksi (Mesin Injeksi / Line)</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Gudang MATKOM / Store</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Formulir Retur Material Produksi ke Gudang</p>
+      <p class="alur-desc">Pengembalian sisa bahan baku, pigment, atau komponen yang tidak terpakai setelah suatu Work Order selesai diproduksi. Gudang menimbang sisa resin, mencatat pengembalian, dan mengoreksi biaya material aktual pada Work Order terkait.</p>
+    </div>
+  
+    <div class="alur-card in">
+      <div class="alur-badge">ALUR-05 • IN</div>
+      <h3 class="alur-title">Store ke Produksi IN (Verifikasi Checksheet Penerimaan Material di Line)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Store / Gudang Material</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Lantai Produksi (Operator Mesin / Leader)</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Checksheet Penerimaan Material Produksi (Alur 5)</p>
+      <p class="alur-desc">Verifikasi formal penerimaan material di stasiun kerja produksi. Operator/Leader memeriksa kesesuaian kemasan (packaging), label lot nomor, kuantitas aktual, dan spesifikasi material sebelum dimasukkan ke dalam hopper mesin/dryer.</p>
+    </div>
+  
+    <div class="alur-card out">
+      <div class="alur-badge">ALUR-06 • OUT</div>
+      <h3 class="alur-title">Produksi ke QC OUT (Serah-Terima Output Mesin ke Pos Quality Gate)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Lantai Produksi / Mesin Injeksi</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Pos Quality Gate (QC Inspection Area)</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Bukti Transfer Output Produksi (Alur 6) & Kartu Identifikasi Part</p>
+      <p class="alur-desc">Penyerahan hasil cetak (molded parts) atau hasil perakitan dari operator produksi ke Quality Control Gate untuk menjalani inspeksi kualitas visual, dimensi, dan pengujian kelayakan sebelum dinyatakan sebagai Finished Good.</p>
+    </div>
+  
+    <div class="alur-card in">
+      <div class="alur-badge">ALUR-07 • IN</div>
+      <h3 class="alur-title">Terima Rework QC IN (Produksi Menerima Part Rework dari QC)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Pos Quality Gate (QC)</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Lantai Produksi / Stasiun Kerja Rework</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Surat Perintah Kerja Rework & Tagging Kuning/Merah</p>
+      <p class="alur-desc">Penyerahan produk yang dinyatakan mengalami cacat minor yang dapat diperbaiki (misal: flash/burr berlebih, gate trimming tidak rapi, pembersihan debu). Lantai produksi menerima kembali part untuk dilakukan tindakan perbaikan/rework sesuai instruksi QC.</p>
+    </div>
+  
+    <div class="alur-card out">
+      <div class="alur-badge">ALUR-08 • OUT</div>
+      <h3 class="alur-title">Retur Sisa MATKOM OUT (Pencatatan Sisa Material Produksi untuk Dikembalikan)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Lantai Produksi (Line)</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Gudang MATKOM</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Bukti Pengeluaran Retur Material Lantai Produksi</p>
+      <p class="alur-desc">Pencatatan dari sisi lantai produksi ketika membersihkan area mesin (cleaning/purging) dan mendokumentasikan jumlah material yang dikembalikan ke gudang penyimpanan.</p>
+    </div>
+  
+    <div class="alur-card out">
+      <div class="alur-badge">ALUR-09 • OUT</div>
+      <h3 class="alur-title">Kirim Crusher OUT (Penyerahan Runner & Reject ke Area Crusher)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Lantai Produksi (Mesin Injeksi)</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Area Mesin Crusher</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Formulir Penyerahan Limbah Plastik / Runner & Sprue</p>
+      <p class="alur-desc">Penyerahan sisa runner, sprue hasil injeksi, dan part cacat (short shot, sinking, silver streak) yang tidak dapat dirework ke mesin crusher untuk dihancurkan menjadi biji gilingan daur ulang.</p>
+    </div>
+  
+    <div class="alur-card inspection">
+      <div class="alur-badge">ALUR-10 • INSPECTION</div>
+      <h3 class="alur-title">Quality Control & QC Gate Inspection (Inspeksi Mutu & Keputusan)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Pos Quality Gate</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Gudang FG (Lolos) / Rework (Alur 7) / NG Disposal (Alur 12)</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Inspection Log Sheet & QC Pass Sticker</p>
+      <p class="alur-desc">Pemeriksaan ketat oleh QC Inspector terhadap setiap lot/batch produk: pengecekan dimensi (caliper/micrometer), berat per shot, warna, kekuatan struktur, serta ada/tidaknya cacat cetak. Keputusan: Lolos (Release ke FG), Rework (Kembali ke Produksi), atau Reject (Karantina).</p>
+    </div>
+  
+    <div class="alur-card investigation">
+      <div class="alur-badge">ALUR-11 • INVESTIGATION</div>
+      <h3 class="alur-title">Investigasi Customer Claim di QC Gate</h3>
+      <div class="alur-route">
+        <span class="route-origin">Karantina Gudang FG (Alur 14)</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Tim QC, R&D, dan Engineering</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Berita Acara Klaim Pelanggan & Laporan 8D / Korektif</p>
+      <p class="alur-desc">Investigasi menyeluruh terhadap barang komplain/retur yang diterima dari customer. Tim QC melakukan penelusuran akar masalah (5-Why, Fishbone Diagram) dari lot produksi terkait dan menentukan status barang: diperbaiki, diganti, atau di-scrap.</p>
+    </div>
+  
+    <div class="alur-card disposition">
+      <div class="alur-badge">ALUR-12 • DISPOSITION</div>
+      <h3 class="alur-title">Penanganan NG & Disposal (Disposisi Produk Cacat & Scrap)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Area Karantina QC</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Mesin Crusher / Pemusnahan (Disposal) / Vendor Claim</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Berita Acara Pemusnahan / Disposisi Non-Conforming Products</p>
+      <p class="alur-desc">Tindakan resmi terhadap barang cacat yang tidak dapat digunakan lagi. Disposisi mencakup: Sent to Crusher (dihancurkan untuk regrind), Disposed/Scrap (dimusnahkan/dijual sebagai limbah afval), atau Vendor Claim (dikembalikan ke supplier material).</p>
+    </div>
+  
+    <div class="alur-card in">
+      <div class="alur-badge">ALUR-13 • IN</div>
+      <h3 class="alur-title">QC Gate ke FG IN (Penerimaan Barang Jadi Lolos QC di Gudang FG)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Pos Quality Gate (Lolos Inspeksi)</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Gudang Finished Goods (FG)</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Bukti Penyerahan Barang Jadi ke Gudang FG & QC Pass Tag</p>
+      <p class="alur-desc">Penerimaan fisik barang jadi yang telah lulus uji QC ke rak Gudang Finished Goods (FG). Menambah saldo kuantitas stok barang jadi siap kirim dan mengonversi biaya WIP menjadi Nilai Persediaan Barang Jadi.</p>
+    </div>
+  
+    <div class="alur-card in">
+      <div class="alur-badge">ALUR-14 • IN</div>
+      <h3 class="alur-title">Customer Claim ke FG IN (Penerimaan Part Klaim Pelanggan ke Gudang Karantina)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Customer Eksternal</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Area Karantina Gudang FG</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Surat Retur Customer / Nota Klaim Kualitas</p>
+      <p class="alur-desc">Penerimaan fisik barang yang dikembalikan oleh pelanggan karena komplain kualitas atau salah kirim. Barang diisolasi di area karantina gudang FG agar tidak bercampur dengan stok bagus, sebelum diteruskan ke QC Gate (Alur 11).</p>
+    </div>
+  
+    <div class="alur-card in">
+      <div class="alur-badge">ALUR-15 • IN</div>
+      <h3 class="alur-title">Surat Jalan Balikan IN (Penerimaan Kembali Barang Pengiriman yang Tertolak/Tertunda)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Ekspedisi / Pengiriman Driver</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Gudang Finished Goods (FG)</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Surat Jalan Asli dengan Catatan Penolakan / Dokumen Balikan</p>
+      <p class="alur-desc">Penerimaan kembali barang jadi yang tidak dapat diterima oleh pelanggan saat proses pengiriman (misal: gudang customer tutup, kelebihan kirim, atau selisih kuantitas armada pengangkut). Barang diverifikasi ulang dan dikembalikan ke stok gudang FG.</p>
+    </div>
+  
+    <div class="alur-card out">
+      <div class="alur-badge">ALUR-16 • OUT</div>
+      <h3 class="alur-title">Surat Jalan Pengiriman ke Customer (Alur 16 OUT)</h3>
+      <div class="alur-route">
+        <span class="route-origin">Gudang Finished Goods (FG)</span>
+        <span class="route-arrow">➔</span>
+        <span class="route-dest">Customer / Pabrik Perakitan Pelanggan</span>
+      </div>
+      <p class="alur-doc"><strong>Dokumen Terkait:</strong> Surat Jalan Resmi (Delivery Note) & Order Sheet</p>
+      <p class="alur-desc">Pengeluaran fisik barang jadi dari gudang FG ke armada pengiriman ekspedisi untuk dikirimkan ke pelanggan sesuai Order Sheet / Jadwal Delivery. Mengurangi stok barang jadi di gudang FG dan menjadi dasar terbitnya Faktur Penjualan (Sales Invoice).</p>
+    </div>
+  
+      </div>
+    </div>
+
+    <div class="diagram-box">
+      <h2>3. ALUR BISNIS END-TO-END</h2>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div style="background: #f8fafc; padding: 1.2rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem;">A. Procure-to-Pay (Pengadaan)</h3>
+          <ol style="padding-left: 1.2rem; font-size: 0.9rem; color: #334155; line-height: 1.6;">
+            <li><strong>Purchase Request (PR):</strong> Pengajuan kebutuhan barang dengan pengecekan pagu anggaran.</li>
+            <li><strong>Approval Rules:</strong> Persetujuan bertingkat berdasarkan nominal rupiah.</li>
+            <li><strong>Purchase Order (PO):</strong> Surat pesanan resmi ke vendor.</li>
+            <li><strong>Penerimaan Barang (Alur 1):</strong> Penerimaan fisik di gudang & pencatatan nomor lot.</li>
+            <li><strong>Faktur Pembelian:</strong> 3-way matching, terbentuk pengakuan hutang dagang.</li>
+            <li><strong>Pelunasan Hutang:</strong> Pembayaran kas/bank & pemotongan bukti PPh 23.</li>
+          </ol>
+        </div>
+        <div style="background: #f8fafc; padding: 1.2rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+          <h3 style="color: var(--primary); margin-bottom: 0.5rem;">B. Order-to-Cash (Penjualan)</h3>
+          <ol style="padding-left: 1.2rem; font-size: 0.9rem; color: #334155; line-height: 1.6;">
+            <li><strong>Forecast & PO Customer:</strong> Registrasi demand kontrak pelanggan.</li>
+            <li><strong>Order Sheet (SO):</strong> Jadwal alokasi pengiriman bertahap & trigger WO.</li>
+            <li><strong>Surat Jalan (Alur 16 OUT):</strong> Pengeluaran fisik FG & potong stok otomatis.</li>
+            <li><strong>Faktur Penjualan:</strong> Terbit invoice penjualan, terbentuk jurnal piutang & HPP.</li>
+            <li><strong>Tanda Terima Faktur:</strong> Serah terima dokumen tagihan ke customer.</li>
+            <li><strong>Penerimaan Piutang:</strong> Pencatatan pelunasan via transfer bank.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    
+    <section class="module-section" id="MOD-00">
+      <div class="module-header">
+        <span class="module-code">MOD-00</span>
+        <h2>Modul Dashboard Utama</h2>
+      </div>
+      <p class="module-summary">Pusat informasi eksekutif yang menampilkan metrik performa bisnis utama, grafik tren penjualan harian, status realisasi produksi, ringkasan nilai persediaan, posisi kas/bank, dan monitoring anggaran (budget vs actual).</p>
+      <div class="menu-grid">
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Dashboard Overview</h4>
+            <div class="menu-path"><code>/dashboard</code></div>
+            <p class="menu-desc">Monitoring indikator kunci: total PO pending, Work Order aktif, stok kritis di bawah minimum, tagihan jatuh tempo (AP & AR), dan pencapaian sales mingguan/bulanan.</p>
+          </div>
+        
+      </div>
+    </section>
+  
+    <section class="module-section" id="MOD-01">
+      <div class="module-header">
+        <span class="module-code">MOD-01</span>
+        <h2>Modul Supplier & Pembelian</h2>
+      </div>
+      <p class="module-summary">Mengelola seluruh siklus pengadaan (Procure-to-Pay), mulai dari master data vendor, pengajuan pembelian (PR), penerbitan PO, penerimaan barang fisik di gudang (Alur 1), faktur tagihan supplier (3-way match), pengajuan pembayaran, hingga pelunasan hutang dagang dan retur.</p>
+      <div class="menu-grid">
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Supplier</h4>
+            <div class="menu-path"><code>/supplier-pembelian/suppliers</code></div>
+            <p class="menu-desc">Master data pemasok: nama perusahaan, kontak PIC, alamat, NPWP, termin pembayaran (TOP: 30, 60 hari), rekening bank vendor, dan mata uang default.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Supplier Group</h4>
+            <div class="menu-path"><code>/supplier-pembelian/supplier-group</code></div>
+            <p class="menu-desc">Klasifikasi vendor berdasarkan komoditas (misal: Bahan Baku Resin, Pigmen/Masterbatch, Kemasan/Karton, Sparepart Mesin, Subkontraktor Jasa).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Jurnal Pembelian</h4>
+            <div class="menu-path"><code>/supplier-pembelian/jurnal-pembelian</code></div>
+            <p class="menu-desc">Konfigurasi akun GL otomatis untuk membukukan transaksi pembelian (Debit: Persediaan / Beban, Kredit: Hutang Usaha / Hutang Belum Difakturkan).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Jurnal A.P. (Accounts Payable)</h4>
+            <div class="menu-path"><code>/supplier-pembelian/jurnal-ap</code></div>
+            <p class="menu-desc">Pengaturan akun buku pembantu hutang dagang, potongan diskon pembelian, dan selisih kurs pembelian valuta asing.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Jurnal Biaya Impor V.2</h4>
+            <div class="menu-path"><code>/supplier-pembelian/jurnal-biaya-impor-v2</code></div>
+            <p class="menu-desc">Pemetaan akun akuntansi untuk kapitalisasi biaya freight forwarding, bea masuk, pajak impor (PPh 22 & PPN Impor), dan handling fee ke dalam nilai HPP barang impor.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Tutup Pending PO</h4>
+            <div class="menu-path"><code>/supplier-pembelian/tutup-pending-po</code></div>
+            <p class="menu-desc">Menutup sisa kuantitas PO yang tidak akan dikirim lagi oleh vendor agar tidak menggantung di outstanding order dan tidak mengacaukan perhitungan MRP.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Transaksi A.P.</h4>
+            <div class="menu-path"><code>/supplier-pembelian/transaksi-ap</code></div>
+            <p class="menu-desc">Laporan buku pembantu hutang per supplier, analisis umur hutang (Aging AP: 0-30, 31-60, 61-90, >90 hari), dan monitoring jadwal jatuh tempo pembayaran.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Permintaan Pembelian (Purchase Request)</h4>
+            <div class="menu-path"><code>/budgeting/purchase-request</code></div>
+            <p class="menu-desc">Pengajuan permohonan kebutuhan barang dari departemen user, dilengkapi validasi sisa anggaran departemen (budget availability) dan alur persetujuan bertingkat.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Tutup PR</h4>
+            <div class="menu-path"><code>/supplier-pembelian/tutup-pr</code></div>
+            <p class="menu-desc">Menutup dokumen PR yang tidak disetujui atau kuantitas sisa yang tidak akan diproses menjadi Purchase Order.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Purchase Order (PO)</h4>
+            <div class="menu-path"><code>/supplier-pembelian/purchase-order</code></div>
+            <p class="menu-desc">Penerbitan surat pesanan resmi kepada vendor terpilih berdasarkan PR yang disetujui, mencantumkan harga netto, PPN/PPH, jadwal pengiriman, dan ketentuan garansi.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Terima Barang / Penerimaan Barang</h4>
+            <div class="menu-path"><code>/supplier-pembelian/penerimaan-barang</code></div>
+            <p class="menu-desc">Pencatatan penerimaan fisik barang di dermaga gudang (Alur 1), pencocokan kuantitas dengan PO dan Surat Jalan vendor, input nomor lot/batch, dan cetak Bukti Penerimaan Barang (BPB).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Retur PB (Penerimaan Barang)</h4>
+            <div class="menu-path"><code>/supplier-pembelian/retur-pb</code></div>
+            <p class="menu-desc">Pengembalian barang langsung di pintu gudang saat proses inspeksi penerimaan sebelum faktur tagihan diterbitkan (karena reject, salah spesifikasi, atau kemasan rusak).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Pembelian dari PO / Faktur Pembelian</h4>
+            <div class="menu-path"><code>/supplier-pembelian/faktur</code></div>
+            <p class="menu-desc">Pencatatan faktur tagihan resmi supplier dengan sistem 3-Way Matching (PO vs Surat Jalan Penerimaan vs Invoice Supplier), menghasilkan pengakuan Hutang Usaha dan Jurnal Otomatis.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Pembelian Langsung</h4>
+            <div class="menu-path"><code>/supplier-pembelian/pembelian-langsung</code></div>
+            <p class="menu-desc">Pencatatan transaksi pembelian tunai/operasional cepat tanpa alur PO formal untuk kebutuhan mendesak bernilai kecil.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Biaya Impor V.2</h4>
+            <div class="menu-path"><code>/supplier-pembelian/biaya-impor</code></div>
+            <p class="menu-desc">Perhitungan landed cost untuk mendistribusikan biaya impor (ongkos kapal, custom clearance, asuransi) ke harga satuan unit barang yang diimpor.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Pengajuan Pembayaran</h4>
+            <div class="menu-path"><code>/supplier-pembelian/pengajuan-pembayaran</code></div>
+            <p class="menu-desc">Daftar pengajuan rencana pembayaran tagihan vendor yang jatuh tempo untuk mendapatkan persetujuan dari Manager Finance dan Direksi sebelum pencairan kas.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Pelunasan Utang</h4>
+            <div class="menu-path"><code>/supplier-pembelian/pelunasan-hutang</code></div>
+            <p class="menu-desc">Eksekusi pembayaran hutang melalui Kas atau Rekening Bank perusahaan, mencatat potongan pph pasal 23, diskon pelunasan, dan memotong saldo hutang vendor.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Retur Pembelian</h4>
+            <div class="menu-path"><code>/supplier-pembelian/retur-pembelian</code></div>
+            <p class="menu-desc">Penerbitan Nota Retur Pembelian atas barang yang telah difakturkan, menghasilkan Debit Note yang memotong saldo hutang atau tagihan berikutnya.</p>
+          </div>
+        
+      </div>
+    </section>
+  
+    <section class="module-section" id="MOD-02">
+      <div class="module-header">
+        <span class="module-code">MOD-02</span>
+        <h2>Modul Customer & Penjualan</h2>
+      </div>
+      <p class="module-summary">Mengelola siklus pendapatan (Order-to-Cash), mulai dari master customer, perkiraan kebutuhan (Forecast), penerimaan PO Pelanggan, Order Sheet, Surat Jalan pengiriman (Alur 16), pembuatan Faktur Penjualan, Tanda Terima Tagihan, hingga Penerimaan Pembayaran Piutang dan Retur Penjualan.</p>
+      <div class="menu-grid">
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Customer</h4>
+            <div class="menu-path"><code>/customer-penjualan/customers</code></div>
+            <p class="menu-desc">Master data pelanggan: legalitas perusahaan, NPWP, alamat kantor & alamat pabrik (delivery point), plafon kredit (credit limit), termin pembayaran, dan PIC pembelian.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Grup Customer</h4>
+            <div class="menu-path"><code>/customer-penjualan/grup-customer</code></div>
+            <p class="menu-desc">Segmentasi pelanggan (misal: Tier 1 Otomotif, Industri Elektronik, Peralatan Rumah Tangga, Konsumen Retail).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Tipe Customer</h4>
+            <div class="menu-path"><code>/customer-penjualan/tipe-customer</code></div>
+            <p class="menu-desc">Kategorisasi perpajakan dan bisnis (Pelanggan Lokal Ber-NPWP, Kawasan Berikat / Non-PPN, Ekspor, Afiliasi).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Jurnal Penjualan</h4>
+            <div class="menu-path"><code>/customer-penjualan/jurnal-penjualan</code></div>
+            <p class="menu-desc">Pengaturan akun GL otomatis untuk membukukan penjualan (Debit: Piutang Dagang / Kas, Kredit: Pendapatan Penjualan & PPN Keluaran).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Jurnal A.R. (Accounts Receivable)</h4>
+            <div class="menu-path"><code>/customer-penjualan/jurnal-ar</code></div>
+            <p class="menu-desc">Pemetaan akun buku pembantu piutang dagang, retur penjualan, cadangan kerugian piutang, dan selisih kurs piutang valas.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Salesman</h4>
+            <div class="menu-path"><code>/customer-penjualan/salesman</code></div>
+            <p class="menu-desc">Data tenaga penjual (marketing representative), target omzet tahunan, dan asosiasi wilayah kerja pelanggan.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Weekday</h4>
+            <div class="menu-path"><code>/customer-penjualan/weekday</code></div>
+            <p class="menu-desc">Pengaturan jadwal rutin hari penerimaan barang per pelanggan untuk memandu tim logistik dan ekspedisi dalam menyusun rute truk mingguan.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Komisi Per Item</h4>
+            <div class="menu-path"><code>/customer-penjualan/komisi-per-item</code></div>
+            <p class="menu-desc">Skema persentase atau nominal insentif komisi sales per item produk yang berhasil terjual dan tertagih.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Scan Product</h4>
+            <div class="menu-path"><code>/customer-penjualan/scan-product</code></div>
+            <p class="menu-desc">Fitur pemindaian barcode/QR box produk di area staging sebelum dinaikkan ke truk pengiriman untuk mencegah salah muat part.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Tutup Pending SO</h4>
+            <div class="menu-path"><code>/customer-penjualan/tutup-pending-so</code></div>
+            <p class="menu-desc">Menutup pesanan penjualan (Sales Order) yang dibatalkan oleh customer atau tidak dilanjutkan pengirimannya.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Transaksi A.R.</h4>
+            <div class="menu-path"><code>/customer-penjualan/transaksi-ar</code></div>
+            <p class="menu-desc">Buku pembantu piutang pelanggan, pemantauan saldo tagihan outstanding, analisis umur piutang (Aging AR), dan evaluasi batas kredit.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Forecast (Penawaran Penjualan)</h4>
+            <div class="menu-path"><code>/customer-penjualan/penawaran-penjualan</code></div>
+            <p class="menu-desc">Pencatatan estimasi volume pesanan masa depan dari pelanggan bulanan (M, M+1, M+2) sebagai acuan utama perencanaan material MRP dan kapasitas mesin MPP.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">PO Customer</h4>
+            <div class="menu-path"><code>/customer-penjualan/customer-po</code></div>
+            <p class="menu-desc">Pendaftaran Purchase Order resmi yang diterbitkan oleh pelanggan, mencakup nomor PO pelanggan, daftar part, harga kontrak, dan tanggal batas kirim.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Order Sheet (Sales Order)</h4>
+            <div class="menu-path"><code>/customer-penjualan/sales-order</code></div>
+            <p class="menu-desc">Instruksi penjualan internal yang merinci jadwal pengiriman bertahap (delivery schedule), alokasi stok gudang FG, atau perintah otomatis untuk membuat Work Order.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Surat Jalan (Alur 16 OUT)</h4>
+            <div class="menu-path"><code>/customer-penjualan/surat-jalan</code></div>
+            <p class="menu-desc">Dokumen resmi pengantar pengiriman barang dari Gudang FG ke pabrik pelanggan. Mengurangi stok fisik barang jadi, mencatat nomor kendaraan dan nama sopir.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Retur Surat Jalan</h4>
+            <div class="menu-path"><code>/customer-penjualan/retur-surat-jalan</code></div>
+            <p class="menu-desc">Penyesuaian kuantitas surat jalan apabila customer hanya menerima sebagian barang karena keterbatasan tempat atau adanya kemasan yang rusak saat perjalanan.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Penjualan Via S.J.</h4>
+            <div class="menu-path"><code>/customer-penjualan/penjualan-via-sj</code></div>
+            <p class="menu-desc">Penerbitan Faktur Penjualan (Sales Invoice) otomatis berdasarkan Surat Jalan yang telah ditandatangani dan dicap oleh pihak gudang pelanggan.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Penjualan Via S.O.</h4>
+            <div class="menu-path"><code>/customer-penjualan/penjualan-via-so</code></div>
+            <p class="menu-desc">Penerbitan faktur uang muka (Down Payment) atau invoice berbasis pesanan sebelum pengiriman fisik dilakukan.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Penjualan Langsung</h4>
+            <div class="menu-path"><code>/customer-penjualan/penjualan-langsung</code></div>
+            <p class="menu-desc">Faktur penjualan tunai di tempat untuk penjualan afval/scrap, produk sampel, atau transaksi retail spontan.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Tanda Terima</h4>
+            <div class="menu-path"><code>/customer-penjualan/tanda-terima</code></div>
+            <p class="menu-desc">Manajemen tanda terima penyerahan berkas penagihan (Invoice + Faktur Pajak + Surat Jalan Asli) ke loket Finance pelanggan sebagai syarat perhitungan jatuh tempo TOP.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Penagihan Piutang</h4>
+            <div class="menu-path"><code>/customer-penjualan/penagihan-piutang</code></div>
+            <p class="menu-desc">Pencetakan surat peringatan tagihan / statement of account (SOA) kepada pelanggan yang invoice-nya telah mendekati atau melewati jatuh tempo.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Penerimaan Piutang</h4>
+            <div class="menu-path"><code>/customer-penjualan/penerimaan-piutang</code></div>
+            <p class="menu-desc">Pencatatan pelunasan tagihan dari pelanggan melalui transfer bank atau giro, memperhitungkan bukti potong PPh 23, diskon pembayaran cepat, dan penutupan piutang.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Retur Penjualan</h4>
+            <div class="menu-path"><code>/customer-penjualan/retur-penjualan</code></div>
+            <p class="menu-desc">Pengakuan retur barang dari customer yang disetujui, menerbitkan Nota Retur / Credit Note yang mengurangi nilai piutang pelanggan atau mengganti dengan produk baru.</p>
+          </div>
+        
+      </div>
+    </section>
+  
+    <section class="module-section" id="MOD-03">
+      <div class="module-header">
+        <span class="module-code">MOD-03</span>
+        <h2>Modul Persediaan Barang (Inventory)</h2>
+      </div>
+      <p class="module-summary">Pusat pengelolaan dan valuasi seluruh aset persediaan fisik perusahaan pada berbagai fasilitas gudang (Gudang Bahan Baku MATKOM, Gudang Barang Jadi FG, Gudang WIP, Area Karantina QC, Area Crusher). Mengontrol kartu stok, mutasi gudang, stok opname, dan alur pergerakan material 16 Alur.</p>
+      <div class="menu-grid">
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Stok Gudang</h4>
+            <div class="menu-path"><code>/persediaan-barang/stok-gudang</code></div>
+            <p class="menu-desc">Monitoring kuantitas stok real-time per lokasi gudang, nilai persediaan rupiah, safety stock level, status reorder point, dan histori kartu stok keluar-masuk.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Inventory (Master Produk)</h4>
+            <div class="menu-path"><code>/master-data/products</code></div>
+            <p class="menu-desc">Katalog master barang: kode barang, nama part, nomor part customer (OEM Part No), tipe barang (Raw Material, WIP, Finished Good), satuan, berat netto, dan harga standar.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Gudang</h4>
+            <div class="menu-path"><code>/persediaan-barang/gudang</code></div>
+            <p class="menu-desc">Master lokasi penyimpanan fisik (Gudang MATKOM, Gudang Lantai Produksi, Gudang FG, Area Karantina QC, Gudang Crusher, Gudang Sparepart).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Kategori Barang</h4>
+            <div class="menu-path"><code>/master-data/product-categories</code></div>
+            <p class="menu-desc">Pengelompokan barang untuk pelaporan dan pemetaan integrasi akun buku besar persediaan akuntansi.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Merek</h4>
+            <div class="menu-path"><code>/persediaan-barang/merek</code></div>
+            <p class="menu-desc">Data brand/merek dagang produk atau produsen bahan baku plastik (misal: Toray, LG Chem, ExxonMobil, Polychem).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Jurnal Persediaan</h4>
+            <div class="menu-path"><code>/persediaan-barang/jurnal-persediaan</code></div>
+            <p class="menu-desc">Konfigurasi akun GL untuk mutasi persediaan, selisih stok opname, persediaan dalam perjalanan (transit), dan biaya pemakaian material.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Duplikat Barang</h4>
+            <div class="menu-path"><code>/persediaan-barang/duplikat-barang</code></div>
+            <p class="menu-desc">Alat utilitas untuk menduplikasi master produk dengan parameter serupa guna mempercepat registrasi part baru yang mirip.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Jurnal Produksi</h4>
+            <div class="menu-path"><code>/persediaan-barang/jurnal-produksi</code></div>
+            <p class="menu-desc">Pemetaan akun GL untuk persediaan dalam proses (WIP), alokasi biaya overhead pabrik (BOP), dan selisih variansi standar produksi.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Biaya</h4>
+            <div class="menu-path"><code>/persediaan-barang/biaya</code></div>
+            <p class="menu-desc">Master tarif elemen biaya produksi: tarif mesin per jam kerja, tarif listrik pabrik per kWh, tarif tenaga kerja langsung per menit.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Bill of Materials (BOM)</h4>
+            <div class="menu-path"><code>/manufacturing/bom</code></div>
+            <p class="menu-desc">Formula teknis manufaktur: kebutuhan resin murni (gram/shot), persentase campuran regrind, pigmen pewarna, cycle time (detik), cavity mold, dan komponen sub-assembly.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Penyesuaian Stok</h4>
+            <div class="menu-path"><code>/persediaan-barang/penyesuaian</code></div>
+            <p class="menu-desc">Koreksi manual kuantitas atau nilai persediaan akibat susut alami, sampel uji laboratorium, atau kerusakan material tak terduga.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Tutup Pending SR</h4>
+            <div class="menu-path"><code>/persediaan-barang/tutup-pending-sr</code></div>
+            <p class="menu-desc">Menutup dokumen Stock Request internal yang tidak lagi diperlukan agar alokasi kuantitas stok dapat dirilis kembali.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Stock Request (SR)</h4>
+            <div class="menu-path"><code>/persediaan-barang/stock-request</code></div>
+            <p class="menu-desc">Formulir permohonan permintaan barang atau material dari bagian operasional/departemen ke gudang penyimpan.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Transaksi Persediaan</h4>
+            <div class="menu-path"><code>/persediaan-barang/transaksi-persediaan</code></div>
+            <p class="menu-desc">Proses transfer mutasi barang antar gudang internal (misal: transfer resin dari Gudang Pusat ke Gudang Satelit).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Penyesuaian HPP V.2</h4>
+            <div class="menu-path"><code>/persediaan-barang/penyesuaian-hpp-v2</code></div>
+            <p class="menu-desc">Rekalkulasi dan sinkronisasi harga pokok persediaan menggunakan metode rata-rata tertimbang (Weighted Average Costing).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Stok Opname</h4>
+            <div class="menu-path"><code>/persediaan-barang/stok-opname</code></div>
+            <p class="menu-desc">Pencatatan hasil perhitungan fisik berkala, sistem freeze saldo, analisis variansi selisih fisik vs sistem, dan persetujuan posting jurnal penyesuaian.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Adjust Harga Jual</h4>
+            <div class="menu-path"><code>/persediaan-barang/adjust-harga-jual</code></div>
+            <p class="menu-desc">Modul pembaruan daftar harga jual produk massal berdasarkan formula kenaikan harga bahan baku plastik internasional (ICIS).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Produksi Langsung</h4>
+            <div class="menu-path"><code>/persediaan-barang/produksi-langsung</code></div>
+            <p class="menu-desc">Konversi cepat pemakaian bahan baku menjadi produk jadi secara simultan tanpa melalui tahapan penjadwalan Work Order untuk perakitan sederhana.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Schedule Pengiriman Vendor</h4>
+            <div class="menu-path"><code>/persediaan-barang/schedule-vendor</code></div>
+            <p class="menu-desc">Monitoring dan manajemen jadwal kedatangan truk supplier di pabrik agar tidak terjadi penumpukan armada di dermaga bongkar.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Penerimaan by Schedule</h4>
+            <div class="menu-path"><code>/persediaan-barang/penerimaan-by-schedule</code></div>
+            <p class="menu-desc">Fitur penerimaan barang terintegrasi dengan pemindaian barcode jadwal supplier untuk percepatan verifikasi dan cetak label lot otomatis.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Realisasi Bahan Baku (Alur 2 OUT)</h4>
+            <div class="menu-path"><code>/persediaan-barang/realisasi-bahan-baku</code></div>
+            <p class="menu-desc">Pengeluaran resmi material dari Gudang MATKOM ke Lantai Produksi sesuai kebutuhan nomor Work Order.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Crusher ke MATKOM (Alur 3 IN)</h4>
+            <div class="menu-path"><code>/persediaan-barang/penerimaan-crusher</code></div>
+            <p class="menu-desc">Pencatatan penerimaan material biji plastik daur ulang (regrind resin) dari area crusher kembali ke persediaan bahan baku MATKOM.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Produksi ke MATKOM (Alur 4 IN)</h4>
+            <div class="menu-path"><code>/persediaan-barang/penerimaan-retur-produksi</code></div>
+            <p class="menu-desc">Penerimaan pengembalian kelebihan resin dan komponen yang tidak terpakai dari lantai kerja ke Gudang MATKOM.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">QC Gate ke FG (Alur 13 IN)</h4>
+            <div class="menu-path"><code>/persediaan-barang/penerimaan-fg</code></div>
+            <p class="menu-desc">Penerimaan fisik barang jadi yang telah dinyatakan lolos uji inspeksi Quality Control Gate masuk ke persediaan Gudang Finished Goods.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Customer Claim ke FG (Alur 14 IN)</h4>
+            <div class="menu-path"><code>/persediaan-barang/customer-claim-fg</code></div>
+            <p class="menu-desc">Penerimaan barang klaim/retur dari pelanggan ke area karantina gudang FG sebelum dilakukan analisis investigasi di QC Gate (Alur 11).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Surat Jalan Balikan (Alur 15 IN)</h4>
+            <div class="menu-path"><code>/persediaan-barang/sj-balikan</code></div>
+            <p class="menu-desc">Penerimaan kembali barang pengiriman ekspedisi yang tertunda atau tidak berhasil diserahkan ke pelanggan.</p>
+          </div>
+        
+      </div>
+    </section>
+  
+    <section class="module-section" id="MOD-04">
+      <div class="module-header">
+        <span class="module-code">MOD-04</span>
+        <h2>Modul Manufacturing & Produksi</h2>
+      </div>
+      <p class="module-summary">Tulang punggung operasional pabrik manufaktur (Plastic Injection & Assembly), mencakup Engineering Master (BOM, Mesin, Mold, Work Center), Perencanaan Produksi (MRP & MPP Penjadwalan Mesin), Penerbitan Perintah Kerja (Work Order), Eksekusi Lantai Kerja, Serah-Terima Antar Unit (Alur 5, 6, 7, 8, 9), Penanganan Produk Cacat (NG & Disposal), dan Pos Inspeksi Quality Control Gate.</p>
+      <div class="menu-grid">
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Bill of Materials (BOM)</h4>
+            <div class="menu-path"><code>/manufacturing/bom</code></div>
+            <p class="menu-desc">Master formula dan struktur pohon produk (Multi-Level BOM), mencakup data gramatur shot weight, runner weight, jumlah cavity, waktu siklus injeksi (cycle time), dan instruksi kerja.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Daftar Mesin</h4>
+            <div class="menu-path"><code>/manufacturing/daftar-mesin</code></div>
+            <p class="menu-desc">Inventaris mesin produksi pabrik (Mesin Injeksi Plastik 50T - 850T, Robot Arm, Auto Loader, Mold Temperature Controller / MTC), kapasitas tonase, dan catatan histori pemeliharaan.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Kategori Mesin</h4>
+            <div class="menu-path"><code>/manufacturing/kategori-mesin</code></div>
+            <p class="menu-desc">Klasifikasi pengelompokan jenis mesin (Mesin Injeksi Horisontal, Mesin Injeksi Vertikal, Mesin Crusher Limbah, Lini Pad Printing, Lini Perakitan Manual).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Daftar Mold</h4>
+            <div class="menu-path"><code>/manufacturing/daftar-mold</code></div>
+            <p class="menu-desc">Manajemen cetakan cetak (mould/dies): nomor mold, jumlah cavity aktif, kepemilikan aset (milik customer / milik internal), shot counter digital, dan jadwal preventive maintenance mold.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Work Center</h4>
+            <div class="menu-path"><code>/manufacturing/work-center</code></div>
+            <p class="menu-desc">Pusat stasiun kerja lantai pabrik (Stasiun Injeksi Plastik, Stasiun Trimming, Stasiun Assembly, Pos QC Gate, Area Crusher, Stasiun Packaging).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">MRP (Material Requirement Planning)</h4>
+            <div class="menu-path"><code>/manufacturing/mrp</code></div>
+            <p class="menu-desc">Simulasi perhitungan kebutuhan bersih material: membandingkan permintaan Customer PO/Forecast dengan stok on-hand dan stok on-order, menghasilkan rekomendasi jadwal pengadaan material (PR).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">MPP (Master Production Planning / Jadwal Mesin)</h4>
+            <div class="menu-path"><code>/manufacturing/mpp</code></div>
+            <p class="menu-desc">Penjadwalan urutan mesin produksi (Machine Scheduling) dengan diagram Gantt visual, memperhitungkan waktu pasang-bongkar mold (changeover mold), ketersediaan jam shift, dan efisiensi kapasitas.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Work Order (Surat Perintah Kerja)</h4>
+            <div class="menu-path"><code>/manufacturing/work-order</code></div>
+            <p class="menu-desc">Dokumen perintah kerja resmi bagi operator lini produksi: mencantumkan target kuantitas part, mesin yang dialokasikan, nomor mold, resep material BOM, dan target jam selesai.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Dashboard Transaksi Produksi</h4>
+            <div class="menu-path"><code>/manufacturing/dashboard-transaksi</code></div>
+            <p class="menu-desc">Papan kendali visual real-time di lantai produksi: status mesin (Running, Setup, Idle, Breakdown), rasio pencapaian target harian, persentase reject rate, dan efisiensi OEE (Overall Equipment Effectiveness).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Realisasi Bahan Baku</h4>
+            <div class="menu-path"><code>/persediaan-barang/realisasi-bahan-baku</code></div>
+            <p class="menu-desc">Dokumentasi serah-terima material dari Gudang MATKOM ke mesin produksi sesuai alokasi Work Order.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Realisasi Hasil Produksi</h4>
+            <div class="menu-path"><code>/manufacturing/realisasi-produksi</code></div>
+            <p class="menu-desc">Pencatatan hasil output operator per shift kerja: total shot mesin, jumlah part OK, jumlah part NG beserta kategori cacat (short mold, flash, bubble, burr), dan jam henti mesin (downtime).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Serah-Terima Produksi (Alur 5,6,7,8,9)</h4>
+            <div class="menu-path"><code>/manufacturing/transfer-produksi</code></div>
+            <p class="menu-desc">Modul sentral perpindahan fisik lantai produksi yang terdiri atas 5 tab utama:
+- Tab Alur 5: Store ke Produksi IN (Checksheet verifikasi material masuk line)
+- Tab Alur 6: Produksi ke QC OUT (Serah-terima output part ke QC Gate)
+- Tab Alur 7: Terima Rework QC IN (Penerimaan part cacat minor untuk diperbaiki)
+- Tab Alur 8: Retur Sisa MATKOM OUT (Pencatatan sisa resin kembali ke gudang)
+- Tab Alur 9: Kirim Crusher OUT (Penyerahan runner dan reject ke area mesin crusher).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Penanganan NG & Disposal</h4>
+            <div class="menu-path"><code>/manufacturing/ng-disposal</code></div>
+            <p class="menu-desc">Proses disposisi produk cacat (Non-Conforming Material): keputusan resmi apakah part dikirim ke crusher (Sent to Crusher), dimusnahkan/scrap (Disposed), dirework, atau dikembalikan ke vendor.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Quality Control & QC Gate</h4>
+            <div class="menu-path"><code>/manufacturing/qc-gate</code></div>
+            <p class="menu-desc">Pusat penjaminan mutu pabrik yang terbagi atas tab:
+- Realisasi: Verifikasi output mesin langsung
+- Alur 10: QC Gate Inspection (Pemeriksaan dimensi, visual, go/no-go gauge, approval rilis ke FG)
+- Alur 11 & Claims: Penanganan investigasi customer claim dan vendor claim
+- Alur 12: Pengawasan karantina part reject.</p>
+          </div>
+        
+      </div>
+    </section>
+  
+    <section class="module-section" id="MOD-05">
+      <div class="module-header">
+        <span class="module-code">MOD-05</span>
+        <h2>Modul Kas & Bank</h2>
+      </div>
+      <p class="module-summary">Mengelola likuiditas keuangan perusahaan, saldo kas operasional, rekening giro bank, mutasi transfer antar rekening, pengeluaran kas operasional, rekonsiliasi berkala dengan rekening koran bank, dan transaksi multi-currency.</p>
+      <div class="menu-grid">
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Daftar Kas & Bank</h4>
+            <div class="menu-path"><code>/kas-bank/daftar</code></div>
+            <p class="menu-desc">Master rekening kas kecil (Petty Cash), kas operasional kantor, dan seluruh rekening bank perusahaan (IDR, USD, JPY) beserta saldo buku saat ini.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Transaksi Kas</h4>
+            <div class="menu-path"><code>/kas-bank/transaksi</code></div>
+            <p class="menu-desc">Pencatatan penerimaan dan pengeluaran kas/bank non-faktur (misal: pembayaran biaya perizinan, biaya operasional kantor, biaya konsumsi, penerimaan bunga bank).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Transfer Kas</h4>
+            <div class="menu-path"><code>/kas-bank/transfer</code></div>
+            <p class="menu-desc">Pemindahan dana antar rekening kas/bank internal perusahaan (misal: penarikan dana dari rekening giro BCA ke kas operasional tunai).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Rekonsiliasi Bank</h4>
+            <div class="menu-path"><code>/kas-bank/rekonsiliasi</code></div>
+            <p class="menu-desc">Pencocokan mutasi transaksi pada buku bank sistem dengan mutasi rekening koran bank riil, mengidentifikasi biaya administrasi, bunga, atau transaksi gantung (outstanding check).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Currencies</h4>
+            <div class="menu-path"><code>/master-data/currencies</code></div>
+            <p class="menu-desc">Master mata uang asing dan pembaruan kurs valuta asing (kurs transaksi dan kurs pajak BI) untuk pembukuan selisih kurs otomatis.</p>
+          </div>
+        
+      </div>
+    </section>
+  
+    <section class="module-section" id="MOD-06">
+      <div class="module-header">
+        <span class="module-code">MOD-06</span>
+        <h2>Modul General Ledger (Buku Besar & Akuntansi)</h2>
+      </div>
+      <p class="module-summary">Pusat akuntansi keuangan perusahaan yang menghimpun seluruh jurnal transaksi operasional secara real-time. Mengelola Bagan Akun Standar (COA), Departemen, Cost Center, Anggaran Belanja (Budgeting), Template Jurnal Memorial, Transaksi GL, serta Menghasilkan Laporan Keuangan Neraca dan Laba Rugi.</p>
+      <div class="menu-grid">
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Akun GL (Chart of Accounts / COA)</h4>
+            <div class="menu-path"><code>/general-ledger/akun-gl</code></div>
+            <p class="menu-desc">Struktur bagan akun standar akuntansi bertingkat: Aktiva Lancar, Aktiva Tetap, Kewajiban Jangka Pendek/Panjang, Ekuitas Modal, Pendapatan, HPP Manufaktur, Beban Operasional, dan Pendapatan/Beban Lain.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">GL Kategori</h4>
+            <div class="menu-path"><code>/general-ledger/gl-kategori</code></div>
+            <p class="menu-desc">Pengelompokan akun untuk penyusunan struktur format Laporan Posisi Keuangan (Neraca) dan Laporan Laba Rugi Komprehensif.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Departemen</h4>
+            <div class="menu-path"><code>/general-ledger/departemen</code></div>
+            <p class="menu-desc">Master unit organisasi perusahaan (Produksi, Maintenance, QC, PPIC, Purchasing, Marketing, Keuangan & Akuntansi, HRGA, IT).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Cost Center</h4>
+            <div class="menu-path"><code>/general-ledger/cost-center</code></div>
+            <p class="menu-desc">Pusat pertanggungjawaban pembebanan biaya untuk mengukur efisiensi biaya per lini mesin atau per fungsi kerja spesifik.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Budgeting</h4>
+            <div class="menu-path"><code>/general-ledger/budgeting</code></div>
+            <p class="menu-desc">Penetapan pagu anggaran tahunan per akun beban operasional untuk mencegah pemborosan dan over-spending.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Budgeting CC (Cost Center)</h4>
+            <div class="menu-path"><code>/general-ledger/budgeting-cc</code></div>
+            <p class="menu-desc">Penetapan limit alokasi anggaran spesifik per unit Cost Center dalam satu departemen.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Rumus Rasio Keuangan</h4>
+            <div class="menu-path"><code>/general-ledger/rumus-rasio-keuangan</code></div>
+            <p class="menu-desc">Konfigurasi formula analisis kinerja keuangan korporasi (Current Ratio, Quick Ratio, Debt to Equity, Gross Margin, Net Profit Margin, ROA, ROE).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">GL Template</h4>
+            <div class="menu-path"><code>/general-ledger/gl-template</code></div>
+            <p class="menu-desc">Pola template jurnal berulang untuk mempercepat input pencatatan memorial rutin (penyusutan aktiva tetap bulanan, amortisasi asuransi, akrual beban gaji).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Transaksi GL (Jurnal Memorial & Log Jurnal)</h4>
+            <div class="menu-path"><code>/general-ledger/transaksi-gl</code></div>
+            <p class="menu-desc">Pencatatan jurnal umum manual dan pengawasan seluruh jurnal otomatis yang dibentuk oleh transaksi purchasing, sales, inventory, kas/bank, dan penyelesaian Work Order.</p>
+          </div>
+        
+      </div>
+    </section>
+  
+    <section class="module-section" id="MOD-07">
+      <div class="module-header">
+        <span class="module-code">MOD-07</span>
+        <h2>Modul Master Data & Lain-lain</h2>
+      </div>
+      <p class="module-summary">Pengaturan master data pendukung seluruh operasional sistem: regulasi perpajakan (PPh & PPN), syarat termin pembayaran bisnis, konversi satuan ukuran barang, permohonan registrasi part baru, tipe klasifikasi barang, serta pengaturan shift kerja pabrik.</p>
+      <div class="menu-grid">
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Daftar PPH</h4>
+            <div class="menu-path"><code>/lain-lain/daftar-pph</code></div>
+            <p class="menu-desc">Pengaturan tarif pajak penghasilan sesuai peraturan perundangan perpajakan (PPh 21 tenaga ahli, PPh 22 impor, PPh 23 jasa teknik, PPh 4 ayat 2 final).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Daftar Tipe PPN</h4>
+            <div class="menu-path"><code>/lain-lain/daftar-ppn</code></div>
+            <p class="menu-desc">Konfigurasi tarif Pajak Pertambahan Nilai (PPN Standar 11%/12%, PPN Dibebaskan Kawasan Berikat, Non-PPN).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Syarat Bayar (Terms of Payment)</h4>
+            <div class="menu-path"><code>/lain-lain/syarat-bayar</code></div>
+            <p class="menu-desc">Master termin pembayaran transaksi (Cash On Delivery/COD, Net 14 Hari, Net 30 Hari, Net 60 Hari, End of Month/EOM, DP 50% Balance Before Delivery).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Units (Satuan Ukuran)</h4>
+            <div class="menu-path"><code>/master-data/units</code></div>
+            <p class="menu-desc">Master satuan ukuran kuantitas fisik (PCS, KG, GRAM, MTR, ROLL, BOX, PACK, CAN, SET) beserta tabel faktor konversi antar satuan.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Product Requests</h4>
+            <div class="menu-path"><code>/master-data/product-requests</code></div>
+            <p class="menu-desc">Alur permohonan pendaftaran kode part baru dari tim Sales/Engineering kepada tim Master Data Administrator dengan verifikasi gambar teknis dan spesifikasi.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Tipe Barang Jadi</h4>
+            <div class="menu-path"><code>/lain-lain/tipe-barang-jadi</code></div>
+            <p class="menu-desc">Sub-kategori produk jadi (Otomotif Interior, Otomotif Exterior, Komponen Kelistrikan, Kemasan Medis, Wadah Makanan).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Tipe Barang</h4>
+            <div class="menu-path"><code>/lain-lain/tipe-barang</code></div>
+            <p class="menu-desc">Klasifikasi material persediaan (Resin Murni, Masterbatch/Pewarna, Regrind/Gilingan, Sub-Part Komponen, Insert Logam, Karton Box, Kantong Plastik, Thinner/Solvent).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Daftar Shift</h4>
+            <div class="menu-path"><code>/lain-lain/daftar-shift</code></div>
+            <p class="menu-desc">Pengaturan jam kerja regu operasional pabrik (Shift 1 Pagi: 07.00-15.00, Shift 2 Siang: 15.00-23.00, Shift 3 Malam: 23.00-07.00) dan alokasi jam istirahat.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Master Budgeting & Approval Request</h4>
+            <div class="menu-path"><code>/budgeting/master-budget</code></div>
+            <p class="menu-desc">Penyusunan anggaran belanja korporat dan alur verifikasi approval limit anggaran sebelum transaksi dapat diproses.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Update Actual</h4>
+            <div class="menu-path"><code>/budgeting/update-actual</code></div>
+            <p class="menu-desc">Proses pembaruan nilai realisasi transaksi pengeluaran aktual terhadap saldo pagu anggaran tahunan berjalan.</p>
+          </div>
+        
+      </div>
+    </section>
+  
+    <section class="module-section" id="MOD-08">
+      <div class="module-header">
+        <span class="module-code">MOD-08</span>
+        <h2>Modul Pengaturan Sistem (Settings)</h2>
+      </div>
+      <p class="module-summary">Konfigurasi parameter global aplikasi dan aturan tata kelola approval alur dokumen kerja perusahaan.</p>
+      <div class="menu-grid">
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Konfigurasi Umum</h4>
+            <div class="menu-path"><code>/settings/general</code></div>
+            <p class="menu-desc">Pengaturan parameter inti: format otomatis penomoran dokumen (Nomor PO, WO, SJ, Inv), aktivasi modul penerimaan by schedule, integrasi sistem, dan logo korporat.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Approval Rules</h4>
+            <div class="menu-path"><code>/settings/approval</code></div>
+            <p class="menu-desc">Konfigurasi matriks kewenangan persetujuan berjenjang: penentuan approver (Supervisor, Manager, Direktur) berdasarkan kategori transaksi dan batas nominal rupiah.</p>
+          </div>
+        
+      </div>
+    </section>
+  
+    <section class="module-section" id="MOD-09">
+      <div class="module-header">
+        <span class="module-code">MOD-09</span>
+        <h2>Modul User Security & Keamanan</h2>
+      </div>
+      <p class="module-summary">Pengendalian hak akses, keamanan data, dan audit trail operasional pengguna sistem.</p>
+      <div class="menu-grid">
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Data Karyawan</h4>
+            <div class="menu-path"><code>/settings/karyawan</code></div>
+            <p class="menu-desc">Basis data personil karyawan pabrik: NIK, Nama Lengkap, Departemen, Jabatan, Tanggal Bergabung, dan Status Kerja.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Users & Department</h4>
+            <div class="menu-path"><code>/settings/users</code></div>
+            <p class="menu-desc">Manajemen akun login sistem, penugasan username, email kantor, password terenkripsi bcrypt, dan penugasan departemen.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Roles Management</h4>
+            <div class="menu-path"><code>/settings/roles</code></div>
+            <p class="menu-desc">Pengelolaan peran hak akses (Role-Based Access Control / RBAC) seperti: Super Admin, Produksi Admin, Operator Injeksi, QC Supervisor, Gudang Logistik, Sales Marketing, Finance & Accounting.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Permissions</h4>
+            <div class="menu-path"><code>/settings/permissions</code></div>
+            <p class="menu-desc">Matriks izin akses detail per menu: Create (tambah data), Read (lihat data), Update (edit), Delete (hapus), Approve (setujui), Export Excel, dan Print Dokumen.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Activity Log</h4>
+            <div class="menu-path"><code>/settings/activity-log</code></div>
+            <p class="menu-desc">Jejak audit digital (Audit Trail) yang mencatat seluruh riwayat aksi pengguna secara otomatis: siapa pengguna, waktu kejadian, IP address, jenis aksi, dan rekaman perubahan nilai data lama vs data baru.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Error Logs</h4>
+            <div class="menu-path"><code>/settings/error-logs</code></div>
+            <p class="menu-desc">Pencatatan riwayat galat/exception sistem backend untuk kebutuhan diagnostik dan pemeliharaan tim teknologi informasi (IT).</p>
+          </div>
+        
+      </div>
+    </section>
+  
+    <section class="module-section" id="MOD-10">
+      <div class="module-header">
+        <span class="module-code">MOD-10</span>
+        <h2>Modul Daftar Laporan (Reports)</h2>
+      </div>
+      <p class="module-summary">Laporan analitis dan rekapitulasi operasional komprehensif untuk mendukung pengambilan keputusan manajemen eksekutif.</p>
+      <div class="menu-grid">
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Purchase Request Report</h4>
+            <div class="menu-path"><code>/reports/purchase-request</code></div>
+            <p class="menu-desc">Laporan analisis siklus pengadaan: status realisasi PR, outstanding PR yang belum menjadi PO, dan evaluasi lead time pengadaan barang per departemen.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Master Budget Report</h4>
+            <div class="menu-path"><code>/reports/master-budget</code></div>
+            <p class="menu-desc">Laporan perbandingan pagu anggaran terhadap realisasi aktual belanja (Budget vs Actual) per departemen beserta persentase sisa kuota anggaran.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Laporan Penjualan</h4>
+            <div class="menu-path"><code>/reports/penjualan</code></div>
+            <p class="menu-desc">Analisis performa penjualan: omzet per periode, ranking customer terbesar, volume penjualan per part, kinerja sales, dan kontribusi laba kotor produk.</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Laporan Stok</h4>
+            <div class="menu-path"><code>/reports/stok</code></div>
+            <p class="menu-desc">Laporan komprehensif persediaan: valuasi stok gudang, mutasi masuk/keluar, kartu stok, serta analisis aging stok (stok lambat bergerak / slow moving).</p>
+          </div>
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Laporan Keuangan</h4>
+            <div class="menu-path"><code>/reports/keuangan</code></div>
+            <p class="menu-desc">Paket laporan keuangan standar akuntansi: Laporan Laba Rugi (Profit & Loss), Laporan Posisi Keuangan (Neraca / Balance Sheet), Laporan Arus Kas, dan Buku Besar Pembantu.</p>
+          </div>
+        
+      </div>
+    </section>
+  
+    <section class="module-section" id="MOD-11">
+      <div class="module-header">
+        <span class="module-code">MOD-11</span>
+        <h2>Modul Profil Perusahaan (Company Profile)</h2>
+      </div>
+      <p class="module-summary">Pengaturan identitas resmi entitas perusahaan yang menjadi rujukan legalitas seluruh kop surat formulir cetakan sistem (PO, Faktur, Surat Jalan, Work Order, dan Slip Kas).</p>
+      <div class="menu-grid">
+        
+          <div class="menu-card">
+            <h4 class="menu-name">Profil Perusahaan</h4>
+            <div class="menu-path"><code>/settings/company</code></div>
+            <p class="menu-desc">Pengisian nama legal perseroan (PT), alamat kantor pusat, alamat fasilitas pabrik manufaktur, nomor telepon/faksimili, email resmi, NPWP perusahaan, Nomor Induk Berusaha (NIB), dan nomor rekening resmi bank.</p>
+          </div>
+        
+      </div>
+    </section>
+  
+  </div>
+</body>
+</html>

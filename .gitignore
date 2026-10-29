@@ -1,0 +1,9 @@
+/budgeting-laravel.zip
+/budgeting-next.zip
+node_modules/
+.env
+.env.local
+.next/
+*.zip
+*.tar.gz
+*.log

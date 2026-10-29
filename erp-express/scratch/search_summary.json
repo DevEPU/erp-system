@@ -1,0 +1,1994 @@
+[
+  {
+    "item": "BOX LUGGAGE K2FK",
+    "db_products": [
+      {
+        "id": 5180,
+        "product_code": "EPBL-FBXLGAK2F",
+        "product_name": "BOX LUGGAGE K2FK",
+        "mmu_uph": 65,
+        "mmu_cavity": 1,
+        "machine_code": "MC-19",
+        "mold_code": "MOLD-FBXLGAK2F",
+        "mold_name": "BOX LUGGAGE K2FK"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FBXLGAK2F",
+        "name": "BOX LUGGAGE K2FK",
+        "uph": 65,
+        "cavity": 1,
+        "machine_code": "MC-19"
+      }
+    ]
+  },
+  {
+    "item": "PROTECTOR MUFFLER K2SA",
+    "db_products": [
+      {
+        "id": 5183,
+        "product_code": "EPPI-FPRMRK2SA",
+        "product_name": "PROTECTOR MUFFLER K2SA",
+        "mmu_uph": 70,
+        "mmu_cavity": 1,
+        "machine_code": "MC-16",
+        "mold_code": "MOLD-FPRMRK2SA",
+        "mold_name": "PROTECTOR MUFFLER K2SA"
+      },
+      {
+        "id": 5211,
+        "product_code": "EPPL-FPRMRK2SAM",
+        "product_name": "PROTECTOR MUFFLER K2SA (AM)",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FPRMRK2SA",
+        "name": "PROTECTOR MUFFLER K2SA",
+        "uph": 70,
+        "cavity": 1,
+        "machine_code": "MC-16"
+      },
+      {
+        "code": "MOLD-FPRMRK2SAM",
+        "name": "PROTECTOR MUFFLER K2SA (AM)",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "PROTECTOR MUFFLER K59",
+    "db_products": [
+      {
+        "id": 5182,
+        "product_code": "EPPI-FPRMRK59",
+        "product_name": "PROTECTOR MUFFLER K59",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FPRMRK59",
+        "name": "PROTECTOR MUFFLER K59",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "RR GRAB RAIL K1AL",
+    "db_products": [
+      {
+        "id": 5179,
+        "product_code": "EPPI-FRGRRLK1L",
+        "product_name": "RR GRAB RAIL K1AL",
+        "mmu_uph": 55,
+        "mmu_cavity": 1,
+        "machine_code": "MC-8",
+        "mold_code": "MOLD-FRGRRLK1L",
+        "mold_name": "RR GRAB RAIL K1AL"
+      },
+      {
+        "id": 5179,
+        "product_code": "EPPI-FRGRRLK1L",
+        "product_name": "RR GRAB RAIL K1AL",
+        "mmu_uph": 55,
+        "mmu_cavity": 1,
+        "machine_code": "MC-9",
+        "mold_code": "MOLD-FRGRRLK1L",
+        "mold_name": "RR GRAB RAIL K1AL"
+      },
+      {
+        "id": 5179,
+        "product_code": "EPPI-FRGRRLK1L",
+        "product_name": "RR GRAB RAIL K1AL",
+        "mmu_uph": 40,
+        "mmu_cavity": 1,
+        "machine_code": "MC-29",
+        "mold_code": "MOLD-FRGRRLK1L",
+        "mold_name": "RR GRAB RAIL K1AL"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FRGRRLK1L",
+        "name": "RR GRAB RAIL K1AL",
+        "uph": 55,
+        "cavity": 1,
+        "machine_code": "MC-8"
+      },
+      {
+        "code": "MOLD-FRGRRLK1L",
+        "name": "RR GRAB RAIL K1AL",
+        "uph": 55,
+        "cavity": 1,
+        "machine_code": "MC-9"
+      },
+      {
+        "code": "MOLD-FRGRRLK1L",
+        "name": "RR GRAB RAIL K1AL",
+        "uph": 40,
+        "cavity": 1,
+        "machine_code": "MC-29"
+      }
+    ]
+  },
+  {
+    "item": "RR GRAB RAIL K2FP",
+    "db_products": [
+      {
+        "id": 5229,
+        "product_code": "EPGR-FGRAILK2F",
+        "product_name": "RR GRAB RAIL K2FP",
+        "mmu_uph": 35,
+        "mmu_cavity": 1,
+        "machine_code": "MC-29",
+        "mold_code": "MOLD-FGRAILK2F",
+        "mold_name": "RR GRAB RAIL K2FP"
+      },
+      {
+        "id": 5229,
+        "product_code": "EPGR-FGRAILK2F",
+        "product_name": "RR GRAB RAIL K2FP",
+        "mmu_uph": 30,
+        "mmu_cavity": 1,
+        "machine_code": "MC-30",
+        "mold_code": "MOLD-FGRAILK2F",
+        "mold_name": "RR GRAB RAIL K2FP"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FGRAILK2F",
+        "name": "RR GRAB RAIL K2FP",
+        "uph": 35,
+        "cavity": 1,
+        "machine_code": "MC-29"
+      },
+      {
+        "code": "MOLD-FGRAILK2F",
+        "name": "RR GRAB RAIL K2FP",
+        "uph": 30,
+        "cavity": 1,
+        "machine_code": "MC-30"
+      }
+    ]
+  },
+  {
+    "item": "BOX LUGGAGE K1Z",
+    "db_products": [
+      {
+        "id": 5181,
+        "product_code": "EPBL-FBXLUGK1Z",
+        "product_name": "BOX LUGGAGE K1Z",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-39",
+        "mold_code": "MOLD-FBXLUGK1Z",
+        "mold_name": "BOX LUGGAGE K1Z"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FBXLUGK1Z",
+        "name": "BOX LUGGAGE K1Z",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-39"
+      }
+    ]
+  },
+  {
+    "item": "PLATE BOTTOM K3VA",
+    "db_products": [
+      {
+        "id": 5177,
+        "product_code": "EPPI-FPLBOK3VA",
+        "product_name": "PLATE BOTTOM K3VA",
+        "mmu_uph": 70,
+        "mmu_cavity": 1,
+        "machine_code": "MC-15",
+        "mold_code": "MOLD-FPLBOK3VA",
+        "mold_name": "PLATE BOTTOM K3VA"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FPLBOK3VA",
+        "name": "PLATE BOTTOM K3VA",
+        "uph": 70,
+        "cavity": 1,
+        "machine_code": "MC-15"
+      }
+    ]
+  },
+  {
+    "item": "PLATE BOTTOM SUZUKI (45111-12K10)",
+    "db_products": [
+      {
+        "id": 5184,
+        "product_code": "EPPI-FPBSZK10",
+        "product_name": "PLATE BOTTOM SUZUKI (45111-12K10)",
+        "mmu_uph": 35,
+        "mmu_cavity": 1,
+        "machine_code": "MC-36",
+        "mold_code": "MOLD-FPBSZK10",
+        "mold_name": "PLATE BOTTOM SUZUKI (45111-12K10)"
+      },
+      {
+        "id": 5184,
+        "product_code": "EPPI-FPBSZK10",
+        "product_name": "PLATE BOTTOM SUZUKI (45111-12K10)",
+        "mmu_uph": 35,
+        "mmu_cavity": 1,
+        "machine_code": "MC-35",
+        "mold_code": "MOLD-FPBSZK10",
+        "mold_name": "PLATE BOTTOM SUZUKI (45111-12K10)"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FPBSZK10",
+        "name": "PLATE BOTTOM SUZUKI (45111-12K10)",
+        "uph": 35,
+        "cavity": 1,
+        "machine_code": "MC-36"
+      },
+      {
+        "code": "MOLD-FPBSZK10",
+        "name": "PLATE BOTTOM SUZUKI (45111-12K10)",
+        "uph": 35,
+        "cavity": 1,
+        "machine_code": "MC-35"
+      }
+    ]
+  },
+  {
+    "item": "HOLDER MIRROR S/A RH",
+    "db_products": [
+      {
+        "id": 5185,
+        "product_code": "EPAS-FHMASK2SR",
+        "product_name": "HOLDER MIRROR S/A RH",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FHMASK2SR",
+        "name": "HOLDER MIRROR S/A RH",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "HOLDER MIRROR S/A LH",
+    "db_products": [
+      {
+        "id": 5186,
+        "product_code": "EPAS-FHMASK2SL",
+        "product_name": "HOLDER MIRROR S/A LH",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FHMASK2SL",
+        "name": "HOLDER MIRROR S/A LH",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "HOLDER MIRROR K3VA",
+    "db_products": [
+      {
+        "id": 5219,
+        "product_code": "EPPI-FHLDMRK3V",
+        "product_name": "HOLDER MIRROR K3VA",
+        "mmu_uph": 140,
+        "mmu_cavity": 1,
+        "machine_code": "MC-7",
+        "mold_code": "MOLD-FHLDMRK3V",
+        "mold_name": "HOLDER MIRROR K3VA"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FHLDMRK3V",
+        "name": "HOLDER MIRROR K3VA",
+        "uph": 140,
+        "cavity": 1,
+        "machine_code": "MC-7"
+      }
+    ]
+  },
+  {
+    "item": "PLATE BOTTOM K1AL SC",
+    "db_products": [
+      {
+        "id": 5178,
+        "product_code": "EPPI-FPLBK1AL",
+        "product_name": "PLATE BOTTOM K1AL SC",
+        "mmu_uph": 55,
+        "mmu_cavity": 1,
+        "machine_code": "MC-11",
+        "mold_code": "MOLD-FPLBK1AL",
+        "mold_name": "PLATE BOTTOM K1AL SC"
+      },
+      {
+        "id": 5178,
+        "product_code": "EPPI-FPLBK1AL",
+        "product_name": "PLATE BOTTOM K1AL SC",
+        "mmu_uph": 55,
+        "mmu_cavity": 1,
+        "machine_code": "MC-12",
+        "mold_code": "MOLD-FPLBK1AL",
+        "mold_name": "PLATE BOTTOM K1AL SC"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FPLBK1AL",
+        "name": "PLATE BOTTOM K1AL SC",
+        "uph": 55,
+        "cavity": 1,
+        "machine_code": "MC-11"
+      },
+      {
+        "code": "MOLD-FPLBK1AL",
+        "name": "PLATE BOTTOM K1AL SC",
+        "uph": 55,
+        "cavity": 1,
+        "machine_code": "MC-12"
+      }
+    ]
+  },
+  {
+    "item": "COVER AIR CLEANER K60",
+    "db_products": [
+      {
+        "id": 5176,
+        "product_code": "EPCV-FCVACLK60",
+        "product_name": "COVER AIR CLEANER K60",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-17",
+        "mold_code": "MOLD-FCVACLK60",
+        "mold_name": "COVER AIR CLEANER K60"
+      },
+      {
+        "id": 5176,
+        "product_code": "EPCV-FCVACLK60",
+        "product_name": "COVER AIR CLEANER K60",
+        "mmu_uph": 80,
+        "mmu_cavity": 1,
+        "machine_code": "MC-37",
+        "mold_code": "MOLD-FCVACLK60",
+        "mold_name": "COVER AIR CLEANER K60"
+      },
+      {
+        "id": 5176,
+        "product_code": "EPCV-FCVACLK60",
+        "product_name": "COVER AIR CLEANER K60",
+        "mmu_uph": 60,
+        "mmu_cavity": 1,
+        "machine_code": "MC-38",
+        "mold_code": "MOLD-FCVACLK60",
+        "mold_name": "COVER AIR CLEANER K60"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FCVACLK60",
+        "name": "COVER AIR CLEANER K60",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-17"
+      },
+      {
+        "code": "MOLD-FCVACLK60",
+        "name": "COVER AIR CLEANER K60",
+        "uph": 80,
+        "cavity": 1,
+        "machine_code": "MC-37"
+      },
+      {
+        "code": "MOLD-FCVACLK60",
+        "name": "COVER AIR CLEANER K60",
+        "uph": 60,
+        "cavity": 1,
+        "machine_code": "MC-38"
+      }
+    ]
+  },
+  {
+    "item": "ELEMENT COMP A/C K60R",
+    "db_products": [
+      {
+        "id": 5172,
+        "product_code": "EPPL-ELMNTK60R",
+        "product_name": "ELEMENT COMP A/C K60R",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-ELMNTK60R",
+        "name": "ELEMENT COMP A/C K60R",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "SET ILLUST AC ELEMENT KOJA",
+    "db_products": [],
+    "db_molds": []
+  },
+  {
+    "item": "SET ILLUST AIR C ELEMENT K2V",
+    "db_products": [
+      {
+        "id": 5217,
+        "product_code": "EPPI-FSIACLK2V",
+        "product_name": "SET ILLUST AIR C ELEMENT K2V",
+        "mmu_uph": 60,
+        "mmu_cavity": 1,
+        "machine_code": "MC-4",
+        "mold_code": "MOLD-FSIACLK2V",
+        "mold_name": "SET ILLUST AIR C ELEMENT K2V"
+      },
+      {
+        "id": 5217,
+        "product_code": "EPPI-FSIACLK2V",
+        "product_name": "SET ILLUST AIR C ELEMENT K2V",
+        "mmu_uph": 60,
+        "mmu_cavity": 1,
+        "machine_code": "MC-24",
+        "mold_code": "MOLD-FSIACLK2V",
+        "mold_name": "SET ILLUST AIR C ELEMENT K2V"
+      },
+      {
+        "id": 5217,
+        "product_code": "EPPI-FSIACLK2V",
+        "product_name": "SET ILLUST AIR C ELEMENT K2V",
+        "mmu_uph": 60,
+        "mmu_cavity": 1,
+        "machine_code": "MC-26",
+        "mold_code": "MOLD-FSIACLK2V",
+        "mold_name": "SET ILLUST AIR C ELEMENT K2V"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FSIACLK2V",
+        "name": "SET ILLUST AIR C ELEMENT K2V",
+        "uph": 60,
+        "cavity": 1,
+        "machine_code": "MC-4"
+      },
+      {
+        "code": "MOLD-FSIACLK2V",
+        "name": "SET ILLUST AIR C ELEMENT K2V",
+        "uph": 60,
+        "cavity": 1,
+        "machine_code": "MC-24"
+      },
+      {
+        "code": "MOLD-FSIACLK2V",
+        "name": "SET ILLUST AIR C ELEMENT K2V",
+        "uph": 60,
+        "cavity": 1,
+        "machine_code": "MC-26"
+      }
+    ]
+  },
+  {
+    "item": "ELEMENT COMP A/C KOJA",
+    "db_products": [],
+    "db_molds": []
+  },
+  {
+    "item": "SUB ASSY COVER AIR CLEANER K1AA",
+    "db_products": [
+      {
+        "id": 5173,
+        "product_code": "EPCV-FCVACLK1A",
+        "product_name": "SUB ASSY COVER AIR CLEANER K1AA",
+        "mmu_uph": 70,
+        "mmu_cavity": 1,
+        "machine_code": "MC-13",
+        "mold_code": "MOLD-FCVACLK1A",
+        "mold_name": "SUB ASSY COVER AIR CLEANER K1AA"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FCVACLK1A",
+        "name": "SUB ASSY COVER AIR CLEANER K1AA",
+        "uph": 70,
+        "cavity": 1,
+        "machine_code": "MC-13"
+      }
+    ]
+  },
+  {
+    "item": "SUB ASSY COVER AIR CLEANER KOJA",
+    "db_products": [],
+    "db_molds": []
+  },
+  {
+    "item": "CASE AIR CLEANER KWN (K2V)",
+    "db_products": [
+      {
+        "id": 5225,
+        "product_code": "EPCS-FCSEACK2V",
+        "product_name": "CASE AIR CLEANER KWN (K2V)",
+        "mmu_uph": 55,
+        "mmu_cavity": 1,
+        "machine_code": "MC-14",
+        "mold_code": "MOLD-FCSEACK2V",
+        "mold_name": "CASE AIR CLEANER KWN (K2V)"
+      },
+      {
+        "id": 5225,
+        "product_code": "EPCS-FCSEACK2V",
+        "product_name": "CASE AIR CLEANER KWN (K2V)",
+        "mmu_uph": 100,
+        "mmu_cavity": 1,
+        "machine_code": "MC-32",
+        "mold_code": "MOLD-FCSEACK2V",
+        "mold_name": "CASE AIR CLEANER KWN (K2V)"
+      },
+      {
+        "id": 5235,
+        "product_code": "EPCS-FCSACK2VM",
+        "product_name": "SUB ASSY CASE AIR CLEANER KWN (K2VM)",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FCSEACK2V",
+        "name": "CASE AIR CLEANER KWN (K2V)",
+        "uph": 55,
+        "cavity": 1,
+        "machine_code": "MC-14"
+      },
+      {
+        "code": "MOLD-FCSEACK2V",
+        "name": "CASE AIR CLEANER KWN (K2V)",
+        "uph": 100,
+        "cavity": 1,
+        "machine_code": "MC-32"
+      }
+    ]
+  },
+  {
+    "item": "SUB ASSY CASE AIR CLEANER KOJA",
+    "db_products": [],
+    "db_molds": []
+  },
+  {
+    "item": "SUB ASSY CASE AIR CLEANER K1AL",
+    "db_products": [
+      {
+        "id": 5174,
+        "product_code": "EPCS-FCSEACK1A",
+        "product_name": "SUB ASSY CASE AIR CLEANER K1AL",
+        "mmu_uph": 95,
+        "mmu_cavity": 1,
+        "machine_code": "MC-17",
+        "mold_code": "MOLD-FCSEACK1A",
+        "mold_name": "SUB ASSY CASE AIR CLEANER K1AL"
+      },
+      {
+        "id": 5174,
+        "product_code": "EPCS-FCSEACK1A",
+        "product_name": "SUB ASSY CASE AIR CLEANER K1AL",
+        "mmu_uph": 90,
+        "mmu_cavity": 1,
+        "machine_code": "MC-18",
+        "mold_code": "MOLD-FCSEACK1A",
+        "mold_name": "SUB ASSY CASE AIR CLEANER K1AL"
+      },
+      {
+        "id": 5174,
+        "product_code": "EPCS-FCSEACK1A",
+        "product_name": "SUB ASSY CASE AIR CLEANER K1AL",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-37",
+        "mold_code": "MOLD-FCSEACK1A",
+        "mold_name": "SUB ASSY CASE AIR CLEANER K1AL"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FCSEACK1A",
+        "name": "SUB ASSY CASE AIR CLEANER K1AL",
+        "uph": 95,
+        "cavity": 1,
+        "machine_code": "MC-17"
+      },
+      {
+        "code": "MOLD-FCSEACK1A",
+        "name": "SUB ASSY CASE AIR CLEANER K1AL",
+        "uph": 90,
+        "cavity": 1,
+        "machine_code": "MC-18"
+      },
+      {
+        "code": "MOLD-FCSEACK1A",
+        "name": "SUB ASSY CASE AIR CLEANER K1AL",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-37"
+      }
+    ]
+  },
+  {
+    "item": "COVER SUB ASSY AIR CLEANER KOJA (AHM-PC)",
+    "db_products": [],
+    "db_molds": []
+  },
+  {
+    "item": "CASE SUB ASSY AIR CLEANER KOJA (AHM-PC)",
+    "db_products": [],
+    "db_molds": []
+  },
+  {
+    "item": "GRIP HANDLE BRACKET BZ050",
+    "db_products": [
+      {
+        "id": 5204,
+        "product_code": "EPPI-FGHABBZ0",
+        "product_name": "GRIP HANDLE BRACKET BZ050",
+        "mmu_uph": 60,
+        "mmu_cavity": 1,
+        "machine_code": "MC-28",
+        "mold_code": "MOLD-FGHABBZ0",
+        "mold_name": "GRIP HANDLE BRACKET BZ050"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FGHABBZ0",
+        "name": "GRIP HANDLE BRACKET BZ050",
+        "uph": 60,
+        "cavity": 1,
+        "machine_code": "MC-28"
+      }
+    ]
+  },
+  {
+    "item": "GRIP PARKING BRAKE LEVER 0K130",
+    "db_products": [
+      {
+        "id": 5205,
+        "product_code": "EPPI-FGRPBL0K",
+        "product_name": "GRIP PARKING BRAKE LEVER 0K130",
+        "mmu_uph": 40,
+        "mmu_cavity": 1,
+        "machine_code": "MC-6",
+        "mold_code": "MOLD-FGRPBL0K",
+        "mold_name": "GRIP PARKING BRAKE LEVER 0K130"
+      },
+      {
+        "id": 5205,
+        "product_code": "EPPI-FGRPBL0K",
+        "product_name": "GRIP PARKING BRAKE LEVER 0K130",
+        "mmu_uph": 35,
+        "mmu_cavity": 1,
+        "machine_code": "MC-28",
+        "mold_code": "MOLD-FGRPBL0K",
+        "mold_name": "GRIP PARKING BRAKE LEVER 0K130"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FGRPBL0K",
+        "name": "GRIP PARKING BRAKE LEVER 0K130",
+        "uph": 40,
+        "cavity": 1,
+        "machine_code": "MC-6"
+      },
+      {
+        "code": "MOLD-FGRPBL0K",
+        "name": "GRIP PARKING BRAKE LEVER 0K130",
+        "uph": 35,
+        "cavity": 1,
+        "machine_code": "MC-28"
+      }
+    ]
+  },
+  {
+    "item": "HOLDER MIRROR BACK RH K97G",
+    "db_products": [
+      {
+        "id": 5222,
+        "product_code": "EPPI-FHDMRRK97",
+        "product_name": "HOLDER MIRROR BACK RH K97G",
+        "mmu_uph": 70,
+        "mmu_cavity": 1,
+        "machine_code": "MC-10",
+        "mold_code": "MOLD-FHDMRRK97",
+        "mold_name": "HOLDER MIRROR BACK RH K97G"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FHDMRRK97",
+        "name": "HOLDER MIRROR BACK RH K97G",
+        "uph": 70,
+        "cavity": 1,
+        "machine_code": "MC-10"
+      }
+    ]
+  },
+  {
+    "item": "HOLDER MIRROR BACK LH K97G",
+    "db_products": [
+      {
+        "id": 5223,
+        "product_code": "EPPI-FHDMRLK97",
+        "product_name": "HOLDER MIRROR BACK LH K97G",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FHDMRLK97",
+        "name": "HOLDER MIRROR BACK LH K97G",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "HOLDER MIRROR BACK RH KZLG",
+    "db_products": [
+      {
+        "id": 5207,
+        "product_code": "EPHD-FHMRRKZLR",
+        "product_name": "HOLDER MIRROR BACK RH KZLG",
+        "mmu_uph": 100,
+        "mmu_cavity": 1,
+        "machine_code": "MC-35",
+        "mold_code": "MOLD-FHMRRKZLR",
+        "mold_name": "HOLDER MIRROR BACK RH KZLG"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FHMRRKZLR",
+        "name": "HOLDER MIRROR BACK RH KZLG",
+        "uph": 100,
+        "cavity": 1,
+        "machine_code": "MC-35"
+      }
+    ]
+  },
+  {
+    "item": "HOLDER MIRROR BACK LH KZLG",
+    "db_products": [
+      {
+        "id": 5208,
+        "product_code": "EPHD-FHMRRKZLL",
+        "product_name": "HOLDER MIRROR BACK LH KZLG",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FHMRRKZLL",
+        "name": "HOLDER MIRROR BACK LH KZLG",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "SUB ASSY HOLDER MIRROR BACK RH/LH K93",
+    "db_products": [
+      {
+        "id": 5206,
+        "product_code": "EPPL-FHMRRLK93",
+        "product_name": "SUB ASSY HOLDER MIRROR BACK RH/LH K93",
+        "mmu_uph": 250,
+        "mmu_cavity": 1,
+        "machine_code": "MC-35",
+        "mold_code": "MOLD-FHMRRLK93",
+        "mold_name": "SUB ASSY HOLDER MIRROR BACK RH/LH K93"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FHMRRLK93",
+        "name": "SUB ASSY HOLDER MIRROR BACK RH/LH K93",
+        "uph": 250,
+        "cavity": 1,
+        "machine_code": "MC-35"
+      }
+    ]
+  },
+  {
+    "item": "COVER PARKING BRAKE HOLE F1010",
+    "db_products": [
+      {
+        "id": 5209,
+        "product_code": "EPCP-FCPBHF101",
+        "product_name": "COVER PARKING BRAKE HOLE F1010",
+        "mmu_uph": 54,
+        "mmu_cavity": 1,
+        "machine_code": "MC-4",
+        "mold_code": "MOLD-FCPBHF101",
+        "mold_name": "COVER PARKING BRAKE HOLE F1010"
+      },
+      {
+        "id": 5209,
+        "product_code": "EPCP-FCPBHF101",
+        "product_name": "COVER PARKING BRAKE HOLE F1010",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-24",
+        "mold_code": "MOLD-FCPBHF101",
+        "mold_name": "COVER PARKING BRAKE HOLE F1010"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FCPBHF101",
+        "name": "COVER PARKING BRAKE HOLE F1010",
+        "uph": 54,
+        "cavity": 1,
+        "machine_code": "MC-4"
+      },
+      {
+        "code": "MOLD-FCPBHF101",
+        "name": "COVER PARKING BRAKE HOLE F1010",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-24"
+      }
+    ]
+  },
+  {
+    "item": "BACK MRR STYLISH RL YM 12-BMST-M10BYR AM",
+    "db_products": [
+      {
+        "id": 5192,
+        "product_code": "EPAS-FJETAYMH",
+        "product_name": "BACK MRR STYLISH RL YM 12-BMST-M10BYR AM",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FJETAYMH",
+        "name": "BACK MRR STYLISH RL YM 12-BMST-M10BYR AM",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "BACK MRR STYLISH RL HD 12-BMST-M10BHR AM",
+    "db_products": [
+      {
+        "id": 5191,
+        "product_code": "EPAS-FJETAHND",
+        "product_name": "BACK MRR STYLISH RL HD 12-BMST-M10BHR AM",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FJETAHND",
+        "name": "BACK MRR STYLISH RL HD 12-BMST-M10BHR AM",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "BACK MRR GN LOOK RL HD FP-BMGL-M10BHR AM",
+    "db_products": [
+      {
+        "id": 5189,
+        "product_code": "EPAS-FSAPFHND",
+        "product_name": "BACK MRR GN LOOK RL HD FP-BMGL-M10BHR AM",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FSAPFHND",
+        "name": "BACK MRR GN LOOK RL HD FP-BMGL-M10BHR AM",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "BACK MRR GN LOOK RL YM FP-BMGL-M10BYR AM",
+    "db_products": [
+      {
+        "id": 5190,
+        "product_code": "EPAS-FSAPFYMH",
+        "product_name": "BACK MRR GN LOOK RL YM FP-BMGL-M10BYR AM",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FSAPFYMH",
+        "name": "BACK MRR GN LOOK RL YM FP-BMGL-M10BYR AM",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "BACK MRR GN LOOK RL HD 12-BMGL-M10BHR AM",
+    "db_products": [
+      {
+        "id": 5187,
+        "product_code": "EPAS-FSAPAHND",
+        "product_name": "BACK MRR GN LOOK RL HD 12-BMGL-M10BHR AM",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FSAPAHND",
+        "name": "BACK MRR GN LOOK RL HD 12-BMGL-M10BHR AM",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "BACK MRR GN LOOK RL YM 12-BMGL-M10BYR AM",
+    "db_products": [
+      {
+        "id": 5188,
+        "product_code": "EPAS-FSAPAYMH",
+        "product_name": "BACK MRR GN LOOK RL YM 12-BMGL-M10BYR AM",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FSAPAYMH",
+        "name": "BACK MRR GN LOOK RL YM 12-BMGL-M10BYR AM",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "MIRROR BASIC YMH",
+    "db_products": [
+      {
+        "id": 5201,
+        "product_code": "EPAS-FBSCFSMY",
+        "product_name": "MIRROR BASIC YMH",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FBSCFSMY",
+        "name": "MIRROR BASIC YMH",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "MIRROR ARROW HND",
+    "db_products": [
+      {
+        "id": 5202,
+        "product_code": "EPAS-FARRFSMH",
+        "product_name": "MIRROR ARROW HND",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FARRFSMH",
+        "name": "MIRROR ARROW HND",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "MIRROR ARROW YMH",
+    "db_products": [
+      {
+        "id": 5203,
+        "product_code": "EPAS-FARRFSMY",
+        "product_name": "MIRROR ARROW YMH",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FARRFSMY",
+        "name": "MIRROR ARROW YMH",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "MIRROR BASIC HND",
+    "db_products": [
+      {
+        "id": 5200,
+        "product_code": "EPAS-FBSCFSMH",
+        "product_name": "MIRROR BASIC HND",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FBSCFSMH",
+        "name": "MIRROR BASIC HND",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "MIRROR SET (CHR)",
+    "db_products": [
+      {
+        "id": 5195,
+        "product_code": "EPAS-FASIACHR",
+        "product_name": "MIRROR SET (CHR)",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FASIACHR",
+        "name": "MIRROR SET (CHR)",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "MIRROR,BACK (SET)",
+    "db_products": [
+      {
+        "id": 5193,
+        "product_code": "EASR-FASIAHND",
+        "product_name": "MIRROR,BACK (SET)",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      },
+      {
+        "id": 5194,
+        "product_code": "EPAS-FASIAYMH",
+        "product_name": "MIRROR,BACK (SET) OLD YMH",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      },
+      {
+        "id": 5196,
+        "product_code": "EPAS-FASOAHND",
+        "product_name": "MIRROR,BACK (SET) HND",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FASIAHND",
+        "name": "MIRROR,BACK (SET)",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      },
+      {
+        "code": "MOLD-FASIAYMH",
+        "name": "MIRROR,BACK (SET) OLD YMH",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      },
+      {
+        "code": "MOLD-FASOAHND",
+        "name": "MIRROR,BACK (SET) HND",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "MIRROR,BACK (SET OLD YMH)",
+    "db_products": [
+      {
+        "id": 5193,
+        "product_code": "EASR-FASIAHND",
+        "product_name": "MIRROR,BACK (SET)",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      },
+      {
+        "id": 5194,
+        "product_code": "EPAS-FASIAYMH",
+        "product_name": "MIRROR,BACK (SET) OLD YMH",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      },
+      {
+        "id": 5196,
+        "product_code": "EPAS-FASOAHND",
+        "product_name": "MIRROR,BACK (SET) HND",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": []
+  },
+  {
+    "item": "MIRROR,BACK (SET) OLD YMH",
+    "db_products": [
+      {
+        "id": 5194,
+        "product_code": "EPAS-FASIAYMH",
+        "product_name": "MIRROR,BACK (SET) OLD YMH",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FASIAYMH",
+        "name": "MIRROR,BACK (SET) OLD YMH",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "MIRROR, BACK (SET) FED",
+    "db_products": [
+      {
+        "id": 5198,
+        "product_code": "EPAS-FASIFHND",
+        "product_name": "MIRROR, BACK (SET) FED",
+        "mmu_uph": 100,
+        "mmu_cavity": 4,
+        "machine_code": "MC-22",
+        "mold_code": "MOLD-FASIFHND",
+        "mold_name": "MIRROR, BACK (SET) FED"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FASIFHND",
+        "name": "MIRROR, BACK (SET) FED",
+        "uph": 100,
+        "cavity": 4,
+        "machine_code": "MC-22"
+      }
+    ]
+  },
+  {
+    "item": "MIRROR, BACK (SET) OLD YMH FED",
+    "db_products": [
+      {
+        "id": 5199,
+        "product_code": "EPAS-FASIFYMH",
+        "product_name": "MIRROR, BACK (SET) OLD YMH FED",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FASIFYMH",
+        "name": "MIRROR, BACK (SET) OLD YMH FED",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "MIRROR,BACK (SET) HND",
+    "db_products": [
+      {
+        "id": 5196,
+        "product_code": "EPAS-FASOAHND",
+        "product_name": "MIRROR,BACK (SET) HND",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FASOAHND",
+        "name": "MIRROR,BACK (SET) HND",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "MIRROR,BACK (SET) YMH",
+    "db_products": [
+      {
+        "id": 5197,
+        "product_code": "EPAS-FASOAYMH",
+        "product_name": "MIRROR,BACK (SET) YMH",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FASOAYMH",
+        "name": "MIRROR,BACK (SET) YMH",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "CAP LOCK NUT K3VA",
+    "db_products": [
+      {
+        "id": 5221,
+        "product_code": "EPPI-FCPLNTK3V",
+        "product_name": "CAP LOCK NUT K3VA",
+        "mmu_uph": 200,
+        "mmu_cavity": 1,
+        "machine_code": "MC-21",
+        "mold_code": "MOLD-FCPLNTK3V",
+        "mold_name": "CAP LOCK NUT K3VA"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FCPLNTK3V",
+        "name": "CAP LOCK NUT K3VA",
+        "uph": 200,
+        "cavity": 1,
+        "machine_code": "MC-21"
+      }
+    ]
+  },
+  {
+    "item": "COVER MIRROR K3VA",
+    "db_products": [
+      {
+        "id": 5220,
+        "product_code": "EPPI-FCOVMRK3V",
+        "product_name": "COVER MIRROR K3VA",
+        "mmu_uph": 150,
+        "mmu_cavity": 1,
+        "machine_code": "MC-5",
+        "mold_code": "MOLD-FCOVMRK3V",
+        "mold_name": "COVER MIRROR K3VA"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FCOVMRK3V",
+        "name": "COVER MIRROR K3VA",
+        "uph": 150,
+        "cavity": 1,
+        "machine_code": "MC-5"
+      }
+    ]
+  },
+  {
+    "item": "PROTECTOR MUFFLER K2SA (AM)",
+    "db_products": [
+      {
+        "id": 5183,
+        "product_code": "EPPI-FPRMRK2SA",
+        "product_name": "PROTECTOR MUFFLER K2SA",
+        "mmu_uph": 70,
+        "mmu_cavity": 1,
+        "machine_code": "MC-16",
+        "mold_code": "MOLD-FPRMRK2SA",
+        "mold_name": "PROTECTOR MUFFLER K2SA"
+      },
+      {
+        "id": 5211,
+        "product_code": "EPPL-FPRMRK2SAM",
+        "product_name": "PROTECTOR MUFFLER K2SA (AM)",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FPRMRK2SAM",
+        "name": "PROTECTOR MUFFLER K2SA (AM)",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "COVER INNER LOWER KZL",
+    "db_products": [
+      {
+        "id": 5216,
+        "product_code": "EPCI-FCVINLKZL",
+        "product_name": "COVER INNER LOWER KZL",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-17",
+        "mold_code": "MOLD-FCVINLKZL",
+        "mold_name": "COVER INNER LOWER KZL"
+      },
+      {
+        "id": 5216,
+        "product_code": "EPCI-FCVINLKZL",
+        "product_name": "COVER INNER LOWER KZL",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-18",
+        "mold_code": "MOLD-FCVINLKZL",
+        "mold_name": "COVER INNER LOWER KZL"
+      },
+      {
+        "id": 5216,
+        "product_code": "EPCI-FCVINLKZL",
+        "product_name": "COVER INNER LOWER KZL",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-37",
+        "mold_code": "MOLD-FCVINLKZL",
+        "mold_name": "COVER INNER LOWER KZL"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FCVINLKZL",
+        "name": "COVER INNER LOWER KZL",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-17"
+      },
+      {
+        "code": "MOLD-FCVINLKZL",
+        "name": "COVER INNER LOWER KZL",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-18"
+      },
+      {
+        "code": "MOLD-FCVINLKZL",
+        "name": "COVER INNER LOWER KZL",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-37"
+      }
+    ]
+  },
+  {
+    "item": "COVER FRONT LOWER K25",
+    "db_products": [
+      {
+        "id": 5213,
+        "product_code": "EPCF-FCFRLWK25",
+        "product_name": "COVER FRONT LOWER K25",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-17",
+        "mold_code": "MOLD-FCFRLWK25",
+        "mold_name": "COVER FRONT LOWER K25"
+      },
+      {
+        "id": 5213,
+        "product_code": "EPCF-FCFRLWK25",
+        "product_name": "COVER FRONT LOWER K25",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-18",
+        "mold_code": "MOLD-FCFRLWK25",
+        "mold_name": "COVER FRONT LOWER K25"
+      },
+      {
+        "id": 5213,
+        "product_code": "EPCF-FCFRLWK25",
+        "product_name": "COVER FRONT LOWER K25",
+        "mmu_uph": 80,
+        "mmu_cavity": 1,
+        "machine_code": "MC-37",
+        "mold_code": "MOLD-FCFRLWK25",
+        "mold_name": "COVER FRONT LOWER K25"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FCFRLWK25",
+        "name": "COVER FRONT LOWER K25",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-17"
+      },
+      {
+        "code": "MOLD-FCFRLWK25",
+        "name": "COVER FRONT LOWER K25",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-18"
+      },
+      {
+        "code": "MOLD-FCFRLWK25",
+        "name": "COVER FRONT LOWER K25",
+        "uph": 80,
+        "cavity": 1,
+        "machine_code": "MC-37"
+      }
+    ]
+  },
+  {
+    "item": "COVER L BODY SIDE K59A AHM-PC",
+    "db_products": [
+      {
+        "id": 5215,
+        "product_code": "EPBS-FCVLBSK59",
+        "product_name": "COVER L BODY SIDE K59A AHM-PC",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-17",
+        "mold_code": "MOLD-FCVLBSK59",
+        "mold_name": "COVER L BODY SIDE K59A AHM-PC"
+      },
+      {
+        "id": 5215,
+        "product_code": "EPBS-FCVLBSK59",
+        "product_name": "COVER L BODY SIDE K59A AHM-PC",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-18",
+        "mold_code": "MOLD-FCVLBSK59",
+        "mold_name": "COVER L BODY SIDE K59A AHM-PC"
+      },
+      {
+        "id": 5215,
+        "product_code": "EPBS-FCVLBSK59",
+        "product_name": "COVER L BODY SIDE K59A AHM-PC",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-37",
+        "mold_code": "MOLD-FCVLBSK59",
+        "mold_name": "COVER L BODY SIDE K59A AHM-PC"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FCVLBSK59",
+        "name": "COVER L BODY SIDE K59A AHM-PC",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-17"
+      },
+      {
+        "code": "MOLD-FCVLBSK59",
+        "name": "COVER L BODY SIDE K59A AHM-PC",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-18"
+      },
+      {
+        "code": "MOLD-FCVLBSK59",
+        "name": "COVER L BODY SIDE K59A AHM-PC",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-37"
+      }
+    ]
+  },
+  {
+    "item": "COVER R BODY SIDE K59A AHM-PC",
+    "db_products": [
+      {
+        "id": 5214,
+        "product_code": "EPBS-FCVRBSK59",
+        "product_name": "COVER R BODY SIDE K59A AHM-PC",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FCVRBSK59",
+        "name": "COVER R BODY SIDE K59A AHM-PC",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "COVER HANDLE FRONT K25",
+    "db_products": [
+      {
+        "id": 5212,
+        "product_code": "EPCH-FCHDFRK25",
+        "product_name": "COVER HANDLE FRONT K25",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-18",
+        "mold_code": "MOLD-FCHDFRK25",
+        "mold_name": "COVER HANDLE FRONT K25"
+      },
+      {
+        "id": 5212,
+        "product_code": "EPCH-FCHDFRK25",
+        "product_name": "COVER HANDLE FRONT K25",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-37",
+        "mold_code": "MOLD-FCHDFRK25",
+        "mold_name": "COVER HANDLE FRONT K25"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FCHDFRK25",
+        "name": "COVER HANDLE FRONT K25",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-18"
+      },
+      {
+        "code": "MOLD-FCHDFRK25",
+        "name": "COVER HANDLE FRONT K25",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-37"
+      }
+    ]
+  },
+  {
+    "item": "GARNISH FR",
+    "db_products": [
+      {
+        "id": 5218,
+        "product_code": "EPGN-FGRNISHFR",
+        "product_name": "GARNISH FR",
+        "mmu_uph": 100,
+        "mmu_cavity": 1,
+        "machine_code": "MC-17",
+        "mold_code": "MOLD-FGRNISHFR",
+        "mold_name": "GARNISH FR"
+      },
+      {
+        "id": 5218,
+        "product_code": "EPGN-FGRNISHFR",
+        "product_name": "GARNISH FR",
+        "mmu_uph": 100,
+        "mmu_cavity": 1,
+        "machine_code": "MC-18",
+        "mold_code": "MOLD-FGRNISHFR",
+        "mold_name": "GARNISH FR"
+      },
+      {
+        "id": 5218,
+        "product_code": "EPGN-FGRNISHFR",
+        "product_name": "GARNISH FR",
+        "mmu_uph": 100,
+        "mmu_cavity": 1,
+        "machine_code": "MC-37",
+        "mold_code": "MOLD-FGRNISHFR",
+        "mold_name": "GARNISH FR"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FGRNISHFR",
+        "name": "GARNISH FR",
+        "uph": 100,
+        "cavity": 1,
+        "machine_code": "MC-17"
+      },
+      {
+        "code": "MOLD-FGRNISHFR",
+        "name": "GARNISH FR",
+        "uph": 100,
+        "cavity": 1,
+        "machine_code": "MC-18"
+      },
+      {
+        "code": "MOLD-FGRNISHFR",
+        "name": "GARNISH FR",
+        "uph": 100,
+        "cavity": 1,
+        "machine_code": "MC-37"
+      }
+    ]
+  },
+  {
+    "item": "GAUGE HOPPER NETRAL 01",
+    "db_products": [
+      {
+        "id": 5227,
+        "product_code": "EPPI-FGAGHPPER",
+        "product_name": "GAUGE HOPPER NETRAL 01",
+        "mmu_uph": 50,
+        "mmu_cavity": 1,
+        "machine_code": "MC-3",
+        "mold_code": "MOLD-FGAGHPPER",
+        "mold_name": "GAUGE HOPPER NETRAL 01"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FGAGHPPER",
+        "name": "GAUGE HOPPER NETRAL 01",
+        "uph": 50,
+        "cavity": 1,
+        "machine_code": "MC-3"
+      }
+    ]
+  },
+  {
+    "item": "SWITCH BOX COVER 16 SAE",
+    "db_products": [
+      {
+        "id": 5228,
+        "product_code": "EPPI-SWBXCOV16",
+        "product_name": "SWITCH BOX COVER 16 SAE",
+        "mmu_uph": 100,
+        "mmu_cavity": 1,
+        "machine_code": "MC-2",
+        "mold_code": "MOLD-SWBXCOV16",
+        "mold_name": "SWITCH BOX COVER 16 SAE"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-SWBXCOV16",
+        "name": "SWITCH BOX COVER 16 SAE",
+        "uph": 100,
+        "cavity": 1,
+        "machine_code": "MC-2"
+      }
+    ]
+  },
+  {
+    "item": "STAND BASE 12 LDA",
+    "db_products": [
+      {
+        "id": 5230,
+        "product_code": "EPPI-FSTB12LDA",
+        "product_name": "STAND BASE 12 LDA",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FSTB12LDA",
+        "name": "STAND BASE 12 LDA",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "SWITCH COVER 301 CRJ",
+    "db_products": [
+      {
+        "id": 5231,
+        "product_code": "EPPI-FSWCOVCRJ",
+        "product_name": "SWITCH COVER 301 CRJ",
+        "mmu_uph": 150,
+        "mmu_cavity": 1,
+        "machine_code": "MC-3",
+        "mold_code": "MOLD-FSWCOVCRJ",
+        "mold_name": "SWITCH COVER 301 CRJ"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FSWCOVCRJ",
+        "name": "SWITCH COVER 301 CRJ",
+        "uph": 150,
+        "cavity": 1,
+        "machine_code": "MC-3"
+      }
+    ]
+  },
+  {
+    "item": "RR GRAB RAIL K1AL (AM)",
+    "db_products": [
+      {
+        "id": 5179,
+        "product_code": "EPPI-FRGRRLK1L",
+        "product_name": "RR GRAB RAIL K1AL",
+        "mmu_uph": 55,
+        "mmu_cavity": 1,
+        "machine_code": "MC-8",
+        "mold_code": "MOLD-FRGRRLK1L",
+        "mold_name": "RR GRAB RAIL K1AL"
+      },
+      {
+        "id": 5179,
+        "product_code": "EPPI-FRGRRLK1L",
+        "product_name": "RR GRAB RAIL K1AL",
+        "mmu_uph": 55,
+        "mmu_cavity": 1,
+        "machine_code": "MC-9",
+        "mold_code": "MOLD-FRGRRLK1L",
+        "mold_name": "RR GRAB RAIL K1AL"
+      },
+      {
+        "id": 5179,
+        "product_code": "EPPI-FRGRRLK1L",
+        "product_name": "RR GRAB RAIL K1AL",
+        "mmu_uph": 40,
+        "mmu_cavity": 1,
+        "machine_code": "MC-29",
+        "mold_code": "MOLD-FRGRRLK1L",
+        "mold_name": "RR GRAB RAIL K1AL"
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FRGRK1LAM",
+        "name": "RR GRAB RAIL K1AL (AM)",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "SUB ASSY CASE AIR CLEANER KWN (K2VM)",
+    "db_products": [
+      {
+        "id": 5235,
+        "product_code": "EPCS-FCSACK2VM",
+        "product_name": "SUB ASSY CASE AIR CLEANER KWN (K2VM)",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": [
+      {
+        "code": "MOLD-FCSACK2VM",
+        "name": "SUB ASSY CASE AIR CLEANER KWN (K2VM)",
+        "uph": null,
+        "cavity": null,
+        "machine_code": null
+      }
+    ]
+  },
+  {
+    "item": "PROTECTOR MUFFLER K2SM",
+    "db_products": [
+      {
+        "id": 5312,
+        "product_code": "EPPI-FPRMRK2SM",
+        "product_name": "PROTECTOR MUFFLER K2SM",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      },
+      {
+        "id": 5313,
+        "product_code": "EPPL-FPRMRK2SMA",
+        "product_name": "PROTECTOR MUFFLER K2SM (AM)",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": []
+  },
+  {
+    "item": "PROTECTOR MUFFLER K2SM (AM)",
+    "db_products": [
+      {
+        "id": 5312,
+        "product_code": "EPPI-FPRMRK2SM",
+        "product_name": "PROTECTOR MUFFLER K2SM",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      },
+      {
+        "id": 5313,
+        "product_code": "EPPL-FPRMRK2SMA",
+        "product_name": "PROTECTOR MUFFLER K2SM (AM)",
+        "mmu_uph": null,
+        "mmu_cavity": null,
+        "machine_code": null,
+        "mold_code": null,
+        "mold_name": null
+      }
+    ],
+    "db_molds": []
+  }
+]

@@ -1,0 +1,54 @@
+# Implementasi Component Substitution (Supplier Allocation)
+
+Mengimplementasikan fitur *Component Substitution* atau *Supplier Allocation at Transaction Level* untuk menjembatani kebutuhan antara fleksibilitas *Procurement* di Gudang Utama (MATKOM) dan penyederhanaan stok *Parent Only* di lini perakitan Produksi (PROD).
+
+## User Review Required
+
+> [!IMPORTANT]
+> Mohon tinjau cetak biru ini. Ini diadaptasi langsung dari konsep luar biasa Anda. Jika Anda sudah menyetujui struktur tabel baru (`product_suppliers` dan `warehouse_stocks`), kita dapat langsung mengeksekusi Tahap 1.
+
+## Proposed Changes
+
+### Database Architecture
+Perubahan struktur basis data untuk mendukung Multi-Vendor (Parent-Child) dan pelacakan stok yang fleksibel.
+
+#### [NEW] Tabel `product_suppliers`
+Menghubungkan satu produk (Parent) ke banyak vendor dengan harga beli dan Part Number berbeda.
+- `id` (Primary Key)
+- `product_id` (Foreign Key -> `products.id`)
+- `supplier_id` (Foreign Key -> `suppliers.id`)
+- `supplier_part_number` (VARCHAR)
+- `purchase_price` (DECIMAL)
+- `is_primary` (BOOLEAN)
+- `created_at`, `updated_at`
+
+#### [NEW] Tabel `warehouse_stocks`
+Tempat penyimpanan saldo stok berdasarkan lokasi gudang (MATKOM, PROD, dll).
+- `id` (Primary Key)
+- `product_id` (Foreign Key -> `products.id`)
+- `warehouse_id` (Foreign Key -> `warehouses.id`)
+- `supplier_id` (Nullable Foreign Key -> `suppliers.id`)
+- `qty_stock` (DECIMAL)
+- `created_at`, `updated_at`
+
+### Master Data UI
+#### [MODIFY] `budgeting-next/src/components/master-data/ProductModal.tsx`
+- Menambahkan tab atau tabel *Mapping Supplier* di Form Edit Produk agar admin dapat memasukkan daftar vendor untuk suatu produk.
+- Menyesuaikan *backend controller* (`productController.js`) agar bisa menyimpan relasi ke tabel `product_suppliers`.
+
+### Transaction Flow
+#### Modul PPIC / Work Order
+- Menambahkan *Dropdown/Modal* pemilihan Sub-Item (Vendor) pada dokumen *Work Order / Request Material*.
+
+#### Warehouse Mutation Logic
+- Membuat logika pemotongan stok dengan kondisi: Jika pengeluaran dari gudang MATKOM ke PROD, stok spesifik per *supplier_id* dipotong dari MATKOM, dan stok *Parent Only* (tanpa supplier) ditambahkan ke PROD.
+
+## Verification Plan
+
+### Database & Master Data
+- Mengeksekusi script SQL migrasi.
+- Memastikan pengguna dapat memasukkan beberapa *supplier* untuk satu produk di modal *Edit Produk* dan menyimpannya.
+
+### Stock Mutation
+- Menguji pengeluaran barang dari MATKOM untuk memastikan *qty_stock* berkurang sesuai *supplier_id* yang dipilih.
+- Memastikan penerimaan di gudang PROD tercatat sebagai *Parent Item* (supplier_id = NULL).

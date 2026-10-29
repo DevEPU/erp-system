@@ -1,0 +1,102 @@
+[
+    {
+        "id": 179,
+        "requestable_type": "Modules\\Budget\\Entities\\MasterBudget",
+        "requestable_id": 135,
+        "approval_types_id": 19,
+        "approval_rules_id": 46,
+        "amount": "345678.00",
+        "current_level": 1,
+        "status": "approved",
+        "created_by": 12,
+        "created_at": "2026-02-06T01:14:20.000000Z",
+        "updated_at": "2026-02-06T02:52:52.000000Z",
+        "logs": [
+            {
+                "id": 204,
+                "approval_request_id": 179,
+                "user_id": 23,
+                "action": "approved",
+                "comment": null,
+                "level": 1,
+                "created_at": "2026-02-06T01:14:20.000000Z",
+                "updated_at": "2026-02-06T02:52:52.000000Z"
+            }
+        ]
+    },
+    {
+        "id": 192,
+        "requestable_type": "Modules\\Budget\\Entities\\MasterBudget",
+        "requestable_id": 141,
+        "approval_types_id": 19,
+        "approval_rules_id": 46,
+        "amount": "500000.00",
+        "current_level": 1,
+        "status": "approved",
+        "created_by": 1,
+        "created_at": "2026-02-23T01:39:48.000000Z",
+        "updated_at": "2026-02-23T01:40:36.000000Z",
+        "logs": [
+            {
+                "id": 219,
+                "approval_request_id": 192,
+                "user_id": 1,
+                "action": "approved",
+                "comment": null,
+                "level": 1,
+                "created_at": "2026-02-23T01:39:48.000000Z",
+                "updated_at": "2026-02-23T01:40:36.000000Z"
+            }
+        ]
+    },
+    {
+        "id": 202,
+        "requestable_type": "Modules\\Budget\\Entities\\MasterBudget",
+        "requestable_id": 143,
+        "approval_types_id": 19,
+        "approval_rules_id": 46,
+        "amount": "1000000.00",
+        "current_level": 1,
+        "status": "approved",
+        "created_by": 1,
+        "created_at": "2026-02-23T04:33:41.000000Z",
+        "updated_at": "2026-02-23T04:43:06.000000Z",
+        "logs": [
+            {
+                "id": 229,
+                "approval_request_id": 202,
+                "user_id": 1,
+                "action": "approved",
+                "comment": null,
+                "level": 1,
+                "created_at": "2026-02-23T04:33:41.000000Z",
+                "updated_at": "2026-02-23T04:43:06.000000Z"
+            }
+        ]
+    },
+    {
+        "id": 224,
+        "requestable_type": "Modules\\Budget\\Entities\\MasterBudget",
+        "requestable_id": 145,
+        "approval_types_id": 19,
+        "approval_rules_id": 46,
+        "amount": "1850000.00",
+        "current_level": 1,
+        "status": "pending",
+        "created_by": 1,
+        "created_at": "2026-02-27T01:51:25.000000Z",
+        "updated_at": "2026-02-27T01:51:25.000000Z",
+        "logs": [
+            {
+                "id": 252,
+                "approval_request_id": 224,
+                "user_id": 1,
+                "action": "assigned",
+                "comment": null,
+                "level": 1,
+                "created_at": "2026-02-27T01:51:25.000000Z",
+                "updated_at": "2026-02-27T01:51:25.000000Z"
+            }
+        ]
+    }
+]

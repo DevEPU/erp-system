@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preview: Penyesuaian Harga Pokok Penjualan (HPP) V2 - PT Eran Plastindo Utama</title>
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: #e0e7ff;
+      --secondary: #0ea5e9;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --dark: #0f172a;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+      --popover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f6fa;
+      color: var(--gray-700);
+      min-height: 100vh;
+      padding: 2.5rem;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    /* Page container */
+    .app-container {
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* Breadcrumbs & Navigation Header */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--primary);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .breadcrumb:hover {
+      color: var(--primary-hover);
+    }
+
+    /* Main Page Header */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .header-icon {
+      padding: 0.75rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 1rem;
+      box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.3);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .header-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke-width: 2.5;
+    }
+    .header-title h1 {
+      font-size: 2.25rem;
+      letter-spacing: -0.02em;
+    }
+    .header-title p {
+      font-size: 0.875rem;
+      color: var(--gray-600);
+      margin-top: 0.25rem;
+      font-weight: 500;
+    }
+
+    /* Top Cards Dashboard Row */
+    .stats-row {
+      display: grid;
+      grid-template-cols: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .stat-card {
+      background: white;
+      border: 1px solid var(--gray-100);
+      border-radius: 1.75rem;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 6px;
+      background: var(--primary);
+    }
+    .stat-card.secondary::before { background: var(--secondary); }
+    .stat-card.success::before { background: var(--success); }
+
+    .stat-content p {
+      font-size: 0.625rem;
+      font-weight: 900;
+      color: var(--gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+    }
+    .stat-content h3 {
+      font-size: 1.75rem;
+      margin-top: 0.5rem;
+      font-weight: 900;
+    }
+    .stat-content span {
+      font-size: 0.75rem;
+      color: var(--gray-600);
+      font-weight: 600;
+      display: block;
+      margin-top: 0.25rem;
+    }
+    .stat-icon {
+      padding: 0.75rem;
+      border-radius: 1rem;
+      background: var(--gray-50);
+      color: var(--gray-600);
+    }
+    .stat-card.secondary .stat-icon { color: var(--secondary); background: #f0f9ff; }
+    .stat-card.success .stat-icon { color: var(--success); background: #f0fdf4; }
+
+    /* Control Panel Card */
+    .control-panel {
+      background: white;
+      border: 1px solid var(--gray-100);
+      border-radius: 2rem;
+      padding: 2rem;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .control-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid var(--gray-100);
+      padding-bottom: 1rem;
+    }
+    .control-header svg {
+      color: var(--primary);
+      width: 20px;
+      height: 20px;
+    }
+    .control-header h2 {
+      font-size: 1.125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-cols: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      align-items: flex-end;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .form-group label {
+      font-size: 0.625rem;
+      font-weight: 900;
+      color: var(--gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .form-select, .form-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border-radius: 1rem;
+      border: 1.5px solid var(--gray-200);
+      background-color: var(--gray-50);
+      font-size: 0.875rem;
+      font-weight: 600;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-select:focus, .form-input:focus {
+      border-color: var(--primary);
+      background-color: white;
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+    
+    /* Buttons */
+    .btn {
+      padding: 0.875rem 2rem;
+      border-radius: 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      transition: all 0.2s;
+      height: 48px;
+    }
+    .btn-primary {
+      background: var(--dark);
+      color: white;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+    .btn-primary:hover {
+      background: var(--primary);
+      box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.3);
+    }
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+    
+    .btn-success {
+      background: var(--success);
+      color: white;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+    }
+    .btn-success:hover {
+      background: #059669;
+    }
+    .btn-success:active {
+      transform: scale(0.97);
+    }
+
+    /* Progress and Loading Simulation */
+    .progress-container {
+      display: none;
+      flex-direction: column;
+      gap: 0.75rem;
+      background: var(--gray-50);
+      padding: 1.5rem;
+      border-radius: 1.5rem;
+      border: 1px dashed var(--gray-200);
+      margin-top: 1rem;
+      animation: fadeIn 0.3s;
+    }
+    .progress-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: var(--gray-200);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 999px;
+      transition: width 0.1s linear;
+    }
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    /* Main Table Container */
+    .table-container {
+      background: white;
+      border: 1px solid var(--gray-100);
+      border-radius: 2rem;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 400px;
+    }
+    .table-title {
+      padding: 1.5rem 2rem;
+      border-b: 1px solid var(--gray-100);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--gray-50);
+    }
+    .table-title h3 {
+      font-size: 1.125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .table-title span {
+      background: var(--primary-light);
+      color: var(--primary-hover);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.675rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      flex: 1;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    th {
+      padding: 1rem 1.5rem;
+      font-size: 0.625rem;
+      font-weight: 900;
+      color: var(--gray-600);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      border-bottom: 1.5px solid var(--gray-100);
+      background: var(--gray-50);
+    }
+    td {
+      padding: 1.125rem 1.5rem;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      border-bottom: 1px solid var(--gray-100);
+      color: var(--gray-700);
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:hover td {
+      background-color: var(--gray-50);
+    }
+
+    .product-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .product-title {
+      font-weight: 900;
+      color: var(--dark);
+      font-size: 0.875rem;
+    }
+    .product-sub {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--gray-600);
+    }
+
+    /* Price variances styling */
+    .price-old {
+      color: var(--gray-600);
+      font-weight: 600;
+    }
+    .price-new {
+      color: var(--dark);
+      font-weight: 900;
+    }
+    .variance-badge {
+      padding: 0.35rem 0.65rem;
+      border-radius: 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .variance-up {
+      background-color: var(--danger-light);
+      color: var(--danger);
+    }
+    .variance-down {
+      background-color: var(--success-light);
+      color: var(--success);
+    }
+    
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5rem 2rem;
+      gap: 1rem;
+      text-align: center;
+      color: var(--gray-300);
+    }
+    .empty-state svg {
+      width: 64px;
+      height: 64px;
+      stroke-width: 1.5;
+    }
+    .empty-state h4 {
+      color: var(--gray-600);
+      font-size: 1.125rem;
+    }
+    .empty-state p {
+      font-size: 0.875rem;
+      max-width: 400px;
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-box {
+      background: white;
+      border-radius: 2.5rem;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: var(--popover-shadow);
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      animation: zoomIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .modal-header-icon {
+      padding: 0.5rem;
+      background-color: var(--success-light);
+      color: var(--success);
+      border-radius: 0.75rem;
+    }
+    .modal-header-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke-width: 3;
+    }
+    .modal-title h3 {
+      font-size: 1.25rem;
+    }
+    
+    .journal-box {
+      background-color: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 1.5rem;
+      padding: 1.25rem;
+      font-size: 0.75rem;
+      font-family: monospace;
+      line-height: 1.6;
+    }
+    .journal-entry {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    .journal-entry:last-child {
+      margin-bottom: 0;
+    }
+    .debit {
+      padding-left: 0;
+      color: var(--dark);
+      font-weight: bold;
+    }
+    .credit {
+      padding-left: 1.5rem;
+      color: var(--gray-600);
+    }
+    
+    .modal-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+    .modal-buttons button {
+      flex: 1;
+    }
+    .btn-gray {
+      background-color: var(--gray-100);
+      color: var(--gray-700);
+    }
+    .btn-gray:hover {
+      background-color: var(--gray-200);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes zoomIn {
+      from { transform: scale(0.95); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* Keyframes for spinning animation */
+    .animate-spin-slow {
+      animation: spin 8s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Breadcrumb -->
+    <div class="breadcrumb" onclick="alert('Kembali ke Dashboard Persediaan')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px; display: inline-block; vertical-align: middle;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+      Back to Persediaan Barang
+    </div>
+
+    <!-- Header Section -->
+    <div class="page-header">
+      <div class="header-info">
+        <div class="header-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+        </div>
+        <div class="header-title">
+          <h1>Penyesuaian <span style="color: var(--primary);">Harga Pokok (HPP) V2</span></h1>
+          <p>Kalkulasi HPP produk jadi berdasarkan fluktuasi harga bahan baku aktual, biaya impor, dan alokasi overhead periode berjalan.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats summary Row -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-content">
+          <p>Nilai Selisih HPP (Bahan Baku)</p>
+          <h3 id="stat-variance-val">Rp 0</h3>
+          <span id="stat-variance-sub">Menunggu kalkulasi penyesuaian</span>
+        </div>
+        <div class="stat-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+        </div>
+      </div>
+
+      <div class="stat-card secondary">
+        <div class="stat-content">
+          <p>Total Produk Terdampak</p>
+          <h3 id="stat-products-count">0 Item</h3>
+          <span>Komponen yang mengalami perubahan harga riil</span>
+        </div>
+        <div class="stat-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+        </div>
+      </div>
+
+      <div class="stat-card success">
+        <div class="stat-content">
+          <p>Status Pembukuan</p>
+          <h3 id="stat-journal-status" style="color: var(--warning)">DRAFT</h3>
+          <span id="stat-journal-sub">Belum diposting ke Jurnal Umum GL</span>
+        </div>
+        <div class="stat-icon">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Control panel filters card -->
+    <div class="control-panel">
+      <div class="control-header">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+        </svg>
+        <h2>Panel Kontrol Penyesuaian Harga Pokok</h2>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Pilih Periode Bulan</label>
+          <select id="select-month" class="form-select">
+            <option value="6">Juni 2026</option>
+            <option value="5">Mei 2026</option>
+            <option value="4">April 2026</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Metode Penilaian Persediaan</label>
+          <select id="select-method" class="form-select" disabled>
+            <option value="average">Moving Average (Tertimbang)</option>
+            <option value="fifo">FIFO (First In First Out)</option>
+          </select>
+        </div>
+
+        <div class="form-group" style="flex-grow: 1.5;">
+          <label>Alokasi Biaya Tambahan (Impor & Overhead)</label>
+          <input type="text" class="form-input" value="Alokasi Proporsional berdasarkan Faktur Impor (Jurnal V2)" readonly style="color: var(--gray-600); cursor: not-allowed; font-weight: 500;">
+        </div>
+
+        <div class="form-group">
+          <button id="btn-calculate" onclick="startCalculationSim()" class="btn btn-primary" style="width: 100%;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" class="icon-calc" style="vertical-align: middle;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+            <span>Hitung Penyesuaian HPP</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Calculation progress simulated block -->
+      <div id="calc-progress-block" class="progress-container">
+        <div class="progress-info">
+          <span id="progress-status-label">Menganalisis purchase invoices...</span>
+          <span id="progress-percent">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div id="progress-bar-fill" class="progress-bar"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Results Grid Table -->
+    <div class="table-container">
+      <div class="table-title">
+        <h3>Hasil Analisis Selisih HPP Aktual vs HPP Standar</h3>
+        <span id="table-badge-total">Belum Ada Perhitungan</span>
+      </div>
+
+      <div class="table-responsive">
+        <!-- Empty State initially -->
+        <div id="table-empty-state" class="empty-state">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9z"></path></svg>
+          <h4>Belum Ada Data Penyesuaian</h4>
+          <p>Silakan klik tombol <strong>"Hitung Penyesuaian HPP"</strong> di atas untuk memindai faktur pembelian aktual dan menghitung selisih harga pokok persediaan.</p>
+        </div>
+
+        <!-- Hidden table to show after calculation -->
+        <table id="results-table" style="display: none;">
+          <thead>
+            <tr>
+              <th>Produk Jadi / Item</th>
+              <th>Qty Stok Gudang</th>
+              <th>HPP Standar (BOM)</th>
+              <th>HPP Aktual (Average)</th>
+              <th style="text-align: center;">Selisih / Unit</th>
+              <th style="text-align: center;">Total Selisih Nilai Buku</th>
+              <th>Rekomendasi Tindakan Akuntansi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="product-info">
+                  <span class="product-title">HOLDER MIRROR RH 29702-C0100 SAPTA SC</span>
+                  <span class="product-sub">Part No: HD-MIR-RH-29702 | Injection</span>
+                </div>
+              </td>
+              <td>1.200 Pcs</td>
+              <td><span class="price-old">Rp 8.500</span></td>
+              <td><span class="price-new">Rp 8.950</span></td>
+              <td style="text-align: center;">
+                <span class="variance-badge variance-up">+ Rp 450</span>
+              </td>
+              <td style="text-align: center; font-weight: 900; color: var(--danger)">
+                + Rp 540.000
+              </td>
+              <td>
+                <span style="font-weight: 700; color: var(--primary)">Debet Persediaan (Aset)</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="product-info">
+                  <span class="product-title">MIRROR BRACKET LH 29701-C0100 SAPTA SC</span>
+                  <span class="product-sub">Part No: BRK-MIR-LH-29701 | Injection</span>
+                </div>
+              </td>
+              <td>800 Pcs</td>
+              <td><span class="price-old">Rp 6.200</span></td>
+              <td><span class="price-new">Rp 6.400</span></td>
+              <td style="text-align: center;">
+                <span class="variance-badge variance-up">+ Rp 200</span>
+              </td>
+              <td style="text-align: center; font-weight: 900; color: var(--danger)">
+                + Rp 160.000
+              </td>
+              <td>
+                <span style="font-weight: 700; color: var(--primary)">Debet Persediaan (Aset)</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="product-info">
+                  <span class="product-title">HOUSING MIRROR OUT LH PLASTIC</span>
+                  <span class="product-sub">Part No: HS-MIR-LH-PL | Injection</span>
+                </div>
+              </td>
+              <td>2.500 Pcs</td>
+              <td><span class="price-old">Rp 12.000</span></td>
+              <td><span class="price-new">Rp 11.850</span></td>
+              <td style="text-align: center;">
+                <span class="variance-badge variance-down">- Rp 150</span>
+              </td>
+              <td style="text-align: center; font-weight: 900; color: var(--success)">
+                - Rp 375.000
+              </td>
+              <td>
+                <span style="font-weight: 700; color: var(--success)">Kredit Persediaan (Penurunan Aset)</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="product-info">
+                  <span class="product-title">LOCK BUTTON ASSY BACK DOOR</span>
+                  <span class="product-sub">Part No: LOK-BTN-BD | Assembly</span>
+                </div>
+              </td>
+              <td>600 Pcs</td>
+              <td><span class="price-old">Rp 4.500</span></td>
+              <td><span class="price-new">Rp 4.750</span></td>
+              <td style="text-align: center;">
+                <span class="variance-badge variance-up">+ Rp 250</span>
+              </td>
+              <td style="text-align: center; font-weight: 900; color: var(--danger)">
+                + Rp 150.000
+              </td>
+              <td>
+                <span style="font-weight: 700; color: var(--primary)">Debet Persediaan (Aset)</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Footer table button to post -->
+      <div id="table-footer-actions" style="display: none; padding: 1.5rem 2rem; border-top: 1px solid var(--gray-100); text-align: right; background: var(--gray-50)">
+        <button onclick="openPostModal()" class="btn btn-success">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="vertical-align: middle;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+          <span>Posting Jurnal Penyesuaian</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Jurnal Posting Confirmation Modal -->
+  <div id="post-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-header-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+        <div class="modal-title">
+          <h3>Posting Jurnal Penyesuaian HPP</h3>
+        </div>
+      </div>
+      
+      <p style="font-size: 0.875rem; line-height: 1.5; color: var(--gray-600)">Sistem akan secara otomatis membukukan selisih nilai persediaan barang jadi aktual bulan **Juni 2026** ke Buku Besar General Ledger (GL) dengan rincian jurnal berikut:</p>
+      
+      <div class="journal-box">
+        <div class="journal-entry">
+          <span class="debit">[D] 1-1400 Persediaan Barang Jadi (FG)</span>
+          <span style="font-weight: 700;">Rp 475.000</span>
+        </div>
+        <div class="journal-entry">
+          <span class="credit">[K] 5-1000 Harga Pokok Penjualan (HPP)</span>
+          <span style="font-weight: 700;">Rp 475.000</span>
+        </div>
+        <div style="border-top: 1px dashed var(--gray-300); margin-top: 0.5rem; padding-top: 0.5rem; color: var(--gray-600); font-style: italic; font-size: 0.6875rem;">
+          Keterangan: Penyesuaian HPP Produksi Bulan Juni 2026 berdasarkan perhitungan Average Cost bahan baku aktual & alokasi biaya overhead.
+        </div>
+      </div>
+
+      <div class="modal-buttons">
+        <button onclick="closePostModal()" class="btn btn-gray">Batal</button>
+        <button onclick="executePostingSim()" class="btn btn-success">Posting ke GL</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function startCalculationSim() {
+      // Show progress bar
+      const pBlock = document.getElementById('calc-progress-block');
+      const pBar = document.getElementById('progress-bar-fill');
+      const pText = document.getElementById('progress-percent');
+      const pLabel = document.getElementById('progress-status-label');
+      const btnCalc = document.getElementById('btn-calculate');
+      
+      // Reset
+      pBlock.style.display = 'flex';
+      pBar.style.width = '0%';
+      pText.innerText = '0%';
+      btnCalc.disabled = true;
+      btnCalc.style.opacity = '0.5';
+      btnCalc.style.cursor = 'not-allowed';
+
+      // Steps simulation
+      const steps = [
+        { progress: 15, label: "Menganalisis purchase invoices Juni 2026..." },
+        { progress: 35, label: "Mengambil data overhead & biaya tambahan..." },
+        { progress: 60, label: "Menghitung Average Cost riil komponen bahan baku..." },
+        { progress: 85, label: "Kalkulasi HPP Aktual barang jadi pada Planning Produksi..." },
+        { progress: 100, label: "Perhitungan selesai! Membandingkan dengan nilai buku..." }
+      ];
+
+      let currentStep = 0;
+      const interval = setInterval(() => {
+        if (currentStep < steps.length) {
+          const step = steps[currentStep];
+          pBar.style.width = step.progress + '%';
+          pText.innerText = step.progress + '%';
+          pLabel.innerText = step.label;
+          currentStep++;
+        } else {
+          clearInterval(interval);
+          // Show tables and update stats
+          setTimeout(() => {
+            pBlock.style.display = 'none';
+            btnCalc.disabled = false;
+            btnCalc.style.opacity = '1';
+            btnCalc.style.cursor = 'pointer';
+
+            // Show table data
+            document.getElementById('table-empty-state').style.display = 'none';
+            document.getElementById('results-table').style.display = 'table';
+            document.getElementById('table-footer-actions').style.display = 'block';
+
+            // Update Header Stats
+            document.getElementById('stat-variance-val').innerText = "+ Rp 475.000";
+            document.getElementById('stat-variance-val').style.color = "var(--danger)";
+            document.getElementById('stat-variance-sub').innerText = "Selisih biaya terdeteksi";
+            
+            document.getElementById('stat-products-count').innerText = "4 Item Produk";
+            document.getElementById('table-badge-total').innerText = "4 Item Terdeteksi Selisih";
+
+          }, 500);
+        }
+      }, 700);
+    }
+
+    function openPostModal() {
+      document.getElementById('post-modal').style.display = 'flex';
+    }
+
+    function closePostModal() {
+      document.getElementById('post-modal').style.display = 'none';
+    }
+
+    function executePostingSim() {
+      closePostModal();
+      alert("Jurnal Penyesuaian HPP Berhasil Diposting ke GL!");
+      
+      // Update status badge
+      const statusBadge = document.getElementById('stat-journal-status');
+      statusBadge.innerText = "POSTED";
+      statusBadge.style.color = "var(--success)";
+      document.getElementById('stat-journal-sub').innerText = "Sudah dijurnal & ditutup";
+      
+      // Disable posting button
+      const footerActions = document.getElementById('table-footer-actions');
+      footerActions.innerHTML = `<span style="font-weight: 700; color: var(--success); font-size: 0.875rem;">Status: Penyesuaian HPP telah dibukukan ke General Ledger.</span>`;
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+ERROR: Class "Modules\Purchase\Http\Controllers\Modules\Product\Entities\Product" not found
+#0 D:\Work\PT Eran Plastindo Utama\website-budgeting\Budgeting-Update 4-2-26\budgeting-laravel\vendor\laravel\framework\src\Illuminate\Database\Concerns\ManagesTransactions.php(30): Modules\Purchase\Http\Controllers\PurchaseController->Modules\Purchase\Http\Controllers\{closure}(Object(Illuminate\Database\MySqlConnection))
+#1 D:\Work\PT Eran Plastindo Utama\website-budgeting\Budgeting-Update 4-2-26\budgeting-laravel\vendor\laravel\framework\src\Illuminate\Database\DatabaseManager.php(509): Illuminate\Database\Connection->transaction(Object(Closure))
+#2 D:\Work\PT Eran Plastindo Utama\website-budgeting\Budgeting-Update 4-2-26\budgeting-laravel\vendor\laravel\framework\src\Illuminate\Support\Facades\Facade.php(355): Illuminate\Database\DatabaseManager->__call('transaction', Array)
+#3 D:\Work\PT Eran Plastindo Utama\website-budgeting\Budgeting-Update 4-2-26\budgeting-laravel\Modules\Purchase\Http\Controllers\PurchaseController.php(781): Illuminate\Support\Facades\Facade::__callStatic('transaction', Array)
+#4 D:\Work\PT Eran Plastindo Utama\website-budgeting\Budgeting-Update 4-2-26\budgeting-laravel\test_simulate_178.php(41): Modules\Purchase\Http\Controllers\PurchaseController->updateActual(Object(Illuminate\Http\Request), Object(Modules\Purchase\Entities\Purchase))
+#5 {main}
+MB 135: 3000 -> 3000
+MB 141: 123000 -> 123000
+MB 135: 3000 -> 3000
+MB 141: 123000 -> 129000

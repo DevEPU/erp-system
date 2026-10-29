@@ -1,0 +1,8 @@
+PR ID: 173
+Total: 210000
+Budget: 205000.00
+Master: 135
+Borrow: 141
+
+Allocations:
+ Alloc 27, MB_ID: 141, Amt: 205000.00, DetailId: '0' (type integer), is_int: 1, is_ext: 0

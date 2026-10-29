@@ -1,0 +1,82 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import IconRenderer from "@/components/ui/IconRenderer";
+import { BookOpen } from "lucide-react";
+
+const stats = [
+  { label: "Total Akun", value: "0", icon: "ListTree", color: "from-indigo-500 to-indigo-600" },
+  { label: "Jurnal Bulan Ini", value: "0", icon: "NotebookPen", color: "from-blue-500 to-blue-600" },
+  { label: "Total Debit", value: "Rp 0", icon: "TrendingUp", color: "from-emerald-500 to-emerald-600" },
+  { label: "Total Kredit", value: "Rp 0", icon: "TrendingDown", color: "from-rose-500 to-rose-600" },
+];
+
+const quickMenus = [
+  { label: "Akun GL", path: "/general-ledger/akun-gl", icon: "ListTree", color: "bg-indigo-50 text-indigo-600 border-indigo-100" },
+  { label: "GL Kategori", path: "/general-ledger/gl-kategori", icon: "Folder", color: "bg-blue-50 text-blue-600 border-blue-100" },
+  { label: "Cost Center", path: "/general-ledger/cost-center", icon: "Activity", color: "bg-emerald-50 text-emerald-600 border-emerald-100" },
+  { label: "Budgeting", path: "/general-ledger/budgeting", icon: "Wallet", color: "bg-amber-50 text-amber-600 border-amber-100" },
+  { label: "Transaksi G.L.", path: "/general-ledger/transaksi-gl", icon: "ArrowLeftRight", color: "bg-purple-50 text-purple-600 border-purple-100" },
+];
+
+export default function GeneralLedgerDashboard() {
+  const router = useRouter();
+
+  return (
+    <div className="min-h-[85vh] flex flex-col p-6 space-y-8 animate-in fade-in duration-500 bg-gray-50">
+      {/* Header */}
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-200">
+            <BookOpen size={20} className="text-white" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-800">General Ledger</h1>
+            <p className="text-sm text-gray-500">Buku besar, jurnal akuntansi, dan laporan keuangan.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
+        {stats.map((s, i) => (
+          <div key={i} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 flex items-center gap-4 hover:shadow-md transition-shadow">
+            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center shadow-md`}>
+              <IconRenderer name={s.icon} size={22} className="text-white" />
+            </div>
+            <div>
+              <p className="text-xl font-bold text-gray-800">{s.value}</p>
+              <p className="text-xs text-gray-500 mt-0.5">{s.label}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Quick Access */}
+      <div>
+        <h2 className="text-base font-bold text-gray-700 mb-4">Akses Cepat</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          {quickMenus.map((m, i) => (
+            <button
+              key={i}
+              onClick={() => router.push(m.path)}
+              className={`flex flex-col items-center gap-3 p-5 rounded-2xl border ${m.color} hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md`}
+            >
+              <IconRenderer name={m.icon} size={28} />
+              <span className="text-xs font-semibold text-center leading-tight">{m.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Info Banner */}
+      <div className="bg-gradient-to-r from-indigo-500 to-violet-500 rounded-2xl p-6 text-white flex items-center justify-between">
+        <div>
+          <h3 className="font-bold text-lg">Modul General Ledger</h3>
+          <p className="text-indigo-100 text-sm mt-1">Modul ini sedang dalam pengembangan. Fitur akan segera tersedia.</p>
+        </div>
+        <BookOpen size={48} className="opacity-30" />
+      </div>
+    </div>
+  );
+}

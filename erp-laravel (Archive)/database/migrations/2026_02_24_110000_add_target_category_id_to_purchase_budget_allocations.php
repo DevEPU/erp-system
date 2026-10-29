@@ -1,0 +1,29 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration {
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::table('purchase_budget_allocations', function (Blueprint $table) {
+            $table->unsignedBigInteger('target_category_id')->nullable()->after('source_budget_detail_id');
+            $table->foreign('target_category_id')->references('id')->on('categories')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::table('purchase_budget_allocations', function (Blueprint $table) {
+            $table->dropForeign(['target_category_id']);
+            $table->dropColumn('target_category_id');
+        });
+    }
+};

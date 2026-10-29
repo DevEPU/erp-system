@@ -1,0 +1,538 @@
+[
+  {
+    "name": "Dashboard",
+    "path": "/dashboard"
+  },
+  {
+    "name": "Supplier",
+    "path": "/supplier-pembelian/suppliers"
+  },
+  {
+    "name": "Supplier Group",
+    "path": "/supplier-pembelian/supplier-group"
+  },
+  {
+    "name": "Jurnal Pembelian",
+    "path": "/supplier-pembelian/jurnal-pembelian"
+  },
+  {
+    "name": "Jurnal A.P.",
+    "path": "/supplier-pembelian/jurnal-ap"
+  },
+  {
+    "name": "Jurnal Biaya Impor V.2",
+    "path": "/supplier-pembelian/jurnal-biaya-impor-v2"
+  },
+  {
+    "name": "Tutup Pending PO",
+    "path": "/supplier-pembelian/tutup-pending-po"
+  },
+  {
+    "name": "Transaksi A.P.",
+    "path": "/supplier-pembelian/transaksi-ap"
+  },
+  {
+    "name": "Permintaan Pembelian",
+    "path": "/budgeting/purchase-request"
+  },
+  {
+    "name": "Tutup PR",
+    "path": "/supplier-pembelian/tutup-pr"
+  },
+  {
+    "name": "Purchase Order",
+    "path": "/supplier-pembelian/purchase-order"
+  },
+  {
+    "name": "Terima Barang",
+    "path": "/supplier-pembelian/penerimaan-barang"
+  },
+  {
+    "name": "Retur PB",
+    "path": "/supplier-pembelian/retur-pb"
+  },
+  {
+    "name": "Pembelian dari PO",
+    "path": "/supplier-pembelian/faktur"
+  },
+  {
+    "name": "Pembelian Langsung",
+    "path": "/supplier-pembelian/pembelian-langsung"
+  },
+  {
+    "name": "Biaya Impor V.2",
+    "path": "/supplier-pembelian/biaya-impor"
+  },
+  {
+    "name": "Pelunasan Utang",
+    "path": "/supplier-pembelian/pelunasan-hutang"
+  },
+  {
+    "name": "Retur Pembelian",
+    "path": "/supplier-pembelian/retur-pembelian"
+  },
+  {
+    "name": "Pengajuan Pembayaran",
+    "path": "/supplier-pembelian/pengajuan-pembayaran"
+  },
+  {
+    "name": "Customer",
+    "path": "/customer-penjualan/customers"
+  },
+  {
+    "name": "Grup Customer",
+    "path": "/customer-penjualan/grup-customer"
+  },
+  {
+    "name": "Tipe Customer",
+    "path": "/customer-penjualan/tipe-customer"
+  },
+  {
+    "name": "Jurnal Penjualan",
+    "path": "/customer-penjualan/jurnal-penjualan"
+  },
+  {
+    "name": "Jurnal A.R.",
+    "path": "/customer-penjualan/jurnal-ar"
+  },
+  {
+    "name": "Salesman",
+    "path": "/customer-penjualan/salesman"
+  },
+  {
+    "name": "Weekday",
+    "path": "/customer-penjualan/weekday"
+  },
+  {
+    "name": "Komisi Per Item",
+    "path": "/customer-penjualan/komisi-per-item"
+  },
+  {
+    "name": "Scan Product",
+    "path": "/customer-penjualan/scan-product"
+  },
+  {
+    "name": "Tutup Pending SO",
+    "path": "/customer-penjualan/tutup-pending-so"
+  },
+  {
+    "name": "Transaksi A.R.",
+    "path": "/customer-penjualan/transaksi-ar"
+  },
+  {
+    "name": "Forecast",
+    "path": "/customer-penjualan/penawaran-penjualan"
+  },
+  {
+    "name": "PO Customer",
+    "path": "/customer-penjualan/customer-po"
+  },
+  {
+    "name": "Order Sheet",
+    "path": "/customer-penjualan/sales-order"
+  },
+  {
+    "name": "Surat Jalan",
+    "path": "/customer-penjualan/surat-jalan"
+  },
+  {
+    "name": "Retur Surat Jalan",
+    "path": "/customer-penjualan/retur-surat-jalan"
+  },
+  {
+    "name": "Penjualan Via S.J.",
+    "path": "/customer-penjualan/penjualan-via-sj"
+  },
+  {
+    "name": "Penjualan Via S.O.",
+    "path": "/customer-penjualan/penjualan-via-so"
+  },
+  {
+    "name": "Penjualan Langsung",
+    "path": "/customer-penjualan/penjualan-langsung"
+  },
+  {
+    "name": "Penerimaan Piutang",
+    "path": "/customer-penjualan/penerimaan-piutang"
+  },
+  {
+    "name": "Retur Penjualan",
+    "path": "/customer-penjualan/retur-penjualan"
+  },
+  {
+    "name": "Tanda Terima",
+    "path": "/customer-penjualan/tanda-terima"
+  },
+  {
+    "name": "Penagihan Piutang",
+    "path": "/customer-penjualan/penagihan-piutang"
+  },
+  {
+    "name": "Stok Gudang",
+    "path": "/persediaan-barang/stok-gudang"
+  },
+  {
+    "name": "Inventory",
+    "path": "/master-data/products"
+  },
+  {
+    "name": "Gudang",
+    "path": "/persediaan-barang/gudang"
+  },
+  {
+    "name": "Kategori Barang",
+    "path": "/master-data/product-categories"
+  },
+  {
+    "name": "Merek",
+    "path": "/persediaan-barang/merek"
+  },
+  {
+    "name": "Jurnal Persediaan",
+    "path": "/persediaan-barang/jurnal-persediaan"
+  },
+  {
+    "name": "Duplikat Barang",
+    "path": "/persediaan-barang/duplikat-barang"
+  },
+  {
+    "name": "Jurnal Produksi",
+    "path": "/persediaan-barang/jurnal-produksi"
+  },
+  {
+    "name": "Biaya",
+    "path": "/persediaan-barang/biaya"
+  },
+  {
+    "name": "Bill of Materials",
+    "path": "/manufacturing/bom"
+  },
+  {
+    "name": "Penyesuaian Stok",
+    "path": "/persediaan-barang/penyesuaian"
+  },
+  {
+    "name": "Tutup Pending SR",
+    "path": "/persediaan-barang/tutup-pending-sr"
+  },
+  {
+    "name": "Stock Request",
+    "path": "/persediaan-barang/stock-request"
+  },
+  {
+    "name": "Transaksi Persediaan",
+    "path": "/persediaan-barang/transaksi-persediaan"
+  },
+  {
+    "name": "Penyesuaian Hpp V2",
+    "path": "/persediaan-barang/penyesuaian-hpp-v2"
+  },
+  {
+    "name": "Stok Opname",
+    "path": "/persediaan-barang/stok-opname"
+  },
+  {
+    "name": "Adjust Harga Jual",
+    "path": "/persediaan-barang/adjust-harga-jual"
+  },
+  {
+    "name": "Produksi Langsung",
+    "path": "/persediaan-barang/produksi-langsung"
+  },
+  {
+    "name": "Schedule Pengiriman Vendor",
+    "path": "/persediaan-barang/schedule-vendor"
+  },
+  {
+    "name": "Penerimaan by Schedule",
+    "path": "/persediaan-barang/penerimaan-by-schedule"
+  },
+  {
+    "name": "Realisasi Bahan Baku",
+    "path": "/persediaan-barang/realisasi-bahan-baku"
+  },
+  {
+    "name": "Crusher ke MATKOM",
+    "path": "/persediaan-barang/penerimaan-crusher"
+  },
+  {
+    "name": "Produksi ke MATKOM",
+    "path": "/persediaan-barang/penerimaan-retur-produksi"
+  },
+  {
+    "name": "QC Gate ke FG",
+    "path": "/persediaan-barang/penerimaan-fg"
+  },
+  {
+    "name": "Customer Claim ke FG",
+    "path": "/persediaan-barang/customer-claim-fg"
+  },
+  {
+    "name": "Surat Jalan Balikan",
+    "path": "/persediaan-barang/sj-balikan"
+  },
+  {
+    "name": "Daftar Kas & Bank",
+    "path": "/kas-bank/daftar"
+  },
+  {
+    "name": "Transaksi Kas",
+    "path": "/kas-bank/transaksi"
+  },
+  {
+    "name": "Transfer Kas",
+    "path": "/kas-bank/transfer"
+  },
+  {
+    "name": "Rekonsiliasi Bank",
+    "path": "/kas-bank/rekonsiliasi"
+  },
+  {
+    "name": "Currencies",
+    "path": "/master-data/currencies"
+  },
+  {
+    "name": "Akun GL",
+    "path": "/general-ledger/akun-gl"
+  },
+  {
+    "name": "GL Kategori",
+    "path": "/general-ledger/gl-kategori"
+  },
+  {
+    "name": "Departemen",
+    "path": "/general-ledger/departemen"
+  },
+  {
+    "name": "Cost Center",
+    "path": "/general-ledger/cost-center"
+  },
+  {
+    "name": "Budgeting",
+    "path": "/general-ledger/budgeting"
+  },
+  {
+    "name": "Budgeting Cc.",
+    "path": "/general-ledger/budgeting-cc"
+  },
+  {
+    "name": "Rumus Rasio Keuangan",
+    "path": "/general-ledger/rumus-rasio-keuangan"
+  },
+  {
+    "name": "G.L. Template",
+    "path": "/general-ledger/gl-template"
+  },
+  {
+    "name": "Transaksi G.L.",
+    "path": "/general-ledger/transaksi-gl"
+  },
+  {
+    "name": "Bill of Materials",
+    "path": "/manufacturing/bom"
+  },
+  {
+    "name": "Daftar Mesin",
+    "path": "/manufacturing/daftar-mesin"
+  },
+  {
+    "name": "Kategori Mesin",
+    "path": "/manufacturing/kategori-mesin"
+  },
+  {
+    "name": "Daftar Mold",
+    "path": "/manufacturing/daftar-mold"
+  },
+  {
+    "name": "Work Center",
+    "path": "/manufacturing/work-center"
+  },
+  {
+    "name": "Forecast",
+    "path": "/customer-penjualan/penawaran-penjualan"
+  },
+  {
+    "name": "PO Customer",
+    "path": "/customer-penjualan/customer-po"
+  },
+  {
+    "name": "MRP (Material Planning)",
+    "path": "/manufacturing/mrp"
+  },
+  {
+    "name": "MPP (Jadwal Mesin)",
+    "path": "/manufacturing/mpp"
+  },
+  {
+    "name": "Schedule Pengiriman",
+    "path": "/persediaan-barang/schedule-vendor"
+  },
+  {
+    "name": "Penerimaan dari Schedule",
+    "path": "/persediaan-barang/penerimaan-by-schedule"
+  },
+  {
+    "name": "Work Order",
+    "path": "/manufacturing/work-order"
+  },
+  {
+    "name": "Dashboard Transaksi",
+    "path": "/manufacturing/dashboard-transaksi"
+  },
+  {
+    "name": "Realisasi Bahan Baku",
+    "path": "/persediaan-barang/realisasi-bahan-baku"
+  },
+  {
+    "name": "Realisasi Hasil Produksi",
+    "path": "/manufacturing/realisasi-produksi"
+  },
+  {
+    "name": "Serah-Terima Produksi",
+    "path": "/manufacturing/transfer-produksi"
+  },
+  {
+    "name": "Penanganan NG & Disposal",
+    "path": "/manufacturing/ng-disposal"
+  },
+  {
+    "name": "Quality Control & QC Gate",
+    "path": "/manufacturing/qc-gate"
+  },
+  {
+    "name": "Daily Production Board",
+    "path": "/manufacturing/daily-board"
+  },
+  {
+    "name": "Rekap Rencana & Aktual",
+    "path": "/reports/rekap-plan-prod"
+  },
+  {
+    "name": "Rekap NG / Reject",
+    "path": "/reports/rekap-ng"
+  },
+  {
+    "name": "Control Stock WHFG",
+    "path": "/reports/control-stock-whfg"
+  },
+  {
+    "name": "Achievement Rate (KPI)",
+    "path": "/reports/ach-rate"
+  },
+  {
+    "name": "KPI Leader Group",
+    "path": "/reports/ach-leader"
+  },
+  {
+    "name": "OS vs Delivery Matrix",
+    "path": "/reports/os-delivery"
+  },
+  {
+    "name": "Daftar PPH",
+    "path": "/lain-lain/daftar-pph"
+  },
+  {
+    "name": "Daftar Tipe PPN",
+    "path": "/lain-lain/daftar-ppn"
+  },
+  {
+    "name": "Syarat Bayar",
+    "path": "/lain-lain/syarat-bayar"
+  },
+  {
+    "name": "Currencies",
+    "path": "/master-data/currencies"
+  },
+  {
+    "name": "Budgeting",
+    "path": "/budgeting/master-budget"
+  },
+  {
+    "name": "Approval Request",
+    "path": "/budgeting/approval-request"
+  },
+  {
+    "name": "Update Actual",
+    "path": "/budgeting/update-actual"
+  },
+  {
+    "name": "Units",
+    "path": "/master-data/units"
+  },
+  {
+    "name": "Product Requests",
+    "path": "/master-data/product-requests"
+  },
+  {
+    "name": "Tipe Barang Jadi",
+    "path": "/lain-lain/tipe-barang-jadi"
+  },
+  {
+    "name": "Tipe Barang",
+    "path": "/lain-lain/tipe-barang"
+  },
+  {
+    "name": "Daftar Shift",
+    "path": "/lain-lain/daftar-shift"
+  },
+  {
+    "name": "Konfigurasi Umum",
+    "path": "/settings/general"
+  },
+  {
+    "name": "Approval Rules",
+    "path": "/settings/approval"
+  },
+  {
+    "name": "Pengaturan Cetakan",
+    "path": "/settings/print-templates"
+  },
+  {
+    "name": "Data Karyawan",
+    "path": "/settings/karyawan"
+  },
+  {
+    "name": "Users & Department",
+    "path": "/settings/users"
+  },
+  {
+    "name": "Roles Managements",
+    "path": "/settings/roles"
+  },
+  {
+    "name": "Activity Log",
+    "path": "/settings/activity-log"
+  },
+  {
+    "name": "Error Logs",
+    "path": "/settings/error-logs"
+  },
+  {
+    "name": "Permissions",
+    "path": "/settings/permissions"
+  },
+  {
+    "name": "Purchase Request Report",
+    "path": "/reports/purchase-request"
+  },
+  {
+    "name": "Master Budget Report",
+    "path": "/reports/master-budget"
+  },
+  {
+    "name": "Laporan Penjualan",
+    "path": "/reports/penjualan"
+  },
+  {
+    "name": "Laporan Stok",
+    "path": "/reports/stok"
+  },
+  {
+    "name": "Laporan Keuangan",
+    "path": "/reports/keuangan"
+  },
+  {
+    "name": "Profil Perusahaan",
+    "path": "/settings/company"
+  }
+]
