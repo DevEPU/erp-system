@@ -11,7 +11,7 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
-EXPOSE 5555
-ENV PORT=5555
+EXPOSE 1212
+ENV PORT=1212
 
 CMD ["npm", "run", "start"]

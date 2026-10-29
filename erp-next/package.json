@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --webpack --port 5555",
+    "dev": "next dev --webpack --port 1212",
     "build": "next build",
-    "start": "next start --port 5555",
+    "start": "next start --port 1212",
     "lint": "eslint"
   },
   "dependencies": {

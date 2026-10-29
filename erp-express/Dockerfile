@@ -16,6 +16,6 @@ RUN npx prisma generate
 # Copy source files
 COPY . .
 
-EXPOSE 5656
+EXPOSE 2121
 
 CMD ["node", "server.js"]

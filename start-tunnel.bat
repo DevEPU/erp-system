@@ -4,11 +4,11 @@ echo ========================================================
 echo         ERP EPU - TUNNELING MANAGER (AKSES PUBLIK)
 echo ========================================================
 echo.
-echo Pilih metode tunneling untuk menghubungkan port 5555 ke internet:
+echo Pilih metode tunneling untuk menghubungkan port 1212 ke internet:
 echo.
 echo [1] Cloudflare Tunnel Quick (Gratis, HTTPS, Tanpa Akun / Domain)
-echo [2] Localtunnel (Gratis via NPM, port 5555)
-echo [3] Ngrok (Perlu akun ngrok, port 5555)
+echo [2] Localtunnel (Gratis via NPM, port 1212)
+echo [3] Ngrok (Perlu akun ngrok, port 1212)
 echo [4] Keluar
 echo.
 set /p opt="Pilih opsi (1-4): "
@@ -18,20 +18,20 @@ if "%opt%"=="1" (
     echo Menghubungkan Cloudflare Tunnel...
     where cloudflared >nul 2>nul
     if %errorlevel%==0 (
-        cloudflared tunnel --url http://localhost:5555
+        cloudflared tunnel --url http://localhost:1212
     ) else (
         echo [INFO] Perintah cloudflared tidak ditemukan di PATH.
         echo Menjalankan tunnel otomatis via npx cloudflared...
-        npx -y cloudflared tunnel --url http://localhost:5555
+        npx -y cloudflared tunnel --url http://localhost:1212
     )
 ) else if "%opt%"=="2" (
     echo.
     echo Menghubungkan Localtunnel...
-    npx -y localtunnel --port 5555
+    npx -y localtunnel --port 1212
 ) else if "%opt%"=="3" (
     echo.
     echo Menghubungkan Ngrok...
-    ngrok http 5555
+    ngrok http 1212
 ) else (
     echo Keluar...
 )

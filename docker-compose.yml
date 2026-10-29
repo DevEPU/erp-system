@@ -6,9 +6,9 @@ services:
     container_name: erp-backend
     restart: unless-stopped
     ports:
-      - "5656:5656"
+      - "2121:2121"
     environment:
-      - PORT=5656
+      - PORT=2121
       - DATABASE_URL=mysql://root:@host.docker.internal:3306/db_ims_epu
       - DB_HOST=host.docker.internal
       - DB_PORT=3306
@@ -26,9 +26,9 @@ services:
     container_name: erp-frontend
     restart: unless-stopped
     ports:
-      - "5555:5555"
+      - "1212:1212"
     environment:
-      - PORT=5555
-      - INTERNAL_BACKEND_URL=http://erp-backend:5656
+      - PORT=1212
+      - INTERNAL_BACKEND_URL=http://erp-backend:2121
     depends_on:
       - erp-backend
