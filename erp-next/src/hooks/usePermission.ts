@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import api from "@/lib/api";
 
 type User = {
@@ -12,23 +13,41 @@ type User = {
 };
 
 export default function usePermission() {
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        // 1. Initial fast load from localStorage
-        const userStr = typeof window !== "undefined" ? localStorage.getItem("user") : null;
-        if (userStr) {
+    const pathname = usePathname();
+    const [user, setUser] = useState<User | null>(() => {
+        if (typeof window !== "undefined") {
             try {
-                const parsedUser = JSON.parse(userStr);
-                setUser(parsedUser);
-            } catch (e) {
-                console.error("Failed to parse user from localStorage", e);
+                const userStr = localStorage.getItem("user");
+                return userStr ? JSON.parse(userStr) : null;
+            } catch {
+                return null;
+            }
+        }
+        return null;
+    });
+    const [loading, setLoading] = useState(false);
+
+    const loadUserFromStorage = () => {
+        if (typeof window !== "undefined") {
+            const userStr = localStorage.getItem("user");
+            if (userStr) {
+                try {
+                    const parsedUser = JSON.parse(userStr);
+                    setUser(parsedUser);
+                } catch (e) {
+                    console.error("Failed to parse user from localStorage", e);
+                }
+            } else {
+                setUser(null);
             }
         }
         setLoading(false);
+    };
 
-        // 2. Real-time background sync from backend /auth/me or /me
+    useEffect(() => {
+        loadUserFromStorage();
+
+        // Real-time background sync from backend /auth/me or /me
         const syncPermissions = async () => {
             const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
             if (!token) return;
@@ -50,7 +69,20 @@ export default function usePermission() {
         };
 
         syncPermissions();
-    }, []);
+
+        const handleAuthChange = () => {
+            loadUserFromStorage();
+            syncPermissions();
+        };
+
+        window.addEventListener("auth-change", handleAuthChange);
+        window.addEventListener("storage", handleAuthChange);
+
+        return () => {
+            window.removeEventListener("auth-change", handleAuthChange);
+            window.removeEventListener("storage", handleAuthChange);
+        };
+    }, [pathname]);
 
     const can = (permissionName: string) => {
         if (!user) return false;

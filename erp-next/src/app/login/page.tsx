@@ -55,6 +55,9 @@ export default function LoginPage() {
                 if (data.token) {
                     localStorage.setItem("token", data.token);
                 }
+                if (typeof window !== "undefined") {
+                    window.dispatchEvent(new Event("auth-change"));
+                }
 
                 router.push("/dashboard"); // Redirect to dashboard
             } else {

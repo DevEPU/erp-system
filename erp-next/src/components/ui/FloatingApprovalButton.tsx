@@ -59,17 +59,18 @@ export default function FloatingApprovalButton() {
   const [approvalTypes, setApprovalTypes] = useState<string[]>([]);
 
   // Fetch dynamic notifications from backend
-  const fetchNotifications = async () => {
-    if (!user) return;
+  const fetchNotifications = async (customUser?: any) => {
+    const activeUser = customUser || user || (typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user") || "null") : null);
+    if (!activeUser) return;
     try {
       let resData: any = null;
       try {
-        const res = await api.express.get("/approvals/notifications", { user_id: user.id });
+        const res = await api.express.get("/approvals/notifications", { user_id: activeUser.id });
         resData = res.data;
       } catch (err) {
         // Fallback to Express pending counts endpoint
         try {
-          const res = await api.express.get("/approvals/pending-counts", { user_id: user.id });
+          const res = await api.express.get("/approvals/pending-counts", { user_id: activeUser.id });
           if (res.data) {
             const countsData = res.data;
             resData = {
@@ -115,21 +116,42 @@ export default function FloatingApprovalButton() {
 
   useEffect(() => {
     setMounted(true);
-    if (user) {
-      fetchNotifications();
-      const interval = setInterval(fetchNotifications, 20000); // refresh every 20s
-      return () => clearInterval(interval);
-    }
-  }, [user]);
+    const triggerFetch = () => {
+      const activeUser = user || (typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user") || "null") : null);
+      if (activeUser) {
+        fetchNotifications(activeUser);
+      }
+    };
+
+    triggerFetch();
+    const interval = setInterval(triggerFetch, 20000); // refresh every 20s
+
+    const handleAuthChange = () => {
+      triggerFetch();
+    };
+
+    window.addEventListener("auth-change", handleAuthChange);
+    window.addEventListener("storage", handleAuthChange);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("auth-change", handleAuthChange);
+      window.removeEventListener("storage", handleAuthChange);
+    };
+  }, [user, pathname]);
+
+  const currentUser = user || (typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user") || "null") : null);
+  const isAdmin = currentUser?.email === "admin@epu.com" || currentUser?.role_names?.includes("Admin") || (currentUser as any)?.role?.name === "Admin";
 
   if (pathname === "/login") return null;
-  if (!mounted) return null;
+  if (!mounted || !currentUser || isAdmin) return null;
 
-  const hasAccess =
-    user?.role_names?.includes("Super Admin") ||
-    can("access_approval_management");
+  const hasApprovalAccess =
+    currentUser.role_names?.includes("Super Admin") ||
+    can("access_approval_requests") ||
+    (currentUser.permissions && currentUser.permissions.includes("access_approval_requests"));
 
-  if (!hasAccess) return null;
+  if (!hasApprovalAccess) return null;
 
   const filteredNotifications = notifications.filter((item) => {
     if (selectedType === "all") return true;
@@ -186,13 +208,8 @@ export default function FloatingApprovalButton() {
     );
   };
 
-  const isAdmin = user?.email === "admin@epu.com" || user?.role_names?.includes("Admin") || (user as any)?.role?.name === "Admin";
-  if (!mounted || !user || isAdmin || !can("access_approval_requests")) {
-    return null;
-  }
-
   return (
-    <div className="fixed top-3 right-4 z-50 print:hidden">
+    <div className="fixed top-3 right-3 sm:right-4 z-[70] print:hidden">
       <div className="flex flex-col items-end">
         {/* Trigger Pill Button */}
         <button
@@ -223,7 +240,7 @@ export default function FloatingApprovalButton() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.95 }}
               transition={{ duration: 0.2 }}
-              className="mt-2 w-96 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden text-gray-800 font-sans"
+              className="mt-2 w-96 max-w-[calc(100vw-1.5rem)] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden text-gray-800 font-sans"
             >
               {/* Header */}
               <div className="p-5 pb-3 flex items-start justify-between">
