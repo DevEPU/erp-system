@@ -276,6 +276,13 @@ class ApprovalService {
                 await this.rollbackBudgetAllocations(connection, modelId);
             }
         }
+
+        // Specific Logic for MRP: Auto fill schedule when MRP is approved and enable_mrp_release_pr is disabled (0)
+        if (tableName === 'mrps') {
+            if (status === 'approved') {
+                await this.handleMRPApprovedAutoSchedule(connection, modelId);
+            }
+        }
     }
 
     async applyBudgetAllocations(connection, purchaseId) {
@@ -335,6 +342,120 @@ class ApprovalService {
                 'UPDATE purchase_budget_allocations SET is_applied = 0 WHERE id = ?',
                 [alloc.id]
             );
+        }
+    }
+
+    async handleMRPApprovedAutoSchedule(connection, mrpId) {
+        // 1. Check setting enable_mrp_release_pr
+        const [settings] = await connection.execute('SELECT enable_mrp_release_pr FROM settings LIMIT 1');
+        const isReleasePREnabled = settings.length > 0 ? Boolean(settings[0].enable_mrp_release_pr) : false;
+
+        // If enable_mrp_release_pr is disabled (0 / false / non-active):
+        // Do NOT create PR. Only automatically populate / update vendor_daily_schedules!
+        if (!isReleasePREnabled) {
+            // Fetch MRP info
+            const [mrpRows] = await connection.execute(
+                'SELECT id, revision_number, time_frame_start FROM mrps WHERE id = ?',
+                [mrpId]
+            );
+            if (mrpRows.length === 0) return;
+            const mrp = mrpRows[0];
+            const isRevision = mrp.revision_number && Number(mrp.revision_number) > 0;
+
+            // Determine schedule date string & target month/year
+            let targetDateStr;
+            let targetMonth;
+            let targetYear;
+            if (mrp.time_frame_start) {
+                const dt = new Date(mrp.time_frame_start);
+                if (!isNaN(dt.getTime())) {
+                    targetYear = dt.getFullYear();
+                    targetMonth = dt.getMonth() + 1;
+                    targetDateStr = `${targetYear}-${String(targetMonth).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+                }
+            }
+            if (!targetDateStr) {
+                const today = new Date();
+                targetYear = today.getFullYear();
+                targetMonth = today.getMonth() + 1;
+                targetDateStr = `${targetYear}-${String(targetMonth).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+            }
+
+            // Fetch mrp_details with product & supplier
+            const [details] = await connection.execute(`
+                SELECT md.id, md.product_id, md.mrp_qty, md.net_qty, md.ord_qty, md.qty_required,
+                       COALESCE(md.supplier_id, p.supplier_id) as supplier_id
+                FROM mrp_details md
+                LEFT JOIN products p ON md.product_id = p.id
+                WHERE md.mrp_id = ?
+            `, [mrpId]);
+
+            // Group by supplier_id and product_id
+            const qtyMap = new Map();
+            for (const item of details) {
+                const supplierId = item.supplier_id;
+                const productId = item.product_id;
+                if (!supplierId || !productId) continue;
+
+                const baseQty = Number(item.mrp_qty || item.net_qty || item.ord_qty || item.qty_required || 0);
+                if (baseQty <= 0) continue;
+
+                const key = `${supplierId}-${productId}`;
+                if (!qtyMap.has(key)) {
+                    qtyMap.set(key, { supplierId, productId, totalQty: 0, detailIds: [] });
+                }
+                const entry = qtyMap.get(key);
+                entry.totalQty += baseQty;
+                entry.detailIds.push({ id: item.id, qty: baseQty });
+            }
+
+            for (const entry of qtyMap.values()) {
+                const { supplierId, productId, totalQty, detailIds } = entry;
+
+                // Check if rows already exist for this supplier + product in the target month & year
+                const [existingRows] = await connection.execute(
+                    'SELECT id FROM vendor_daily_schedules WHERE supplier_id = ? AND product_id = ? AND MONTH(schedule_date) = ? AND YEAR(schedule_date) = ? LIMIT 1',
+                    [supplierId, productId, targetMonth, targetYear]
+                );
+
+                if (existingRows.length > 0) {
+                    if (isRevision) {
+                        await connection.execute(
+                            'UPDATE vendor_daily_schedules SET po_qty_2 = ?, updated_at = NOW() WHERE supplier_id = ? AND product_id = ? AND MONTH(schedule_date) = ? AND YEAR(schedule_date) = ?',
+                            [totalQty, supplierId, productId, targetMonth, targetYear]
+                        );
+                    } else {
+                        await connection.execute(
+                            'UPDATE vendor_daily_schedules SET po_qty_1 = ?, updated_at = NOW() WHERE supplier_id = ? AND product_id = ? AND MONTH(schedule_date) = ? AND YEAR(schedule_date) = ?',
+                            [totalQty, supplierId, productId, targetMonth, targetYear]
+                        );
+                    }
+                } else {
+                    if (isRevision) {
+                        await connection.execute(
+                            `INSERT INTO vendor_daily_schedules (supplier_id, product_id, po_qty_1, po_qty_2, schedule_date, schedule_qty, updated_at)
+                             VALUES (?, ?, 0, ?, ?, 0, NOW())
+                             ON DUPLICATE KEY UPDATE po_qty_2 = VALUES(po_qty_2), updated_at = NOW()`,
+                            [supplierId, productId, totalQty, targetDateStr]
+                        );
+                    } else {
+                        await connection.execute(
+                            `INSERT INTO vendor_daily_schedules (supplier_id, product_id, po_qty_1, po_qty_2, schedule_date, schedule_qty, updated_at)
+                             VALUES (?, ?, ?, 0, ?, 0, NOW())
+                             ON DUPLICATE KEY UPDATE po_qty_1 = VALUES(po_qty_1), updated_at = NOW()`,
+                            [supplierId, productId, totalQty, targetDateStr]
+                        );
+                    }
+                }
+
+                // Update detail items: mark qty_released_pr and release_draft_percent
+                for (const d of detailIds) {
+                    await connection.execute(
+                        'UPDATE mrp_details SET qty_released_pr = ?, release_draft_percent = 100, updated_at = NOW() WHERE id = ?',
+                        [d.qty, d.id]
+                    );
+                }
+            }
         }
     }
 }

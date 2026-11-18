@@ -41,7 +41,8 @@ import {
   ArrowUpDown,
   Filter,
   Hash,
-  Save
+  Save,
+  CalendarClock
 } from "lucide-react";
 import api from "@/lib/api";
 import TablePagination from "@/components/ui/TablePagination";
@@ -780,6 +781,9 @@ export default function MRPPage() {
   // Submit PR Release from Percentage Modal
   const handleConfirmPRRelease = async () => {
     if (!releaseTargetMRP) return;
+    if (!isMRPReleasePREnabled) {
+      return showError("Fitur Non-Aktif", "Fitur Rilis PR dari MRP dinonaktifkan di pengaturan sistem. Schedule kedatangan telah diisi otomatis.");
+    }
     const selectedItemsToRelease = releaseModalItems.filter(i => i.is_selected && i.release_qty > 0);
     if (selectedItemsToRelease.length === 0) {
       return showError("Validasi", "Pilih minimal 1 item dengan kuantiti rilis lebih dari 0.");
@@ -1291,7 +1295,10 @@ export default function MRPPage() {
                                 isMRPReleasePREnabled ? (
                                   <button onClick={() => handleReleaseMRP(item.id)} title="Rilis ke PR (Sudah Disetujui)" className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"><Send size={16} /></button>
                                 ) : (
-                                  <button onClick={() => handleOpenReleaseModal(item)} title="Update % PR ke Schedule Pengiriman Vendor" className="p-1.5 text-cyan-600 hover:bg-cyan-50 rounded-lg transition-colors"><Send size={16} /></button>
+                                  <span title="Schedule kedatangan otomatis terisi saat MRP disetujui" className="inline-flex items-center gap-1 text-[11px] font-medium text-teal-700 bg-teal-50 px-2 py-0.5 rounded border border-teal-200">
+                                    <CheckCircle2 size={12} className="text-teal-600" />
+                                    <span>Schedule Terisi</span>
+                                  </span>
                                 )
                               )}
                               {item.status !== "Released" && (
@@ -1407,13 +1414,20 @@ export default function MRPPage() {
                         </span>
                       </button>
                     ) : (
-                      <button
-                        onClick={() => handleOpenReleaseModal(selectedMRP)}
-                        className="flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white px-5 py-2 rounded-xl font-semibold text-xs transition-all shadow-sm active:scale-95"
-                      >
-                        <Send size={15} />
-                        <span>Update % PR ke Schedule Pengiriman</span>
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-1.5 bg-teal-50 border border-teal-200 text-teal-800 px-3.5 py-2 rounded-xl text-xs font-semibold shadow-2xs">
+                          <CheckCircle2 size={15} className="text-teal-600" />
+                          <span>Schedule Kedatangan Terisi Otomatis</span>
+                        </div>
+                        <button
+                          onClick={() => router.push("/persediaan-barang/schedule-vendor")}
+                          className="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-xl font-semibold text-xs transition-all shadow-sm active:scale-95"
+                          title="Buka Schedule Kedatangan Vendor"
+                        >
+                          <CalendarClock size={15} />
+                          <span>Buka Schedule Kedatangan</span>
+                        </button>
+                      </div>
                     )}
                   </>
                 )}
@@ -2518,15 +2532,17 @@ export default function MRPPage() {
                   <Save size={15} />
                   <span>{isSavingDraftPRPercent ? "Menyimpan..." : "💾 Simpan Draft % PR"}</span>
                 </button>
-                <button
-                  type="button"
-                  disabled={isSubmittingPRRelease || isSavingDraftPRPercent}
-                  onClick={handleConfirmPRRelease}
-                  className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs transition-all shadow-sm active:scale-95 flex items-center gap-2"
-                >
-                  <Send size={15} />
-                  <span>{isSubmittingPRRelease ? "Memproses Rilis PR..." : "✓ Konfirmasi & Generate PR"}</span>
-                </button>
+                {isMRPReleasePREnabled && (
+                  <button
+                    type="button"
+                    disabled={isSubmittingPRRelease || isSavingDraftPRPercent}
+                    onClick={handleConfirmPRRelease}
+                    className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs transition-all shadow-sm active:scale-95 flex items-center gap-2"
+                  >
+                    <Send size={15} />
+                    <span>{isSubmittingPRRelease ? "Memproses Rilis PR..." : "✓ Konfirmasi & Generate PR"}</span>
+                  </button>
+                )}
               </div>
             </div>
           </div>

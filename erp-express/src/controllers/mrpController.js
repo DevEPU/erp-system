@@ -895,6 +895,16 @@ exports.releaseMRPToPR = async (req, res) => {
         }
         const mrp = mrpRows[0];
 
+        // Validasi Setting: Rilis PR dari MRP harus aktif
+        const [settings] = await connection.execute('SELECT enable_mrp_release_pr FROM settings LIMIT 1');
+        const isReleasePREnabled = settings.length > 0 ? Boolean(settings[0].enable_mrp_release_pr) : false;
+        if (!isReleasePREnabled) {
+            await connection.rollback();
+            return res.status(400).json({ 
+                message: 'Fitur Rilis PR dari MRP sedang dinonaktifkan di pengaturan sistem. Schedule kedatangan telah diisi otomatis saat MRP disetujui.' 
+            });
+        }
+
         // Validasi: MRP harus sudah disetujui penuh (Approved) sebelum bisa dirilis ke PR
         if (mrp.status !== 'Approved') {
             await connection.rollback();
@@ -1549,6 +1559,10 @@ exports.submitMRPForApproval = async (req, res) => {
 
         await connection.execute('UPDATE mrps SET status = ? WHERE id = ?', [finalStatus, id]);
 
+        if (finalStatus === 'Approved') {
+            await approvalService.handleMRPApprovedAutoSchedule(connection, id);
+        }
+
         await connection.commit();
         return res.json({
             success: true,
@@ -1624,6 +1638,15 @@ exports.bulkReleaseMRPToPR = async (req, res) => {
     const connection = await db.getConnection();
     await connection.beginTransaction();
     try {
+        const [settings] = await connection.execute('SELECT enable_mrp_release_pr FROM settings LIMIT 1');
+        const isReleasePREnabled = settings.length > 0 ? Boolean(settings[0].enable_mrp_release_pr) : false;
+        if (!isReleasePREnabled) {
+            await connection.rollback();
+            return res.status(400).json({ 
+                message: 'Fitur Rilis PR dari MRP sedang dinonaktifkan di pengaturan sistem. Schedule kedatangan telah diisi otomatis saat MRP disetujui.' 
+            });
+        }
+
         const releasedPRs = [];
         for (const id of ids) {
             const [mrpRows] = await connection.execute('SELECT * FROM mrps WHERE id = ?', [id]);
