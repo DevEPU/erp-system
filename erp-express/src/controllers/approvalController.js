@@ -269,6 +269,8 @@ exports.getPendingCounts = async (req, res) => {
             AND al.action = "assigned"
             AND al.level = ar.current_level
             AND ar.status = "pending"
+            AND (t.approval_code != 'PR' OR t.approval_code IS NULL)
+            AND (ar.requestable_type NOT LIKE '%Purchase%' OR ar.requestable_type IS NULL)
             GROUP BY t.approval_code
         `;
 
@@ -276,7 +278,6 @@ exports.getPendingCounts = async (req, res) => {
 
         const counts = {
             'Master Budget': 0,
-            'Purchase Request': 0,
             'Target Sales': 0,
             'Product Request': 0,
             'Over Budget': 0,
@@ -289,8 +290,6 @@ exports.getPendingCounts = async (req, res) => {
 
             if (code === 'Budget') {
                 counts['Master Budget'] += countVal;
-            } else if (code === 'PR') {
-                counts['Purchase Request'] += countVal;
             } else if (code === 'Sales') {
                 counts['Target Sales'] += countVal;
             } else if (code === 'Product') {
@@ -298,7 +297,9 @@ exports.getPendingCounts = async (req, res) => {
             } else if (code === 'OB') {
                 counts['Over Budget'] += countVal;
             }
-            counts['Total'] += countVal;
+            if (code !== 'PR') {
+                counts['Total'] += countVal;
+            }
         });
 
         return res.json(counts);
@@ -336,6 +337,8 @@ exports.getNotifications = async (req, res) => {
             AND al.action = "assigned"
             AND al.level = ar.current_level
             AND ar.status = "pending"
+            AND (t.approval_code != 'PR' OR t.approval_code IS NULL)
+            AND (ar.requestable_type NOT LIKE '%Purchase%' OR ar.requestable_type IS NULL)
             ORDER BY al.created_at DESC
         `;
         const [persetujuanRows] = await db.execute(persetujuanQuery, [userId]);
@@ -389,6 +392,8 @@ exports.getNotifications = async (req, res) => {
             FROM approval_requests ar
             LEFT JOIN approval_types t ON ar.approval_types_id = t.id
             WHERE ar.created_by = ?
+            AND (t.approval_code != 'PR' OR t.approval_code IS NULL)
+            AND (ar.requestable_type NOT LIKE '%Purchase%' OR ar.requestable_type IS NULL)
             ORDER BY ar.updated_at DESC
             LIMIT 30
         `;
@@ -487,51 +492,6 @@ exports.getNotifications = async (req, res) => {
             }
         }
 
-        // Dynamically add summary items for all ACTIVE Approval Rules in database
-        const [pendingCounts] = await db.execute(`
-            SELECT t.approval_name, COUNT(*) as count
-            FROM approval_request_logs al
-            JOIN approval_requests ar ON al.approval_request_id = ar.id
-            JOIN approval_types t ON ar.approval_types_id = t.id
-            WHERE al.user_id = ?
-            AND al.action = "assigned"
-            AND al.level = ar.current_level
-            AND ar.status = "pending"
-            GROUP BY t.id, t.approval_name
-        `, [userId]);
-
-        // Use dynamic rules list from database
-        const dynamicCategories = dbRules.length > 0 ? dbRules.map(r => ({ name: r.approval_name, rule_name: r.rule_name })) : allTypes.map(t => ({ name: t.approval_name, rule_name: t.approval_name }));
-
-        // Deduplicate by category name
-        const uniqueCategories = [];
-        const seenNames = new Set();
-        for (const cat of dynamicCategories) {
-            if (!seenNames.has(cat.name)) {
-                seenNames.add(cat.name);
-                uniqueCategories.push(cat);
-            }
-        }
-
-        if (persetujuanRows.length === 0) {
-            uniqueCategories.forEach((cat, idx) => {
-                const found = pendingCounts.find(t => t.approval_name === cat.name);
-                const count = found ? parseInt(found.count) : 0;
-                notifications.push({
-                    id: `summary_${idx}`,
-                    request_id: 0,
-                    category: 'persetujuan',
-                    title: count > 0 
-                        ? `${count} Data ${cat.name} (${cat.rule_name || cat.name}) menunggu approval anda`
-                        : `Sistem Approval ${cat.name} aktif — Tidak ada permohonan tertunda`,
-                    status: count > 0 ? 'pending' : 'approved',
-                    icon: count > 0 ? 'clock' : 'check',
-                    created_at: new Date().toISOString(),
-                    approval_name: cat.name
-                });
-            });
-        }
-
         notifications.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
         const counts = {
@@ -540,7 +500,9 @@ exports.getNotifications = async (req, res) => {
             pengajuan: notifications.filter(n => n.category === 'pengajuan').length
         };
 
-        const activeApprovalTypes = Array.from(seenNames);
+        const activeApprovalTypes = Array.from(new Set(
+            notifications.map(n => n.approval_name).filter(Boolean)
+        ));
 
         return res.json({ notifications: serialize(notifications), counts, approval_types: activeApprovalTypes });
 

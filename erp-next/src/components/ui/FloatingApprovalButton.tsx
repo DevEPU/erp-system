@@ -72,88 +72,40 @@ export default function FloatingApprovalButton() {
           const res = await api.express.get("/approvals/pending-counts", { user_id: user.id });
           if (res.data) {
             const countsData = res.data;
-            const fallbackNotifications: NotificationItem[] = [
-              {
-                id: "mrp_fallback",
-                request_id: 0,
-                category: "persetujuan",
-                title: (countsData["MRP"] || 0) > 0
-                  ? `${countsData["MRP"]} Data MRP (Material Planning) menunggu approval anda`
-                  : `MRP: Sistem persetujuan aktif — 0 permohonan tertunda`,
-                status: (countsData["MRP"] || 0) > 0 ? "pending" : "approved",
-                icon: (countsData["MRP"] || 0) > 0 ? "clock" : "check",
-                created_at: new Date().toISOString(),
-                approval_name: "MRP"
-              },
-              {
-                id: "product_fallback",
-                request_id: 0,
-                category: "persetujuan",
-                title: (countsData["Product Request"] || 0) > 0
-                  ? `${countsData["Product Request"]} Data Product Request menunggu approval anda`
-                  : `Product Request: Sistem persetujuan aktif — 0 permohonan tertunda`,
-                status: (countsData["Product Request"] || 0) > 0 ? "pending" : "approved",
-                icon: (countsData["Product Request"] || 0) > 0 ? "clock" : "check",
-                created_at: new Date().toISOString(),
-                approval_name: "Product Request"
-              },
-              {
-                id: "target_fallback",
-                request_id: 0,
-                category: "persetujuan",
-                title: (countsData["Target Sales"] || 0) > 0
-                  ? `${countsData["Target Sales"]} Data Target Sales / Revenue menunggu approval anda`
-                  : `Target Sales: Sistem persetujuan aktif — 0 permohonan tertunda`,
-                status: (countsData["Target Sales"] || 0) > 0 ? "pending" : "approved",
-                icon: (countsData["Target Sales"] || 0) > 0 ? "clock" : "check",
-                created_at: new Date().toISOString(),
-                approval_name: "Target Sales"
-              },
-              {
-                id: "mb_fallback",
-                request_id: 0,
-                category: "persetujuan",
-                title: (countsData["Master Budget"] || 0) > 0
-                  ? `${countsData["Master Budget"]} Data Master Budget / Anggaran menunggu approval anda`
-                  : `Master Budget: Sistem persetujuan aktif — 0 permohonan tertunda`,
-                status: (countsData["Master Budget"] || 0) > 0 ? "pending" : "approved",
-                icon: (countsData["Master Budget"] || 0) > 0 ? "clock" : "check",
-                created_at: new Date().toISOString(),
-                approval_name: "Master Budget"
-              },
-              {
-                id: "pr_fallback",
-                request_id: 0,
-                category: "persetujuan",
-                title: (countsData["Purchase Request"] || 0) > 0
-                  ? `${countsData["Purchase Request"]} Data Purchase Request / Permintaan Pembelian menunggu approval anda`
-                  : `Purchase Request: Sistem persetujuan aktif — 0 permohonan tertunda`,
-                status: (countsData["Purchase Request"] || 0) > 0 ? "pending" : "approved",
-                icon: (countsData["Purchase Request"] || 0) > 0 ? "clock" : "check",
-                created_at: new Date().toISOString(),
-                approval_name: "Purchase Request"
-              }
-            ];
             resData = {
-              notifications: fallbackNotifications,
+              notifications: [],
               counts: {
-                total: fallbackNotifications.length,
-                persetujuan: fallbackNotifications.length,
+                total: countsData["Total"] || 0,
+                persetujuan: countsData["Total"] || 0,
                 pengajuan: 0
               },
-              approval_types: ["MRP", "Product Request", "Target Sales", "Master Budget", "Purchase Request"]
+              approval_types: ["MRP", "Product Request", "Target Sales", "Master Budget"]
             };
           }
         } catch (e) {}
       }
 
       if (resData) {
-        setNotifications(resData.notifications || []);
-        setCounts(resData.counts || { total: 0, persetujuan: 0, pengajuan: 0 });
+        const validNotifs = (resData.notifications || []).filter(
+          (n: NotificationItem) =>
+            n.approval_name !== "Purchase Request" &&
+            n.approval_name !== "PR" &&
+            !(n.title || "").toLowerCase().includes("purchase request")
+        );
+        setNotifications(validNotifs);
+        setCounts({
+          total: validNotifs.length,
+          persetujuan: validNotifs.filter((n: NotificationItem) => n.category === "persetujuan").length,
+          pengajuan: validNotifs.filter((n: NotificationItem) => n.category === "pengajuan").length
+        });
         if (resData.approval_types && Array.isArray(resData.approval_types)) {
-          setApprovalTypes(resData.approval_types);
+          setApprovalTypes(
+            resData.approval_types.filter(
+              (t: string) => t !== "Purchase Request" && t !== "PR"
+            )
+          );
         } else {
-          setApprovalTypes(["MRP", "Product Request", "Target Sales", "Master Budget", "Purchase Request"]);
+          setApprovalTypes(["MRP", "Product Request", "Target Sales", "Master Budget"]);
         }
       }
     } catch (error) {
