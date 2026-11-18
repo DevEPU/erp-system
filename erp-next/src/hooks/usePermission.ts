@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import api from "@/lib/api";
 
 type User = {
     id: number;
@@ -15,8 +16,8 @@ export default function usePermission() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Load user from localStorage (or context)
-        const userStr = localStorage.getItem("user");
+        // 1. Initial fast load from localStorage
+        const userStr = typeof window !== "undefined" ? localStorage.getItem("user") : null;
         if (userStr) {
             try {
                 const parsedUser = JSON.parse(userStr);
@@ -26,6 +27,26 @@ export default function usePermission() {
             }
         }
         setLoading(false);
+
+        // 2. Real-time background sync from backend /auth/me
+        const syncPermissions = async () => {
+            const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+            if (!token) return;
+
+            try {
+                const res = await api.express.get("/auth/me");
+                if (res.data?.user) {
+                    const freshUser = res.data.user;
+                    setUser(freshUser);
+                    localStorage.setItem("user", JSON.stringify(freshUser));
+                }
+            } catch (err) {
+                // Silently fallback to cached localStorage user
+                console.debug("Silent permissions sync fallback:", err);
+            }
+        };
+
+        syncPermissions();
     }, []);
 
     const can = (permissionName: string) => {

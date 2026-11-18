@@ -445,13 +445,6 @@ export const STATIC_MENUS: Menu[] = [
         icon: "DollarSign",
         is_active: true,
       },
-      {
-        id: 37,
-        name: "Bill of Materials",
-        path: "/manufacturing/bom",
-        icon: "ClipboardList",
-        is_active: true,
-      },
       // ── Daftar Transaksi ──
       {
         id: "divider-pb-transaksi",
@@ -510,62 +503,6 @@ export const STATIC_MENUS: Menu[] = [
         name: "Adjust Harga Jual",
         path: "/persediaan-barang/adjust-harga-jual",
         icon: "Tags",
-        is_active: true,
-      },
-      {
-        id: 312,
-        name: "Produksi Langsung",
-        path: "/persediaan-barang/produksi-langsung",
-        icon: "Factory",
-        is_active: true,
-      },
-      {
-        id: 313,
-        name: "Schedule Pengiriman Vendor",
-        path: "/persediaan-barang/schedule-vendor",
-        icon: "CalendarClock",
-        is_active: true,
-      },
-      {
-        id: 3131,
-        name: "Penerimaan by Schedule",
-        path: "/persediaan-barang/penerimaan-by-schedule",
-        icon: "Truck",
-        is_active: true,
-      },
-      {
-        id: 314,
-        name: "Realisasi Bahan Baku",
-        path: "/persediaan-barang/realisasi-bahan-baku",
-        icon: "ArrowRightLeft",
-        is_active: true,
-      },
-      {
-        id: 316,
-        name: "Crusher ke MATKOM",
-        path: "/persediaan-barang/penerimaan-crusher",
-        icon: "Recycle",
-        is_active: true,
-      },
-      {
-        id: 317,
-        name: "Produksi ke MATKOM",
-        path: "/persediaan-barang/penerimaan-retur-produksi",
-        icon: "PackageCheck",
-        is_active: true,
-      },
-      {
-        id: 315,
-        name: "QC Gate ke FG",
-        path: "/persediaan-barang/penerimaan-fg",
-        icon: "Warehouse",
-        is_active: true,
-      },
-      {
-        id: 318,
-        name: "Customer Claim ke FG",
-        path: "/persediaan-barang/customer-claim-fg",
-        icon: "ShieldAlert",
         is_active: true,
       },
       {
@@ -874,6 +811,27 @@ export const STATIC_MENUS: Menu[] = [
         icon: "TriangleAlert",
         is_active: true,
       },
+      {
+        id: 626,
+        name: "Crusher ke MATKOM",
+        path: "/persediaan-barang/penerimaan-crusher",
+        icon: "Recycle",
+        is_active: true,
+      },
+      {
+        id: 627,
+        name: "Produksi ke MATKOM",
+        path: "/persediaan-barang/penerimaan-retur-produksi",
+        icon: "PackageCheck",
+        is_active: true,
+      },
+      {
+        id: 628,
+        name: "Produksi Langsung",
+        path: "/persediaan-barang/produksi-langsung",
+        icon: "Factory",
+        is_active: true,
+      },
 
       // ── Quality Control & QC Gate ──
       {
@@ -890,6 +848,20 @@ export const STATIC_MENUS: Menu[] = [
         name: "Quality Control & QC Gate",
         path: "/manufacturing/qc-gate",
         icon: "ShieldCheck",
+        is_active: true,
+      },
+      {
+        id: 629,
+        name: "QC Gate ke FG",
+        path: "/persediaan-barang/penerimaan-fg",
+        icon: "Warehouse",
+        is_active: true,
+      },
+      {
+        id: 630,
+        name: "Customer Claim ke FG",
+        path: "/persediaan-barang/customer-claim-fg",
+        icon: "ShieldAlert",
         is_active: true,
       },
 
