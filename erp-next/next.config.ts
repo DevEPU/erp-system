@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const backendUrl = process.env.INTERNAL_BACKEND_URL || "http://127.0.0.1:2121";
+const backendUrl = process.env.INTERNAL_BACKEND_URL || "http://erp-backend:2121";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
