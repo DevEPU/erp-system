@@ -20,7 +20,7 @@ export default function LoginPage() {
         if (typeof window !== "undefined") {
             const user = localStorage.getItem("user");
             const token = localStorage.getItem("token");
-            if (user || token) {
+            if (user && token) {
                 router.replace("/dashboard");
             }
         }
@@ -59,10 +59,22 @@ export default function LoginPage() {
                 router.push("/dashboard"); // Redirect to dashboard
             } else {
                 const data = await response.json().catch(() => ({}));
-                setError(
-                    data.message ||
-                        "Login failed. Please check your credentials.",
-                );
+                if (response.status === 401) {
+                    setError(
+                        data.message ||
+                        "Email atau password yang Anda masukkan salah.",
+                    );
+                } else if (response.status >= 500) {
+                    setError(
+                        data.message ||
+                        "Terjadi kesalahan pada server backend. Pastikan server backend aktif.",
+                    );
+                } else {
+                    setError(
+                        data.message ||
+                        "Gagal masuk. Silakan periksa kembali data akun Anda.",
+                    );
+                }
             }
         } catch (err) {
             setError("An error occurred. Please try again later.");

@@ -25,6 +25,7 @@ export default function ProfilePage() {
 
     const handleLogout = () => {
         localStorage.removeItem("user");
+        localStorage.removeItem("token");
         router.push("/login");
     };
 
@@ -275,15 +276,15 @@ export default function ProfilePage() {
                             })}
                             {(!user.categories ||
                                 user.categories.length === 0) && (
-                                <div className="col-span-2 flex flex-col items-center justify-center py-20 bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-200">
-                                    <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center text-gray-300 mb-4">
-                                        <Package size={32} />
+                                    <div className="col-span-2 flex flex-col items-center justify-center py-20 bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-200">
+                                        <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center text-gray-300 mb-4">
+                                            <Package size={32} />
+                                        </div>
+                                        <p className="text-sm font-bold text-gray-400 tracking-tight uppercase">
+                                            Tidak ada kategori terdaftar
+                                        </p>
                                     </div>
-                                    <p className="text-sm font-bold text-gray-400 tracking-tight uppercase">
-                                        Tidak ada kategori terdaftar
-                                    </p>
-                                </div>
-                            )}
+                                )}
                         </div>
                     </div>
                 </div>

@@ -183,6 +183,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     router.push("/login");
   };
 
@@ -196,9 +197,8 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-50 flex flex-col h-screen bg-emerald-600 border-r border-emerald-500 shadow-2xl transition-all duration-300 ease-in-out print:hidden ${
-        isCollapsed ? "w-[64px]" : "w-[240px]"
-      }`}
+      className={`fixed left-0 top-0 z-50 flex flex-col h-screen bg-emerald-600 border-r border-emerald-500 shadow-2xl transition-all duration-300 ease-in-out print:hidden ${isCollapsed ? "w-[64px]" : "w-[240px]"
+        }`}
     >
       {/* --- STALE SESSION WARNING --- */}
       {hasStaleSession && !isCollapsed && (
@@ -228,9 +228,8 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
       <div className="flex flex-col items-center pt-4 pb-3 border-b border-emerald-500/50">
         <Link href="/dashboard">
           <div
-            className={`bg-white/90 shadow-2xl shadow-white/50 p-2 rounded-full backdrop-blur-sm transition-all duration-300 ${
-              isCollapsed ? "w-8 h-8 p-1" : "w-12 h-12"
-            }`}
+            className={`bg-white/90 shadow-2xl shadow-white/50 p-2 rounded-full backdrop-blur-sm transition-all duration-300 ${isCollapsed ? "w-8 h-8 p-1" : "w-12 h-12"
+              }`}
           >
             <Image
               src="/logo.png"
@@ -245,9 +244,8 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
         </Link>
 
         <div
-          className={`text-center overflow-hidden transition-all duration-300 flex flex-col items-center ${
-            isCollapsed ? "h-0 opacity-0" : "h-auto opacity-100 mt-1.5"
-          }`}
+          className={`text-center overflow-hidden transition-all duration-300 flex flex-col items-center ${isCollapsed ? "h-0 opacity-0" : "h-auto opacity-100 mt-1.5"
+            }`}
         >
           <Link href="/dashboard">
             <h1 className="font-bold text-white text-base leading-tight whitespace-nowrap hover:text-emerald-100 transition-colors">
@@ -289,19 +287,17 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
                 onClick={() => handleMenuClick(menu)}
                 className={`
                   group flex items-center justify-between px-2.5 py-2 rounded-lg cursor-pointer transition-all duration-200 relative
-                  ${
-                    isParentActive
-                      ? "bg-emerald-800 text-white shadow-lg shadow-emerald-900/20"
-                      : "text-emerald-100 hover:bg-emerald-500 hover:text-white"
+                  ${isParentActive
+                    ? "bg-emerald-800 text-white shadow-lg shadow-emerald-900/20"
+                    : "text-emerald-100 hover:bg-emerald-500 hover:text-white"
                   }
                   ${isCollapsed ? "justify-center" : ""}
                 `}
               >
                 <div className="flex items-center gap-2.5">
                   <div
-                    className={`shrink-0 transition-transform duration-200 ${
-                      !isParentActive && "group-hover:scale-110"
-                    }`}
+                    className={`shrink-0 transition-transform duration-200 ${!isParentActive && "group-hover:scale-110"
+                      }`}
                   >
                     <IconRenderer
                       name={menu.icon}
@@ -310,11 +306,10 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
                   </div>
 
                   <span
-                    className={`font-medium text-xs whitespace-nowrap transition-all duration-300 origin-left ${
-                      isCollapsed
+                    className={`font-medium text-xs whitespace-nowrap transition-all duration-300 origin-left ${isCollapsed
                         ? "w-0 opacity-0 scale-0 hidden"
                         : "w-auto opacity-100 scale-100"
-                    }`}
+                      }`}
                   >
                     {menu.name}
                   </span>
@@ -324,9 +319,8 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
                 {!isCollapsed && hasSubmenu && (
                   <ChevronDown
                     size={16}
-                    className={`transition-transform duration-300 ${
-                      isExpanded ? "rotate-180" : "rotate-0"
-                    } opacity-70`}
+                    className={`transition-transform duration-300 ${isExpanded ? "rotate-180" : "rotate-0"
+                      } opacity-70`}
                   />
                 )}
 
@@ -342,11 +336,10 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
               {/* --- SUBMENUS --- */}
               {!isCollapsed && hasSubmenu && (
                 <div
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    isExpanded
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded
                       ? "max-h-[1000px] opacity-100 mt-1"
                       : "max-h-0 opacity-0"
-                  }`}
+                    }`}
                 >
                   <div className="ml-3 pl-2.5 border-l border-emerald-500/30 space-y-0.5">
                     {activeSubmenus.map((sub) => {
@@ -376,11 +369,10 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
                           onClick={() => router.push(fullSubPath)}
                           className={`
                                         flex items-center gap-2.5 px-2.5 py-1.5 rounded-md cursor-pointer transition-all duration-200 text-xs
-                                        ${
-                                          isSubActive
-                                            ? "bg-emerald-500 text-white font-medium shadow-sm"
-                                            : "text-emerald-100/80 hover:text-white hover:bg-emerald-500/50"
-                                        }
+                                        ${isSubActive
+                              ? "bg-emerald-500 text-white font-medium shadow-sm"
+                              : "text-emerald-100/80 hover:text-white hover:bg-emerald-500/50"
+                            }
                                     `}
                         >
                           {/* Sub Icon */}
@@ -394,9 +386,8 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
                             />
                           ) : (
                             <div
-                              className={`w-1 h-1 rounded-full shrink-0 ${
-                                isSubActive ? "bg-white" : "bg-emerald-300/50"
-                              }`}
+                              className={`w-1 h-1 rounded-full shrink-0 ${isSubActive ? "bg-white" : "bg-emerald-300/50"
+                                }`}
                             ></div>
                           )}
 
@@ -432,9 +423,8 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
           </div>
 
           <div
-            className={`overflow-hidden transition-all duration-300 ${
-              isCollapsed ? "w-0 opacity-0 hidden" : "w-full opacity-100"
-            }`}
+            className={`overflow-hidden transition-all duration-300 ${isCollapsed ? "w-0 opacity-0 hidden" : "w-full opacity-100"
+              }`}
           >
             <p className="text-xs font-bold text-white truncate leading-none mb-0.5">
               {user?.name}
@@ -464,9 +454,8 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
         >
           <LogOut size={16} className="shrink-0" />
           <span
-            className={`font-medium text-xs whitespace-nowrap transition-all duration-300 ${
-              isCollapsed ? "w-0 opacity-0 hidden" : "w-auto opacity-100"
-            }`}
+            className={`font-medium text-xs whitespace-nowrap transition-all duration-300 ${isCollapsed ? "w-0 opacity-0 hidden" : "w-auto opacity-100"
+              }`}
           >
             Keluar Akun
           </span>

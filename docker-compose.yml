@@ -15,7 +15,7 @@ services:
       - DB_USER=root
       - DB_PASSWORD=
       - DB_NAME=db_ims_epu
-      - JWT_SECRET=secret_key_budgeting_express_2026
+      - JWT_SECRET=secret_key_erp_express_2026
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

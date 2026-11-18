@@ -38,14 +38,14 @@ File dump database telah disertakan di root project: `budgeting_db_dump.sql`.
 ### Backend (`/erp-express/.env`):
 Periksa file `.env` di dalam folder `erp-express`:
 ```env
-PORT=5656
-DATABASE_URL="mysql://root:password_anda@127.0.0.1:3306/budgeting"
+PORT=2121
+DATABASE_URL="mysql://root:@127.0.0.1:3306/db_ims_epu"
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_USER=root
-DB_PASSWORD=password_anda
-DB_NAME=budgeting
-JWT_SECRET=secret_key_budgeting_express_2026
+DB_PASSWORD=
+DB_NAME=db_ims_epu
+JWT_SECRET=secret_key_erp_express_2026
 ```
 *(Sesuaikan `DB_PASSWORD` jika MySQL di server Anda menggunakan password)*
 

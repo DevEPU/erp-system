@@ -34,7 +34,10 @@ export default function DashboardLayout({
         if (!isMounted) return;
 
         const userStr = localStorage.getItem("user");
-        if (!userStr) {
+        const token = localStorage.getItem("token");
+        if (!userStr || !token) {
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
             router.push("/login");
             return;
         }
