@@ -149,7 +149,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-50 flex flex-col h-screen bg-emerald-600 border-r border-emerald-500 shadow-2xl transition-all duration-300 ease-in-out print:hidden ${isCollapsed ? "w-[64px]" : "w-[240px]"
+      className={`fixed left-0 top-0 z-50 flex flex-col h-screen bg-emerald-600 border-r border-emerald-500 shadow-2xl transition-all duration-300 ease-in-out print:hidden ${isCollapsed ? "w-[64px]" : "w-[270px]"
         }`}
     >
       {/* --- STALE SESSION WARNING --- */}
@@ -215,7 +215,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
       </div>
 
       {/* --- MENU ITEMS --- */}
-      <div className="flex-1 overflow-y-auto overflow-x-hidden py-4 px-3 space-y-1 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden py-4 px-3 pb-16 space-y-1 custom-scrollbar">
         {visibleMenus.map((menu) => {
           const activeSubmenus =
             menu.submenus?.filter((s) => s.is_active) || [];
@@ -246,7 +246,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
                   ${isCollapsed ? "justify-center" : ""}
                 `}
               >
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2.5 min-w-0">
                   <div
                     className={`shrink-0 transition-transform duration-200 ${!isParentActive && "group-hover:scale-110"
                       }`}
@@ -271,7 +271,7 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
                 {!isCollapsed && hasSubmenu && (
                   <ChevronDown
                     size={16}
-                    className={`transition-transform duration-300 ${isExpanded ? "rotate-180" : "rotate-0"
+                    className={`shrink-0 transition-transform duration-300 ${isExpanded ? "rotate-180" : "rotate-0"
                       } opacity-70`}
                   />
                 )}
@@ -289,11 +289,11 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
               {!isCollapsed && hasSubmenu && (
                 <div
                   className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded
-                      ? "max-h-[1000px] opacity-100 mt-1"
+                      ? "max-h-[3500px] opacity-100 mt-1"
                       : "max-h-0 opacity-0"
                     }`}
                 >
-                  <div className="ml-3 pl-2.5 border-l border-emerald-500/30 space-y-0.5">
+                  <div className="ml-2 pl-2 border-l border-emerald-500/30 space-y-0.5">
                     {activeSubmenus.map((sub) => {
                       // Render section divider/label
                       if (sub.is_divider) {
@@ -319,31 +319,34 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
                         <div
                           key={sub.id}
                           onClick={() => router.push(fullSubPath)}
+                          title={sub.name}
                           className={`
-                                        flex items-center gap-2.5 px-2.5 py-1.5 rounded-md cursor-pointer transition-all duration-200 text-xs
-                                        ${isSubActive
+                            flex items-center gap-2 px-2 py-1.5 rounded-md cursor-pointer transition-all duration-200 text-xs
+                            ${isSubActive
                               ? "bg-emerald-500 text-white font-medium shadow-sm"
-                              : "text-emerald-100/80 hover:text-white hover:bg-emerald-500/50"
+                              : "text-emerald-100/85 hover:text-white hover:bg-emerald-500/50"
                             }
-                                    `}
+                          `}
                         >
                           {/* Sub Icon */}
                           {sub.icon ? (
                             <IconRenderer
                               name={sub.icon}
                               size={13}
-                              className={
-                                isSubActive ? "opacity-100" : "opacity-70"
-                              }
+                              className={`shrink-0 ${
+                                isSubActive ? "opacity-100" : "opacity-75"
+                              }`}
                             />
                           ) : (
                             <div
-                              className={`w-1 h-1 rounded-full shrink-0 ${isSubActive ? "bg-white" : "bg-emerald-300/50"
+                              className={`w-1.5 h-1.5 rounded-full shrink-0 ${isSubActive ? "bg-white" : "bg-emerald-300/50"
                                 }`}
                             ></div>
                           )}
 
-                          <span className="truncate">{sub.name}</span>
+                          <span className="text-[11.5px] leading-tight break-words flex-1 pr-1 font-medium">
+                            {sub.name}
+                          </span>
                         </div>
                       );
                     })}

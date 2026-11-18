@@ -89,7 +89,7 @@ export default function DashboardLayout({
             <main
                 className={`
             flex-1 p-4 overflow-x-auto transition-all duration-300 ease-in-out
-            ${isSidebarCollapsed ? "ml-[64px]" : "ml-0 md:ml-[240px]"}
+            ${isSidebarCollapsed ? "ml-[64px]" : "ml-0 md:ml-[270px]"}
         `}
             >
                 {hasRouteAccess ? (
