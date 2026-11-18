@@ -83,44 +83,6 @@ export default function LoginPage() {
             setLoading(false);
         }
     };
-    const [isVisible, setIsVisible] = useState(false);
-    const [clickCount, setClickCount] = useState(0);
-
-    // Stealth Logic: Listen for "epu" typing
-    useEffect(() => {
-        let buffer = "";
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (!e.key) return;
-            buffer += e.key.toLowerCase();
-            if (buffer.length > 3) {
-                buffer = buffer.slice(-3);
-            }
-            if (buffer === "epu") {
-                setIsVisible(true);
-            }
-        };
-
-        window.addEventListener("keydown", handleKeyDown);
-        return () => window.removeEventListener("keydown", handleKeyDown);
-    }, []);
-
-    const handleStealthClick = () => {
-        if (isVisible) return;
-        const newCount = clickCount + 1;
-        setClickCount(newCount);
-        if (newCount >= 5) {
-            setIsVisible(true);
-        }
-    };
-
-    if (!isVisible) {
-        return (
-            <div
-                onClick={handleStealthClick}
-                className="h-screen w-screen bg-white cursor-default"
-            />
-        );
-    }
 
     return (
         <div className="flex justify-center items-center h-screen w-screen bg-emerald-600 animate-in fade-in duration-700">
