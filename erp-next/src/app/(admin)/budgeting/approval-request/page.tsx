@@ -20,6 +20,7 @@ import {
   Search,
   SortAsc,
   SortDesc,
+  Boxes,
 } from "lucide-react";
 import TablePagination from "@/components/ui/TablePagination";
 import ApprovalList from "@/components/approval/ApprovalList";
@@ -41,7 +42,7 @@ export default function ApprovalRequestPage() {
   const yearParam = searchParams.get("year");
 
   const [activeTab, setActiveTab] = useState<
-    "budget" | "purchase" | "target" | "product"
+    "budget" | "purchase" | "target" | "product" | "inv_change"
   >((tabParam as any) || "budget");
 
   const [selectedMonth, setSelectedMonth] = useState(
@@ -58,6 +59,7 @@ export default function ApprovalRequestPage() {
     budget: 0,
     target: 0,
     product: 0,
+    inv_change: 0,
   });
 
   // Action Modal State
@@ -135,6 +137,11 @@ export default function ApprovalRequestPage() {
           apiData["Product Request"] ||
           apiData["product"] ||
           apiData["product_request"] ||
+          0,
+        inv_change:
+          apiData["Perubahan Master Data Inventory"] ||
+          apiData["inv_change"] ||
+          apiData["inventory"] ||
           0,
       };
 
@@ -244,7 +251,10 @@ export default function ApprovalRequestPage() {
       if (!entity) return false;
 
       const searchLower = searchQuery.toLowerCase();
-      const refMatch = String(entity.reference || entity.no_budgeting || "")
+      const refMatch = String(entity.reference || entity.no_budgeting || entity.request_number || entity.product_code || "")
+        .toLowerCase()
+        .includes(searchLower);
+      const nameMatch = String(entity.product_name || "")
         .toLowerCase()
         .includes(searchLower);
       const deptMatch = String(
@@ -260,7 +270,7 @@ export default function ApprovalRequestPage() {
         .toLowerCase()
         .includes(searchLower);
 
-      return refMatch || deptMatch || userMatch;
+      return refMatch || nameMatch || deptMatch || userMatch;
     })
     .sort((a, b) => {
       const dateA = new Date(a.created_at).getTime();
@@ -292,6 +302,12 @@ export default function ApprovalRequestPage() {
       label: "Product Request",
       icon: PackagePlus,
       color: "text-orange-600 bg-orange-50",
+    },
+    {
+      id: "inv_change",
+      label: "Master Inventory",
+      icon: Boxes,
+      color: "text-teal-600 bg-teal-50",
     },
   ];
 
@@ -399,8 +415,9 @@ export default function ApprovalRequestPage() {
           })}
         </div>
 
-        {/* Budget Summary */}
-        <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
+        {/* Budget Summary (Only for Budget & Purchase tabs) */}
+        {(activeTab === "budget" || activeTab === "purchase") && (
+          <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-6">
           <div className="flex items-center gap-2 mb-4">
             <Wallet size={20} className="text-emerald-600" />
             <h3 className="font-bold text-gray-900">
@@ -562,6 +579,7 @@ export default function ApprovalRequestPage() {
             </div>
           )}
         </div>
+        )}
 
         {/* Content List */}
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden min-h-[400px] flex flex-col">

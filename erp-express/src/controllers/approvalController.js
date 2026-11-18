@@ -71,6 +71,7 @@ exports.getApprovalRequests = async (req, res) => {
             'purchase': ['Modules\\Purchase\\Entities\\Purchase', 'Purchase Request', 'Over Budget', 'Modules\\Purchase\\Entities\\Purchase'],
             'target': ['Modules\\TargetSale\\Entities\\TargetSale', 'Target Sales', 'Modules\\TargetSale\\Entities\\TargetSale'],
             'product': ['Modules\\Product\\Entities\\ProductRequest', 'Product Request', 'Modules\\Product\\Entities\\ProductRequest'],
+            'inv_change': ['Modules\\Product\\Entities\\ProductChangeRequest', 'Perubahan Master Data Inventory', 'Product Change Request'],
             'mrp': ['Modules\\MRP\\Entities\\MRP', 'MRP', 'Modules\\MRP\\Entities\\MRP']
         };
 
@@ -109,7 +110,10 @@ exports.getApprovalRequests = async (req, res) => {
                 'Modules\\TargetSale\\Entities\\TargetSale': { table: 'target_sales', includes: null, dateField: 'month' },
                 'Target Sales': { table: 'target_sales', includes: null, dateField: 'month' },
                 'Modules\\Product\\Entities\\ProductRequest': { table: 'product_requests', includes: null, dateField: 'created_at' },
-                'Product Request': { table: 'product_requests', includes: null, dateField: 'created_at' }
+                'Product Request': { table: 'product_requests', includes: null, dateField: 'created_at' },
+                'Modules\\Product\\Entities\\ProductChangeRequest': { table: 'product_change_requests', includes: null, dateField: 'created_at' },
+                'Perubahan Master Data Inventory': { table: 'product_change_requests', includes: null, dateField: 'created_at' },
+                'Product Change Request': { table: 'product_change_requests', includes: null, dateField: 'created_at' }
             };
 
             const config = tableMap[reqObj.requestable_type];
@@ -137,6 +141,18 @@ exports.getApprovalRequests = async (req, res) => {
                     }
 
                     reqObj.requestable = requestable;
+                    if (config.table === 'product_change_requests') {
+                        try {
+                            reqObj.requestable.old_data_parsed = typeof requestable.old_data === 'string' ? JSON.parse(requestable.old_data) : requestable.old_data;
+                        } catch (e) {
+                            reqObj.requestable.old_data_parsed = {};
+                        }
+                        try {
+                            reqObj.requestable.change_data_parsed = typeof requestable.change_data === 'string' ? JSON.parse(requestable.change_data) : requestable.change_data;
+                        } catch (e) {
+                            reqObj.requestable.change_data_parsed = {};
+                        }
+                    }
                     if (config.includes === 'details') {
                         if (config.table === 'master_budget') {
                             // Budget details
@@ -261,6 +277,8 @@ exports.getPendingCounts = async (req, res) => {
                 'Master Budget': 0,
                 'Target Sales': 0,
                 'Product Request': 0,
+                'Perubahan Master Data Inventory': 0,
+                'inv_change': 0,
                 'Over Budget': 0,
                 'Total': 0
             });
@@ -286,6 +304,8 @@ exports.getPendingCounts = async (req, res) => {
             'Master Budget': 0,
             'Target Sales': 0,
             'Product Request': 0,
+            'Perubahan Master Data Inventory': 0,
+            'inv_change': 0,
             'Over Budget': 0,
             'Total': 0
         };
@@ -300,6 +320,9 @@ exports.getPendingCounts = async (req, res) => {
                 counts['Target Sales'] += countVal;
             } else if (code === 'Product') {
                 counts['Product Request'] += countVal;
+            } else if (code === 'INV_CHANGE') {
+                counts['Perubahan Master Data Inventory'] += countVal;
+                counts['inv_change'] += countVal;
             } else if (code === 'OB') {
                 counts['Over Budget'] += countVal;
             }
@@ -365,6 +388,9 @@ exports.getNotifications = async (req, res) => {
                     'Target Sales': { table: 'target_sales', col: 'reference' },
                     'Modules\\Product\\Entities\\ProductRequest': { table: 'product_requests', col: 'request_number' },
                     'Product Request': { table: 'product_requests', col: 'request_number' },
+                    'Modules\\Product\\Entities\\ProductChangeRequest': { table: 'product_change_requests', col: 'request_number' },
+                    'Perubahan Master Data Inventory': { table: 'product_change_requests', col: 'request_number' },
+                    'Product Change Request': { table: 'product_change_requests', col: 'request_number' },
                     'Modules\\MRP\\Entities\\MRP': { table: 'mrps', col: 'mrp_number' },
                     'MRP': { table: 'mrps', col: 'mrp_number' },
                 };
@@ -421,6 +447,9 @@ exports.getNotifications = async (req, res) => {
                     'Target Sales': { table: 'target_sales', col: 'reference' },
                     'Modules\\Product\\Entities\\ProductRequest': { table: 'product_requests', col: 'request_number' },
                     'Product Request': { table: 'product_requests', col: 'request_number' },
+                    'Modules\\Product\\Entities\\ProductChangeRequest': { table: 'product_change_requests', col: 'request_number' },
+                    'Perubahan Master Data Inventory': { table: 'product_change_requests', col: 'request_number' },
+                    'Product Change Request': { table: 'product_change_requests', col: 'request_number' },
                     'Modules\\MRP\\Entities\\MRP': { table: 'mrps', col: 'mrp_number' },
                     'MRP': { table: 'mrps', col: 'mrp_number' },
                 };

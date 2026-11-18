@@ -59,6 +59,7 @@ type Product = {
   product_price: number;
   product_unit: string;
   product_note?: string;
+  reason?: string;
   is_asset: boolean | number;
   is_mandatory: boolean | number;
   supplier_id?: number;
@@ -134,6 +135,7 @@ export default function ProductModal({
     product_price: 0,
     product_unit: "",
     product_note: "",
+    reason: "",
     is_asset: false,
     is_mandatory: false,
     supplier_id: undefined,
@@ -523,10 +525,15 @@ export default function ProductModal({
     }
 
     try {
+      let res: any;
       if (productToEdit) {
-        await api.express.put(`/products/${productToEdit.id}`, formData);
+        res = await api.express.put(`/products/${productToEdit.id}`, formData);
       } else {
-        await api.express.post("/products", formData);
+        res = await api.express.post("/products", formData);
+      }
+
+      if (res?.data?.requires_approval) {
+        alert(res.data.message || "Perubahan telah diajukan ke Approval Request.");
       }
 
       onSuccess();
@@ -1210,6 +1217,27 @@ export default function ProductModal({
                   className="w-full px-6 py-4 rounded-[2rem] border-2 border-gray-50 bg-gray-50/50 focus:bg-white focus:border-emerald-500 transition-all font-bold text-gray-700 resize-none"
                 />
               </div>
+
+              {/* Alasan Perubahan Master Data (Khusus Mode Edit / Approval Request) */}
+              {productToEdit && (
+                <div className="space-y-3 bg-teal-50/50 p-6 rounded-[2rem] border border-teal-100">
+                  <div className="flex items-center gap-3">
+                    <div className="w-1.5 h-6 bg-teal-500 rounded-full" />
+                    <div>
+                      <h3 className="text-sm font-black text-teal-900 uppercase tracking-widest">Alasan Perubahan Master Data</h3>
+                      <p className="text-[10px] text-teal-600 font-bold mt-0.5">Catatan ini akan dikirimkan ke lembar permohonan persetujuan (Approval Request)</p>
+                    </div>
+                  </div>
+                  <input
+                    type="text"
+                    name="reason"
+                    value={formData.reason || ""}
+                    onChange={handleChange}
+                    placeholder="Contoh: Perubahan spesifikasi produk, update harga beli supplier, dsb..."
+                    className="w-full px-5 py-3 rounded-2xl border-2 border-teal-100 bg-white focus:border-teal-500 transition-all font-bold text-gray-700 text-xs"
+                  />
+                </div>
+              )}
 
               <div className="flex justify-end gap-3 pt-6 border-t border-gray-100">
                 <button

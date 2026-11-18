@@ -16,7 +16,7 @@ interface ApprovalListProps {
   loading: boolean;
   onAction: (item: any, type: "approve" | "reject") => void;
   onView: (item: any) => void;
-  type: "budget" | "purchase" | "target" | "product";
+  type: "budget" | "purchase" | "target" | "product" | "inv_change";
   quickApprovingId?: number | null;
 }
 
@@ -252,6 +252,28 @@ export default function ApprovalList({
                   </div>
                 )}
               </div>
+            </div>
+          );
+        } else if (type === "inv_change") {
+          title = entity.product_name || `Perubahan Master Data #${entity.id}`;
+          amountLabel = "Kode Part / Produk";
+          amount = entity.product_code || entity.part_number || "-";
+
+          subtitle = (
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-[10px] font-black text-teal-700 bg-teal-50 px-2.5 py-1 rounded-lg border border-teal-200 uppercase tracking-wider">
+                  {entity.request_number || `#PCR-${entity.id}`}
+                </span>
+                <span className="text-xs text-gray-500 font-bold">
+                  Status: <span className="text-amber-600 font-extrabold">{entity.status || "Pending"}</span>
+                </span>
+              </div>
+              {entity.reason && (
+                <div className="text-xs text-gray-600 bg-gray-50/80 px-3 py-1.5 rounded-xl border border-gray-100 max-w-lg italic font-medium">
+                  &ldquo;{entity.reason}&rdquo;
+                </div>
+              )}
             </div>
           );
         }

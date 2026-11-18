@@ -79,7 +79,7 @@ export default function FloatingApprovalButton() {
                 persetujuan: countsData["Total"] || 0,
                 pengajuan: 0
               },
-              approval_types: ["MRP", "Product Request", "Target Sales", "Master Budget"]
+              approval_types: ["MRP", "Perubahan Master Data Inventory", "Product Request", "Target Sales", "Master Budget"]
             };
           }
         } catch (e) {}
@@ -105,7 +105,7 @@ export default function FloatingApprovalButton() {
             )
           );
         } else {
-          setApprovalTypes(["MRP", "Product Request", "Target Sales", "Master Budget"]);
+          setApprovalTypes(["MRP", "Perubahan Master Data Inventory", "Product Request", "Target Sales", "Master Budget"]);
         }
       }
     } catch (error) {
@@ -145,6 +145,8 @@ export default function FloatingApprovalButton() {
       tab = "purchase";
     } else if (nameLower.includes("target") || nameLower.includes("sales")) {
       tab = "target";
+    } else if (nameLower.includes("inventory") || nameLower.includes("master data") || nameLower.includes("inv_change")) {
+      tab = "inv_change";
     } else if (nameLower.includes("product")) {
       tab = "product";
     } else if (nameLower.includes("mrp")) {

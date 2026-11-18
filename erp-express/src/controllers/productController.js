@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const approvalService = require('../services/approvalService');
 
 // Utility function for BigInt serialization
 const serialize = (data) => JSON.parse(JSON.stringify(data, (key, value) =>
@@ -787,6 +788,92 @@ exports.updateProduct = async (req, res) => {
     await conn.beginTransaction();
     try {
         const { id } = req.params;
+        const userId = req.user?.id || req.user?.userId || req.body.user_id || 1;
+
+        // Check if approval rule for Perubahan Master Data Inventory is active
+        const [activeInvRules] = await conn.execute(
+            `SELECT ar.*, t.id as type_id 
+             FROM approval_rules ar 
+             JOIN approval_types t ON ar.approval_types_id = t.id 
+             WHERE (t.approval_code = 'INV_CHANGE' OR t.approval_name LIKE '%Perubahan Master Data%') 
+             AND ar.is_active = 1 LIMIT 1`
+        );
+
+        if (activeInvRules.length > 0) {
+            // Fetch current product state for old_data comparison
+            const [currentProds] = await conn.execute('SELECT * FROM products WHERE id = ?', [id]);
+            if (currentProds.length === 0) {
+                await conn.rollback();
+                conn.release();
+                return res.status(404).json({ message: 'Product not found' });
+            }
+            const currentProd = currentProds[0];
+            const [currUnits] = await conn.execute('SELECT * FROM product_units WHERE product_id = ?', [id]);
+            const [currLocs] = await conn.execute('SELECT * FROM product_locations WHERE product_id = ?', [id]);
+            const [currSups] = await conn.execute('SELECT * FROM product_suppliers WHERE product_id = ?', [id]);
+            const oldData = {
+                ...currentProd,
+                units: currUnits,
+                locations: currLocs,
+                product_suppliers: currSups
+            };
+
+            const now = new Date();
+            const todayStr = now.toISOString().slice(0,10).replace(/-/g, '');
+            const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+            const requestNumber = `PCR-${todayStr}-${randomSuffix}`;
+            const reason = req.body.reason || req.body.change_reason || 'Pengajuan perubahan master data inventaris';
+
+            const [pcrResult] = await conn.execute(
+                `INSERT INTO product_change_requests (product_id, request_number, product_name, product_code, old_data, change_data, reason, status, created_by, created_at, updated_at)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending', ?, NOW(), NOW())`,
+                [
+                    id,
+                    requestNumber,
+                    req.body.product_name || currentProd.product_name,
+                    req.body.product_code || req.body.part_number || currentProd.product_code,
+                    JSON.stringify(oldData),
+                    JSON.stringify(req.body),
+                    reason,
+                    userId
+                ]
+            );
+            const changeRequestId = pcrResult.insertId;
+
+            const approvalResponse = await approvalService.createRequest(
+                'Modules\\Product\\Entities\\ProductChangeRequest',
+                changeRequestId,
+                activeInvRules[0].type_id,
+                0,
+                userId,
+                conn
+            );
+
+            if (approvalResponse.status === 'approved') {
+                // Auto-approved: apply change immediately
+                await approvalService.applyProductChange(conn, changeRequestId);
+                await conn.execute('UPDATE product_change_requests SET status = "Approved", updated_at = NOW() WHERE id = ?', [changeRequestId]);
+                await conn.commit();
+                conn.release();
+                return res.json({
+                    success: true,
+                    message: 'Perubahan master data produk berhasil disetujui otomatis dan disimpan.',
+                    requires_approval: false,
+                    data: { id, request_number: requestNumber, status: 'Approved' }
+                });
+            } else {
+                // Pending approval
+                await conn.commit();
+                conn.release();
+                return res.json({
+                    success: true,
+                    message: `Perubahan master data produk telah diajukan (No. ${requestNumber}) dan sedang menunggu persetujuan (Approval Request).`,
+                    requires_approval: true,
+                    data: { id, request_number: requestNumber, status: 'Pending', approval_id: approvalResponse.id }
+                });
+            }
+        }
+
         let { 
             product_code, product_name, category_id, product_unit, product_price, 
             supplier_id, is_asset, is_mandatory, product_note, min_qty, max_qty, min_order, pcs_per_pack,

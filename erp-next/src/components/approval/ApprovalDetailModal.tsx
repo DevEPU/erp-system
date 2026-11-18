@@ -20,7 +20,7 @@ interface ApprovalDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
   data: any;
-  type: "budget" | "purchase" | "target" | "product";
+  type: "budget" | "purchase" | "target" | "product" | "inv_change";
 }
 
 export default function ApprovalDetailModal({
@@ -440,6 +440,97 @@ export default function ApprovalDetailModal({
           <div className="bg-gray-50 p-3 rounded-lg">
             <span className="block text-gray-500 text-xs uppercase font-bold">Status</span>
             <span className="font-bold text-gray-900 capitalize">{entity.status}</span>
+          </div>
+        </div>
+      </div>
+    );
+  } else if (type === "inv_change") {
+    title = `Perubahan Master: ${entity.product_name}`;
+    icon = Box;
+    const oldData = entity.old_data_parsed || (typeof entity.old_data === "string" ? (() => { try { return JSON.parse(entity.old_data); } catch { return {}; } })() : (entity.old_data || {}));
+    const changeData = entity.change_data_parsed || (typeof entity.change_data === "string" ? (() => { try { return JSON.parse(entity.change_data); } catch { return {}; } })() : (entity.change_data || {}));
+
+    const compareFields = [
+      { label: "Nama Produk", oldVal: oldData.product_name, newVal: changeData.product_name },
+      { label: "Kode Produk", oldVal: oldData.product_code || "-", newVal: changeData.product_code || "-" },
+      { label: "Part Number", oldVal: oldData.part_number || "-", newVal: changeData.part_number || "-" },
+      { label: "Satuan Dasar", oldVal: oldData.product_unit || "-", newVal: changeData.product_unit || "-" },
+      { 
+        label: "Harga Jual", 
+        oldVal: formatCurrency(oldData.product_price || 0), 
+        newVal: formatCurrency(changeData.product_price || 0) 
+      },
+      { 
+        label: "Harga Beli / Standard", 
+        oldVal: formatCurrency(oldData.purchase_price || 0), 
+        newVal: formatCurrency(changeData.purchase_price || 0) 
+      },
+      { label: "Tipe Produk", oldVal: oldData.product_type || "-", newVal: changeData.product_type || "-" },
+      { 
+        label: "Status Asset", 
+        oldVal: oldData.is_asset ? "Asset" : "Non-Asset", 
+        newVal: changeData.is_asset ? "Asset" : "Non-Asset" 
+      },
+      { 
+        label: "Mandatory", 
+        oldVal: oldData.is_mandatory ? "Ya" : "Tidak", 
+        newVal: changeData.is_mandatory ? "Ya" : "Tidak" 
+      },
+      { label: "Catatan Produk", oldVal: oldData.product_note || "-", newVal: changeData.product_note || "-" },
+    ];
+
+    detailsContent = (
+      <div className="space-y-6">
+        {/* Alasan Perubahan */}
+        {entity.reason && (
+          <div className="p-4 rounded-2xl bg-teal-50 border border-teal-100 space-y-1">
+            <span className="text-[10px] font-black uppercase tracking-wider text-teal-700">Alasan Perubahan Master Data:</span>
+            <p className="text-xs font-bold text-teal-900 leading-relaxed">&ldquo;{entity.reason}&rdquo;</p>
+          </div>
+        )}
+
+        {/* Tabel Komparasi Data Lama vs Data Baru */}
+        <div>
+          <h4 className="font-bold text-gray-800 text-sm mb-3 flex items-center gap-2">
+            <Box size={16} className="text-teal-600" />
+            <span>Perbandingan Data Master (Sebelum vs Sesudah)</span>
+          </h4>
+          <div className="border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+            <table className="w-full text-xs text-left">
+              <thead className="bg-gray-50 text-gray-500 font-bold uppercase tracking-wider border-b border-gray-100">
+                <tr>
+                  <th className="px-4 py-3">Atribut</th>
+                  <th className="px-4 py-3 bg-red-50/40 text-red-700">Data Sebelumnya</th>
+                  <th className="px-4 py-3 bg-emerald-50/40 text-emerald-800">Data Baru (Diajukan)</th>
+                  <th className="px-3 py-3 text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {compareFields.map((field, idx) => {
+                  const isChanged = String(field.oldVal || "").trim() !== String(field.newVal || "").trim();
+                  return (
+                    <tr key={idx} className={isChanged ? "bg-amber-50/20" : "hover:bg-gray-50/30"}>
+                      <td className="px-4 py-2.5 font-bold text-gray-700">{field.label}</td>
+                      <td className="px-4 py-2.5 text-gray-500 bg-red-50/20">{field.oldVal || "-"}</td>
+                      <td className={`px-4 py-2.5 font-bold ${isChanged ? "text-emerald-700 bg-emerald-50/30" : "text-gray-800"}`}>
+                        {field.newVal || "-"}
+                      </td>
+                      <td className="px-3 py-2.5 text-center">
+                        {isChanged ? (
+                          <span className="inline-block px-2 py-0.5 rounded text-[9px] font-black uppercase bg-emerald-100 text-emerald-700">
+                            Berubah
+                          </span>
+                        ) : (
+                          <span className="inline-block px-2 py-0.5 rounded text-[9px] font-bold text-gray-400">
+                            Sama
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
