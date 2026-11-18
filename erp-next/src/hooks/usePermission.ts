@@ -69,6 +69,18 @@ export default function usePermission() {
             ) {
                 return false;
             }
+
+            // Hide "Daftar Laporan" and its reports for admin
+            if (
+                permissionName === "access_reports" ||
+                permissionName === "access_pr_reports" ||
+                permissionName === "access_mb_reports" ||
+                permissionName === "access_laporan_penjualan" ||
+                permissionName === "access_laporan_stok" ||
+                permissionName === "access_laporan_keuangan"
+            ) {
+                return false;
+            }
         }
 
         // Admin role or admin@epu.com has full access to all manufacturing execution and QC menus

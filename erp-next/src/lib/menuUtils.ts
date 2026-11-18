@@ -79,6 +79,12 @@ export function filterAccessibleMenus(
   return menus
     .filter((menu) => !menu.hidden)
     .map((menu) => {
+      // Check parent module permission if defined
+      const parentPerm = COMPONENT_PERMISSIONS[menu.name];
+      if (parentPerm && !can(parentPerm)) {
+        return null;
+      }
+
       if (menu.submenus && menu.submenus.length > 0) {
         const filteredSubs = filterAccessibleSubmenus(
           menu.submenus,

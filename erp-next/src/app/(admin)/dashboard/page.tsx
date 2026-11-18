@@ -152,18 +152,23 @@ export default function MainDashboardPortal() {
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Filter modules based on permission, exclude "Dashboard" itself
+  // Filter modules based on permission, exclude "Dashboard" itself and "Daftar Laporan" for admin
   const accessibleModules = useMemo(() => {
-    const rawFiltered = filterAccessibleMenus(
+    let rawFiltered = filterAccessibleMenus(
       STATIC_MENUS,
       can,
       isForecastEnabled,
       isReceiptByScheduleEnabled
     );
 
+    const isAdmin = user?.email === "admin@epu.com" || user?.role_names?.includes("Admin") || (user as any)?.role?.name === "Admin";
+    if (isAdmin) {
+      rawFiltered = rawFiltered.filter((m) => m.name !== "Daftar Laporan");
+    }
+
     // Remove "Dashboard" leaf menu from the cards container list
     return rawFiltered.filter((m) => m.name !== "Dashboard");
-  }, [can, isForecastEnabled, isReceiptByScheduleEnabled]);
+  }, [can, isForecastEnabled, isReceiptByScheduleEnabled, user]);
 
   // Total functional submenus accessible by user
   const totalAccessibleItems = useMemo(() => {

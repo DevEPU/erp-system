@@ -50,13 +50,19 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
   const [menus, setMenus] = useState<Menu[]>(STATIC_MENUS);
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
 
+  const isAdmin = user?.email === "admin@epu.com" || user?.role_names?.includes("Admin") || (user as any)?.role?.name === "Admin";
+
   // Filtered Menus strictly based on Role Permissions
-  const visibleMenus = filterAccessibleMenus(
+  let visibleMenus = filterAccessibleMenus(
     menus,
     can,
     isForecastEnabled,
     isReceiptByScheduleEnabled
   );
+
+  if (isAdmin) {
+    visibleMenus = visibleMenus.filter((m) => m.name !== "Daftar Laporan");
+  }
 
   // Effect: Auto Expand Menu if child is active (accordion — only one open)
   useEffect(() => {
