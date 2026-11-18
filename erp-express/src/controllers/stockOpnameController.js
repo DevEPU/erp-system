@@ -185,16 +185,33 @@ exports.loadSystemStockForOpname = async (req, res) => {
             }
         } else {
             // No warehouse selected (All Warehouses):
-            // Return all products, using product_quantity from products as total system qty
+            // Check warehouse_stocks sum per product as well as products.product_quantity
+            const [allWs] = await db.query(`
+                SELECT product_id, SUM(qty_stock) as total_stock 
+                FROM warehouse_stocks 
+                GROUP BY product_id
+            `);
+            const wsMap = new Map();
+            allWs.forEach(row => wsMap.set(String(row.product_id), Number(row.total_stock)));
+
+            const [allSuppliers] = await db.query(`SELECT id, supplier_name FROM suppliers`);
+            const suppMap = new Map();
+            allSuppliers.forEach(s => suppMap.set(String(s.id), s.supplier_name));
+
             for (const p of products) {
-                const currentStock = Number(p.product_quantity || 0);
+                const wsStock = wsMap.get(String(p.id));
+                const currentStock = wsStock !== undefined && wsStock > 0 ? wsStock : Number(p.product_quantity || 0);
+                const suppliersForProduct = productSuppliers.filter(ps => String(ps.product_id) === String(p.id));
+                const suppName = (p.supplier_id && suppMap.get(String(p.supplier_id))) || (suppliersForProduct[0] ? suppliersForProduct[0].supplier_name : null);
+                const suppId = p.supplier_id || (suppliersForProduct[0] ? suppliersForProduct[0].supplier_id : null);
+
                 items.push({
                     product_id: p.id,
-                    product_name: p.product_name,
-                    product_code: p.product_code,
+                    product_name: suppName ? `${p.product_name} (${suppName})` : p.product_name,
+                    product_code: p.part_number || p.product_code,
                     product_unit: p.product_unit,
-                    supplier_id: null,
-                    supplier_name: null,
+                    supplier_id: suppId,
+                    supplier_name: suppName,
                     qty_system: currentStock,
                     qty_physical: currentStock
                 });

@@ -129,7 +129,10 @@ export default function StockOpnamePage() {
     }
   };
 
-  const viewOpnameDetails = async (id: number) => {
+  const viewOpnameDetails = async (id: number, initialSto?: any) => {
+    if (initialSto) {
+      setSelectedOpname({ ...initialSto, details: initialSto.details || [] });
+    }
     setDetailLoading(true);
     try {
       const res = await api.express.get(`/stock-opnames/${id}`);
@@ -884,7 +887,7 @@ export default function StockOpnamePage() {
                   ) : opnames.map((sto, idx) => (
                     <tr 
                       key={sto.id} 
-                      onClick={() => viewOpnameDetails(sto.id)}
+                      onClick={() => viewOpnameDetails(sto.id, sto)}
                       className="cursor-pointer transition-colors group hover:bg-purple-50/30"
                     >
                       <td className="px-6 py-4 text-xs font-bold text-gray-400 text-center w-12">
@@ -926,6 +929,36 @@ export default function StockOpnamePage() {
                       </td>
                       <td className="px-6 py-4 text-center">
                         <div className="flex items-center justify-center gap-2" onClick={(e) => e.stopPropagation()}>
+                          {/* Direct View Transaction button */}
+                          <button
+                            onClick={() => viewOpnameDetails(sto.id, sto)}
+                            title="Tampilkan Detail Transaksi & Data"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-purple-50 hover:bg-purple-600 text-purple-700 hover:text-white rounded-xl text-xs font-bold transition-all border border-purple-200/60 shadow-sm active:scale-95"
+                          >
+                            <FileText size={13} />
+                            <span>Detail</span>
+                          </button>
+
+                          {/* Edit button: Active for Draft, Disabled for Reconciled */}
+                          {sto.status === "Draft" ? (
+                            <button
+                              onClick={(e) => handleOpenEditModal(sto, e)}
+                              title="Edit Draft Opname"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-500 text-amber-700 hover:text-white rounded-xl text-xs font-bold transition-all border border-amber-200/60 shadow-sm active:scale-95"
+                            >
+                              <Edit2 size={13} />
+                              <span>Edit Draft</span>
+                            </button>
+                          ) : (
+                            <span
+                              title="Sudah Rekonsiliasi - Tidak dapat diedit kembali"
+                              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 text-gray-400 rounded-xl text-xs font-bold cursor-not-allowed border border-gray-200/60"
+                            >
+                              <Lock size={12} />
+                              <span>Terkunci</span>
+                            </span>
+                          )}
+
                           <PrintButton
                             moduleKey="stok_opname"
                             moduleName="Stok Opname"
@@ -939,33 +972,6 @@ export default function StockOpnamePage() {
                               items: sto.items || [],
                             }}
                           />
-
-                          {/* Edit button: Active for Draft, Disabled for Reconciled */}
-                          {sto.status === "Draft" ? (
-                            <button
-                              onClick={(e) => handleOpenEditModal(sto, e)}
-                              title="Edit Draft Opname"
-                              className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-50 text-amber-600 hover:bg-amber-500 hover:text-white transition-all shadow-sm"
-                            >
-                              <Edit2 size={13} />
-                            </button>
-                          ) : (
-                            <span
-                              title="Sudah Rekonsiliasi - Tidak dapat diedit kembali"
-                              className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-300 cursor-not-allowed"
-                            >
-                              <Lock size={13} />
-                            </span>
-                          )}
-
-                          {/* Direct View Transaction button */}
-                          <button
-                            onClick={() => viewOpnameDetails(sto.id)}
-                            title="Tampilkan Detail Transaksi"
-                            className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-50 text-purple-600 hover:bg-purple-600 hover:text-white transition-all shadow-sm"
-                          >
-                            <ArrowRight size={14} />
-                          </button>
                         </div>
                       </td>
                     </tr>
