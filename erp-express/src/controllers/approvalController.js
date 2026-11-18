@@ -256,8 +256,14 @@ exports.getPendingCounts = async (req, res) => {
     try {
         const userId = req.user?.id || req.query.user_id;
         
-        if (!userId) {
-            return res.json({});
+        if (!userId || userId == 9 || req.user?.email === 'admin@epu.com') {
+            return res.json({
+                'Master Budget': 0,
+                'Target Sales': 0,
+                'Product Request': 0,
+                'Over Budget': 0,
+                'Total': 0
+            });
         }
 
         const query = `
@@ -311,7 +317,10 @@ exports.getPendingCounts = async (req, res) => {
 
 exports.getNotifications = async (req, res) => {
     try {
-        const userId = req.user?.id || req.user?.userId || req.query.user_id || 1;
+        const userId = req.user?.id || req.user?.userId || req.query.user_id;
+        if (!userId || userId == 9 || req.user?.email === 'admin@epu.com') {
+            return res.json({ notifications: [], counts: { total: 0, persetujuan: 0, pengajuan: 0 }, approval_types: [] });
+        }
         const notifications = [];
 
         // 0. Fetch all active Approval Rules & Types dynamically from database

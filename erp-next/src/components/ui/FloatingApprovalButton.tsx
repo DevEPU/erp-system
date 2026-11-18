@@ -184,6 +184,11 @@ export default function FloatingApprovalButton() {
     );
   };
 
+  const isAdmin = user?.email === "admin@epu.com" || user?.role_names?.includes("Admin") || (user as any)?.role?.name === "Admin";
+  if (!mounted || !user || isAdmin || !can("access_approval_requests")) {
+    return null;
+  }
+
   return (
     <div className="fixed top-3 right-4 z-50 print:hidden">
       <div className="flex flex-col items-end">

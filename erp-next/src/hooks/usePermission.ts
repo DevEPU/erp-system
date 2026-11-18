@@ -57,6 +57,20 @@ export default function usePermission() {
         // Super Admin has all permissions
         if (user.role_names?.includes("Super Admin")) return true;
 
+        // Admin role or admin@epu.com explicitly has NO access to approval requests
+        if (user.role_names?.includes("Admin") || user.email === "admin@epu.com") {
+            if (
+                permissionName === "access_approval_requests" ||
+                permissionName === "create_approval_requests" ||
+                permissionName === "approve_approval_requests" ||
+                permissionName === "reject_approval_requests" ||
+                permissionName === "show_approval_requests" ||
+                permissionName.includes("approval_request")
+            ) {
+                return false;
+            }
+        }
+
         // Admin role or admin@epu.com has full access to all manufacturing execution and QC menus
         if (user.role_names?.includes("Admin") || user.email === "admin@epu.com") {
             const adminGrantedPerms = [

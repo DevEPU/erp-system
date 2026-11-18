@@ -296,7 +296,7 @@ export default function ApprovalRequestPage() {
   ];
 
   return (
-    <Protect permission="access_prices_actual">
+    <Protect permission="access_approval_requests">
       <div className="p-6 pt-12 min-h-screen animate-in fade-in duration-500 space-y-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
