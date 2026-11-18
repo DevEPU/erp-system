@@ -63,7 +63,14 @@ export default function DashboardLayout({
     // Check Route Permission for current path
     const requiredPermission = getRequiredPermissionForPath(pathname);
     const isSuperAdmin = user?.role_names?.includes("Super Admin");
-    const hasRouteAccess = !requiredPermission || isSuperAdmin || can(requiredPermission);
+    let hasRouteAccess = !requiredPermission || isSuperAdmin;
+    if (!hasRouteAccess && requiredPermission) {
+        if (Array.isArray(requiredPermission)) {
+            hasRouteAccess = requiredPermission.some((p) => can(p));
+        } else {
+            hasRouteAccess = can(requiredPermission);
+        }
+    }
 
     return (
         <div className="flex min-h-screen bg-gray-50">
@@ -105,10 +112,14 @@ export default function DashboardLayout({
                                         Hak Akses yang Dibutuhkan:
                                     </p>
                                     <p className="text-xs font-semibold text-gray-800">
-                                        {getPermissionMapping(requiredPermission).label}
+                                        {Array.isArray(requiredPermission)
+                                            ? requiredPermission.map((p) => getPermissionMapping(p)?.label || p).join(" ATAU ")
+                                            : (getPermissionMapping(requiredPermission)?.label || requiredPermission)}
                                     </p>
                                     <p className="text-[11px] font-mono text-gray-400 mt-0.5">
-                                        {requiredPermission}
+                                        {Array.isArray(requiredPermission)
+                                            ? requiredPermission.join(", ")
+                                            : requiredPermission}
                                     </p>
                                 </div>
                             )}

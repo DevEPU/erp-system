@@ -1,865 +1,487 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import IconRenderer from "@/components/ui/IconRenderer";
-import SearchableSelect from "@/components/ui/SearchableSelect";
-import {
-  LayoutGrid,
-  DollarSign,
-  ShoppingCart,
-  Wallet,
-  Hourglass,
-  Package,
-  ArrowRight,
-} from "lucide-react";
-import LoadingState from "@/components/ui/LoadingState";
 import usePermission from "@/hooks/usePermission";
+import { useForecastEnabled, useReceiptByScheduleEnabled } from "@/lib/config";
 import { STATIC_MENUS } from "@/lib/constants";
-import api from "@/lib/api";
-import PurchaseDetailModal from "@/components/budget/PurchaseDetailModal";
+import { filterAccessibleMenus } from "@/lib/menuUtils";
+import { Menu } from "@/types/menu";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  ComposedChart,
-  Line,
-  AreaChart,
-  Area,
+  Search,
+  ArrowRight,
+  ShieldCheck,
+  Sparkles,
+  Layers,
+  CheckCircle2,
+  ExternalLink,
+  ChevronRight,
   PieChart,
-  Pie,
-  Cell,
-} from "recharts";
+} from "lucide-react";
 
-const COLORS = [
-  "#ffc658",
-  "#0088FE",
-  "#00C49F",
-  "#FFBB28",
-  "#FF8042",
-  "#C41E3A",
-  "#702963",
-];
-
-// Helper for currency formatting
-const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat("id-ID", {
-    style: "currency",
-    currency: "IDR",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value);
-};
-
-// Helper for compact number
-const formatCompactNumber = (number: number) => {
-  if (number >= 1000000000) {
-    return (number / 1000000000).toFixed(1).replace(".", ",") + "M";
-  } else if (number >= 1000000) {
-    return (number / 1000000).toFixed(0) + "jt";
+// Theme configuration per module for beautiful unique accents
+const MODULE_THEMES: Record<
+  string,
+  {
+    gradient: string;
+    borderHover: string;
+    badgeBg: string;
+    badgeText: string;
+    iconBg: string;
+    iconColor: string;
+    tagBg: string;
   }
-  return number.toString();
+> = {
+  "Supplier & Pembelian": {
+    gradient: "from-emerald-500 to-teal-600",
+    borderHover: "hover:border-emerald-500/40",
+    badgeBg: "bg-emerald-50 border-emerald-200",
+    badgeText: "text-emerald-700",
+    iconBg: "bg-emerald-50 text-emerald-600 border-emerald-100",
+    iconColor: "text-emerald-600",
+    tagBg: "bg-emerald-500/10 text-emerald-700",
+  },
+  "Customer & Penjualan": {
+    gradient: "from-blue-500 to-indigo-600",
+    borderHover: "hover:border-blue-500/40",
+    badgeBg: "bg-blue-50 border-blue-200",
+    badgeText: "text-blue-700",
+    iconBg: "bg-blue-50 text-blue-600 border-blue-100",
+    iconColor: "text-blue-600",
+    tagBg: "bg-blue-500/10 text-blue-700",
+  },
+  "Persediaan Barang": {
+    gradient: "from-amber-500 to-orange-600",
+    borderHover: "hover:border-amber-500/40",
+    badgeBg: "bg-amber-50 border-amber-200",
+    badgeText: "text-amber-700",
+    iconBg: "bg-amber-50 text-amber-600 border-amber-100",
+    iconColor: "text-amber-600",
+    tagBg: "bg-amber-500/10 text-amber-700",
+  },
+  "Manufacturing": {
+    gradient: "from-purple-500 to-violet-600",
+    borderHover: "hover:border-purple-500/40",
+    badgeBg: "bg-purple-50 border-purple-200",
+    badgeText: "text-purple-700",
+    iconBg: "bg-purple-50 text-purple-600 border-purple-100",
+    iconColor: "text-purple-600",
+    tagBg: "bg-purple-500/10 text-purple-700",
+  },
+  "Kas/Bank": {
+    gradient: "from-teal-500 to-cyan-600",
+    borderHover: "hover:border-teal-500/40",
+    badgeBg: "bg-teal-50 border-teal-200",
+    badgeText: "text-teal-700",
+    iconBg: "bg-teal-50 text-teal-600 border-teal-100",
+    iconColor: "text-teal-600",
+    tagBg: "bg-teal-500/10 text-teal-700",
+  },
+  "General Ledger": {
+    gradient: "from-indigo-500 to-slate-700",
+    borderHover: "hover:border-indigo-500/40",
+    badgeBg: "bg-indigo-50 border-indigo-200",
+    badgeText: "text-indigo-700",
+    iconBg: "bg-indigo-50 text-indigo-600 border-indigo-100",
+    iconColor: "text-indigo-600",
+    tagBg: "bg-indigo-500/10 text-indigo-700",
+  },
+  "Pengaturan": {
+    gradient: "from-slate-600 to-gray-800",
+    borderHover: "hover:border-slate-500/40",
+    badgeBg: "bg-slate-50 border-slate-200",
+    badgeText: "text-slate-700",
+    iconBg: "bg-slate-50 text-slate-600 border-slate-100",
+    iconColor: "text-slate-600",
+    tagBg: "bg-slate-500/10 text-slate-700",
+  },
+  "User Security": {
+    gradient: "from-rose-500 to-red-600",
+    borderHover: "hover:border-rose-500/40",
+    badgeBg: "bg-rose-50 border-rose-200",
+    badgeText: "text-rose-700",
+    iconBg: "bg-rose-50 text-rose-600 border-rose-100",
+    iconColor: "text-rose-600",
+    tagBg: "bg-rose-500/10 text-rose-700",
+  },
+  "Daftar Laporan": {
+    gradient: "from-cyan-600 to-blue-700",
+    borderHover: "hover:border-cyan-500/40",
+    badgeBg: "bg-cyan-50 border-cyan-200",
+    badgeText: "text-cyan-700",
+    iconBg: "bg-cyan-50 text-cyan-600 border-cyan-100",
+    iconColor: "text-cyan-600",
+    tagBg: "bg-cyan-500/10 text-cyan-700",
+  },
+  "Lain-lain": {
+    gradient: "from-stone-500 to-zinc-600",
+    borderHover: "hover:border-stone-500/40",
+    badgeBg: "bg-stone-50 border-stone-200",
+    badgeText: "text-stone-700",
+    iconBg: "bg-stone-50 text-stone-600 border-stone-100",
+    iconColor: "text-stone-600",
+    tagBg: "bg-stone-500/10 text-stone-700",
+  },
+  "Profil Perusahaan": {
+    gradient: "from-emerald-600 to-green-700",
+    borderHover: "hover:border-emerald-500/40",
+    badgeBg: "bg-emerald-50 border-emerald-200",
+    badgeText: "text-emerald-700",
+    iconBg: "bg-emerald-50 text-emerald-600 border-emerald-100",
+    iconColor: "text-emerald-600",
+    tagBg: "bg-emerald-500/10 text-emerald-700",
+  },
 };
 
-export default function Dashboard() {
+const DEFAULT_THEME = {
+  gradient: "from-emerald-500 to-teal-600",
+  borderHover: "hover:border-emerald-500/40",
+  badgeBg: "bg-emerald-50 border-emerald-200",
+  badgeText: "text-emerald-700",
+  iconBg: "bg-emerald-50 text-emerald-600 border-emerald-100",
+  iconColor: "text-emerald-600",
+  tagBg: "bg-emerald-500/10 text-emerald-700",
+};
+
+export default function MainDashboardPortal() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>(null);
-  const { hasRole, can } = usePermission();
+  const { can, user, loading } = usePermission();
+  const isForecastEnabled = useForecastEnabled();
+  const isReceiptByScheduleEnabled = useReceiptByScheduleEnabled();
 
-  const canViewRemainingBudget =
-    hasRole("Super Admin") || can("remaining_budget");
-  const canViewAllDepartments =
-    hasRole("Super Admin") || can("all_departments");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Filters
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const [year, setYear] = useState(new Date().getFullYear());
+  // Filter modules based on permission, exclude "Dashboard" itself
+  const accessibleModules = useMemo(() => {
+    const rawFiltered = filterAccessibleMenus(
+      STATIC_MENUS,
+      can,
+      isForecastEnabled,
+      isReceiptByScheduleEnabled
+    );
 
-  // Data States
-  const [stats, setStats] = useState({
-    approved_budget: 0,
-    purchases: 0,
-    remaining_budget: 0,
-    pending_purchases: 0,
-    total_assets: 0,
-  });
+    // Remove "Dashboard" leaf menu from the cards container list
+    return rawFiltered.filter((m) => m.name !== "Dashboard");
+  }, [can, isForecastEnabled, isReceiptByScheduleEnabled]);
 
-  const [targetVsPurchaseData, setTargetVsPurchaseData] = useState<any[]>([]);
-  const [budgetPurchasesData, setBudgetPurchasesData] = useState<any[]>([]);
-  const [budgetDepartmentData, setBudgetDepartmentData] = useState<any[]>([]);
-  const [budgetCategoryData, setBudgetCategoryData] = useState<any[]>([]);
-  const [pendingPRs, setPendingPRs] = useState<any[]>([]);
-  const [departments, setDepartments] = useState<any[]>([]);
-  const [catDeptFilter, setCatDeptFilter] = useState<string>("all");
-  const [pendingDeptFilter, setPendingDeptFilter] = useState<string>("all");
-  const [dailyDeptFilter, setDailyDeptFilter] = useState<string>("all");
-  const [selectedPR, setSelectedPR] = useState<any | null>(null);
-  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [chartVersion, setChartVersion] = useState<"others" | "mandatory">(
-    "others",
-  );
-
-  useEffect(() => {
-    const userStr = localStorage.getItem("user");
-    if (!userStr) {
-      router.push("/login");
-      return;
-    }
-    try {
-      setUser(JSON.parse(userStr));
-    } catch {
-      router.push("/login");
-    }
-  }, [router]);
-
-  // Initial Filter Setup
-  useEffect(() => {
-    if (user && !canViewAllDepartments) {
-      const deptId = String(user.department_id);
-      setCatDeptFilter(deptId);
-      setPendingDeptFilter(deptId);
-      setDailyDeptFilter(deptId);
-    }
-  }, [user, canViewAllDepartments]);
-
-  // Fetch Departments for Filters
-  useEffect(() => {
-    const fetchDepts = async () => {
-      try {
-        const res = await api.get("/budgeting/form-data");
-        setDepartments(res.data.departments || []);
-      } catch (error) {
-        console.error("Failed to fetch departments", error);
+  // Total functional submenus accessible by user
+  const totalAccessibleItems = useMemo(() => {
+    let count = 0;
+    accessibleModules.forEach((m) => {
+      if (m.submenus && m.submenus.length > 0) {
+        count += m.submenus.filter((s) => !s.is_divider).length;
+      } else {
+        count += 1;
       }
-    };
-    if (user && canViewAllDepartments) {
-      fetchDepts();
+    });
+    return count;
+  }, [accessibleModules]);
+
+  // Search filter across module names and submenu names
+  const filteredModules = useMemo(() => {
+    if (!searchQuery.trim()) return accessibleModules;
+
+    const query = searchQuery.toLowerCase().trim();
+    return accessibleModules
+      .map((mod) => {
+        const moduleNameMatches = mod.name.toLowerCase().includes(query);
+        const matchedSubmenus = mod.submenus?.filter((sub) => {
+          if (sub.is_divider) return false;
+          return sub.name.toLowerCase().includes(query);
+        });
+
+        if (moduleNameMatches) {
+          return mod;
+        }
+
+        if (matchedSubmenus && matchedSubmenus.length > 0) {
+          return {
+            ...mod,
+            submenus: matchedSubmenus,
+          };
+        }
+
+        return null;
+      })
+      .filter(Boolean) as Menu[];
+  }, [accessibleModules, searchQuery]);
+
+  const handleNavigate = (path: string) => {
+    if (path && path !== "#") {
+      router.push(path);
     }
-  }, [user, canViewAllDepartments]);
-
-  // Fetch Dashboard Data
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        // 1. Stats
-        const statsRes = await api.express.get("/home/stats", { month, year });
-        setStats(statsRes.data);
-
-        // 2. Target vs Purchase Chart
-        const tvpRes = await api.express.get("/home/chart/target-vs-purchase", { year });
-        if (tvpRes.data) {
-          const data = tvpRes.data;
-          // Transform for Recharts
-          const formatted = data.labels.map((label: string, i: number) => ({
-            name: label,
-            totalTarget: Number(data.targetAmounts[i] || 0),
-            limit065: Number(data.limit065s[i] || 0),
-            mandatory: Number(data.mandatoryPurchases[i] || 0),
-            others: Number(data.othersPurchases[i] || 0),
-            asset: Number(data.assetPurchases[i] || 0),
-          }));
-          setTargetVsPurchaseData(formatted);
-        }
-
-        // 3. Daily Trend Chart
-        const dailyParams: any = { month, year };
-        if (dailyDeptFilter !== "all") {
-          dailyParams.department_id = dailyDeptFilter;
-        }
-        const dailyRes = await api.express.get("/home/chart/budget-purchases", dailyParams);
-        if (dailyRes.data) {
-          const data = dailyRes.data;
-          const formatted = data.labels.map((label: string, i: number) => ({
-            day: label,
-            budget: Number(data.approvedBudgets[i] || 0),
-            nonAssetPurchase: Number(data.approvedNonAssetPurchases?.[i] ?? data.approvedPurchases?.[i] ?? 0),
-            assetPurchase: Number(data.approvedAssetPurchases?.[i] ?? 0),
-          }));
-          setBudgetPurchasesData(formatted);
-        }
-
-        // 4. Department Share Chart
-        const deptRes = await api.express.get("/home/chart/budget-department", { month, year });
-        if (deptRes.data) {
-          const data = deptRes.data;
-          const formatted = data.labels.map((label: string, i: number) => ({
-            name: label,
-            value: Number(data.data[i] || 0),
-          }));
-          setBudgetDepartmentData(formatted);
-        }
-
-        // 5. Budget by Category Chart
-        const catParams: any = { month, year };
-        if (catDeptFilter !== "all") {
-          catParams.department_id = catDeptFilter;
-        }
-        const catRes = await api.express.get("/home/chart/budget-category", catParams);
-        if (catRes.data) {
-          const data = catRes.data;
-          const formatted = data.labels.map((label: string, i: number) => ({
-            name: label,
-            value: Number(data.data[i] || 0),
-          }));
-          setBudgetCategoryData(formatted);
-        }
-
-        // 6. Pending PR List
-        const pendParams: any = {};
-        if (pendingDeptFilter !== "all") {
-          pendParams.department_id = pendingDeptFilter;
-        }
-        const pendRes = await api.express.get("/home/pending-purchases", pendParams);
-        setPendingPRs(pendRes.data);
-      } catch (error) {
-        console.error("Failed to fetch dashboard data", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (user) {
-      fetchData();
-    }
-  }, [user, month, year, catDeptFilter, pendingDeptFilter, dailyDeptFilter]);
-
-  const handleCardClick = (path: string) => {
-    router.push(path);
   };
 
-  if (!user && loading) return <LoadingState message="Memuat dashboard..." />;
+  if (loading) {
+    return (
+      <div className="min-h-[80vh] flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+          <p className="text-sm font-semibold text-gray-500">Memuat akses portal...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-[85vh] flex flex-col p-6 space-y-8 animate-in fade-in duration-500 bg-gray-50">
-      {/* Header & Filter */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-800">
-            Dashboard Overview
-          </h1>
-          <p className="text-gray-500">
-            Halo,{" "}
-            <span className="font-semibold text-emerald-600">
-              {user?.name || user?.fullname || "User"}
-            </span>{" "}
-            👋. Berikut ringkasan aktivitas budgeting Anda.
-            <br />
-          </p>
-        </div>
+    <div className="min-h-[85vh] flex flex-col p-4 md:p-8 space-y-8 animate-in fade-in duration-500 bg-[#f8fafc]">
+      {/* ── BANNER HERO & USER GREETING ── */}
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-700 via-emerald-600 to-teal-700 text-white p-6 md:p-8 shadow-xl shadow-emerald-950/10">
+        <div className="absolute top-0 right-0 -mt-10 -mr-10 w-72 h-72 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div className="absolute bottom-0 left-1/3 -mb-10 w-60 h-60 bg-teal-400/10 rounded-full blur-2xl pointer-events-none"></div>
 
-        <div className="flex gap-2">
-          <div className="w-40">
-            <SearchableSelect
-              label=""
-              placeholder="Bulan"
-              value={month}
-              onChange={(val) => setMonth(parseInt(val.toString()))}
-              options={Array.from({ length: 12 }, (_, i) => i + 1).map((m) => ({
-                value: m,
-                label: new Date(0, m - 1).toLocaleString("id-ID", {
-                  month: "long",
-                }),
-              }))}
-            />
-          </div>
-          <div className="w-32">
-            <SearchableSelect
-              label=""
-              placeholder="Tahun"
-              value={year}
-              onChange={(val) => setYear(parseInt(val.toString()))}
-              options={Array.from(
-                { length: 4 },
-                (_, i) => new Date().getFullYear() - 3 + i,
-              ).map((y) => ({
-                value: y,
-                label: y.toString(),
-              }))}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* 1. STATS CARDS */}
-      <div
-        className={`grid grid-cols-1 md:grid-cols-2 ${canViewRemainingBudget ? "xl:grid-cols-5" : "xl:grid-cols-4"} gap-6`}
-      >
-        <StatsCard
-          title="Approved Budget"
-          value={formatCurrency(stats.approved_budget)}
-          icon="DollarSign"
-          gradient="from-emerald-400 to-emerald-600"
-        />
-        <StatsCard
-          title="Total Purchase"
-          value={formatCurrency(stats.purchases)}
-          icon="ShoppingCart"
-          gradient="from-amber-400 to-amber-600"
-        />
-        <StatsCard
-          title="Total Asset"
-          value={formatCurrency(stats.total_assets)}
-          icon="Package"
-          gradient="from-blue-400 to-blue-600"
-        />
-        {canViewRemainingBudget && (
-          <StatsCard
-            title="Remaining Budget"
-            value={formatCurrency(stats.remaining_budget)}
-            icon="Wallet"
-            gradient="from-cyan-400 to-cyan-600"
-          />
-        )}
-        <StatsCard
-          title="Pending Approval"
-          value={formatCurrency(stats.pending_purchases)}
-          icon="Hourglass"
-          gradient="from-rose-400 to-rose-600"
-        />
-      </div>
-
-      {/* 2. CHARTS SECTION */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Chart 1: Target vs Purchase (Full Width on mobile, half on large) */}
-        <div className="lg:col-span-2 bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-          <div className="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <h3 className="font-bold text-gray-800 flex items-center gap-2">
-              <LayoutGrid size={18} className="text-emerald-600" />
-              Monitoring Purchase vs Target Sales ({year})
-            </h3>
-
-            <div className="flex bg-gray-100 p-1 rounded-xl">
-              <button
-                onClick={() => setChartVersion("others")}
-                className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                  chartVersion === "others"
-                    ? "bg-white text-emerald-600 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                Pembelian Others
-              </button>
-              <button
-                onClick={() => setChartVersion("mandatory")}
-                className={`px-4 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                  chartVersion === "mandatory"
-                    ? "bg-white text-emerald-600 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                Pembelian Mandatory
-              </button>
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/15 backdrop-blur-md rounded-full text-xs font-semibold tracking-wide border border-white/20">
+              <Sparkles size={14} className="text-amber-300" />
+              <span>ERP System Portal - PT Eran Plastindo Utama</span>
             </div>
+            <h1 className="text-2xl md:text-3xl font-black tracking-tight text-white">
+              Halo, {user?.name || "Pengguna"}! 👋
+            </h1>
+            <p className="text-sm md:text-base text-emerald-100 font-medium leading-relaxed">
+              Berikut adalah modul dan container menu operasional yang aktif sesuai hak akses peran{" "}
+              <span className="font-bold underline decoration-white/50">
+                [{user?.role_names?.join(", ") || "User"}]
+              </span>
+              . Klik salah satu menu di bawah untuk langsung menuju halaman kerja Anda.
+            </p>
           </div>
-          <div className="h-[350px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart
-                data={targetVsPurchaseData}
-                margin={{
-                  top: 20,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  vertical={false}
-                  stroke="#f0f0f0"
-                />
-                <XAxis
-                  dataKey="name"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: "#6b7280", fontSize: 12 }}
-                  dy={10}
-                />
-                <YAxis
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: "#6b7280", fontSize: 12 }}
-                  tickFormatter={(val) => formatCompactNumber(val)}
-                />
-                <Tooltip
-                  formatter={(value: any) => formatCurrency(Number(value))}
-                  contentStyle={{
-                    borderRadius: "12px",
-                    border: "none",
-                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                  }}
-                />
-                <Legend />
-                {chartVersion === "others" ? (
-                  <>
-                    <Bar
-                      dataKey="others"
-                      name="Pembelian Other"
-                      fill="#3b82f6"
-                      radius={[4, 4, 0, 0]}
-                      barSize={20}
-                    />
-                    <Bar
-                      dataKey="asset"
-                      name="Pembelian Asset"
-                      fill="#10b981"
-                      radius={[4, 4, 0, 0]}
-                      barSize={20}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="limit065"
-                      name="Batas Aman (0.65%)"
-                      stroke="#ef4444"
-                      strokeWidth={2}
-                      dot={false}
-                      strokeDasharray="5 5"
-                    />
-                  </>
-                ) : (
-                  <>
-                    <Bar
-                      dataKey="mandatory"
-                      name="Pembelian Mandatory"
-                      fill="#8b5cf6"
-                      radius={[4, 4, 0, 0]}
-                      barSize={40}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="totalTarget"
-                      name="Target Sales"
-                      stroke="#f59e0b"
-                      strokeWidth={2}
-                      dot={false}
-                      strokeDasharray="5 5"
-                    />
-                  </>
-                )}
-              </ComposedChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
 
-        {/* Chart 2: Daily Trend */}
-        {canViewRemainingBudget && (
-          <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="font-bold text-gray-800">
-                Budget & Purchases Daily Trend
-              </h3>
-              <div className="w-48">
-                <SearchableSelect
-                  label=""
-                  placeholder="Department"
-                  value={dailyDeptFilter}
-                  onChange={(val) => setDailyDeptFilter(val.toString())}
-                  disabled={!canViewAllDepartments}
-                  options={[
-                    ...(canViewAllDepartments
-                      ? [{ value: "all", label: "All Dept." }]
-                      : []),
-                    ...(canViewAllDepartments
-                      ? departments.map((d) => ({
-                          value: d.id,
-                          label: d.department_name,
-                        }))
-                      : [
-                          {
-                            value: user?.department_id,
-                            label:
-                              user?.department?.department_name ||
-                              "Departemen Anda",
-                          },
-                        ]),
-                  ]}
-                />
+          {/* Quick Metrics & Budgeting Link */}
+          <div className="flex flex-wrap md:flex-nowrap items-center gap-3 shrink-0">
+            {can("access_budget") && (
+              <button
+                onClick={() => router.push("/budgeting/dashboard")}
+                className="flex items-center gap-2.5 px-4 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-2xl text-xs font-bold transition-all shadow-md active:scale-95"
+              >
+                <PieChart size={16} className="text-amber-300" />
+                <span>Dashboard Budgeting</span>
+                <ChevronRight size={14} className="opacity-70" />
+              </button>
+            )}
+
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-3 px-4 flex items-center gap-4 shadow-inner">
+              <div className="text-center">
+                <p className="text-[10px] uppercase tracking-wider text-emerald-200 font-bold">
+                  Modul Aktif
+                </p>
+                <p className="text-xl font-black text-white">{accessibleModules.length}</p>
+              </div>
+              <div className="h-7 w-px bg-white/20"></div>
+              <div className="text-center">
+                <p className="text-[10px] uppercase tracking-wider text-emerald-200 font-bold">
+                  Menu Tersedia
+                </p>
+                <p className="text-xl font-black text-white">{totalAccessibleItems}</p>
               </div>
             </div>
-              <div className="h-[300px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={budgetPurchasesData}>
-                  <defs>
-                    <linearGradient id="colorBudget" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.15} />
-                      <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="colorPurchase" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.15} />
-                      <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
-                    </linearGradient>
-                    <linearGradient id="colorAsset" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.15} />
-                      <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                  <XAxis dataKey="day" hide />
-                  <YAxis
-                    tickFormatter={(val) => formatCompactNumber(val)}
-                    axisLine={false}
-                    tickLine={false}
-                    tick={{ fontSize: 12, fill: "#9ca3af" }}
-                  />
-                  <Tooltip
-                    formatter={(value: any) => formatCurrency(Number(value))}
-                    contentStyle={{
-                      borderRadius: "12px",
-                      border: "none",
-                      boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
-                    }}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="budget"
-                    name="Sisa Budget"
-                    stroke="#10b981"
-                    strokeWidth={2}
-                    fillOpacity={1}
-                    fill="url(#colorBudget)"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="nonAssetPurchase"
-                    name="Pembelian Mandatory & Others"
-                    stroke="#f59e0b"
-                    strokeWidth={2}
-                    fillOpacity={1}
-                    fill="url(#colorPurchase)"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="assetPurchase"
-                    name="Pembelian Asset"
-                    stroke="#3b82f6"
-                    strokeWidth={2}
-                    fillOpacity={1}
-                    fill="url(#colorAsset)"
-                  />
-                  <Legend />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        )}
-
-        {/* Chart 3: Department Share */}
-        {canViewAllDepartments && (
-          <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-            <h3 className="font-bold text-gray-800 mb-6">
-              Budget Share by Department
-            </h3>
-            <div className="h-[300px] w-full flex justify-center">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={budgetDepartmentData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {budgetDepartmentData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    formatter={(value: any) => formatCurrency(Number(value))}
-                  />
-                  <Legend
-                    layout="vertical"
-                    align="right"
-                    verticalAlign="middle"
-                    iconType="circle"
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-        )}
-
-        {/* Chart 4: Category Share */}
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="font-bold text-gray-800">
-              Budget Departement Share by Category
-            </h3>
-            <div className="w-48">
-              <SearchableSelect
-                label=""
-                placeholder="Department"
-                value={catDeptFilter}
-                onChange={(val) => setCatDeptFilter(val.toString())}
-                disabled={!canViewAllDepartments}
-                options={[
-                  ...(canViewAllDepartments
-                    ? [{ value: "all", label: "All Dept." }]
-                    : []),
-                  ...(canViewAllDepartments
-                    ? departments.map((d) => ({
-                        value: d.id,
-                        label: d.department_name,
-                      }))
-                    : [
-                        {
-                          value: user?.department_id,
-                          label:
-                            user?.department?.department_name ||
-                            "Departemen Anda",
-                        },
-                      ]),
-                ]}
-              />
-            </div>
-          </div>
-          <div className="h-[300px] w-full flex justify-center">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={budgetCategoryData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={50}
-                  outerRadius={80}
-                  paddingAngle={5}
-                  dataKey="value"
-                  label={({ name, percent }) =>
-                    `${name} ${((percent || 0) * 100).toFixed(0)}%`
-                  }
-                >
-                  {budgetCategoryData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value: any) => formatCurrency(Number(value))}
-                />
-                <Legend
-                  layout="horizontal"
-                  align="center"
-                  verticalAlign="bottom"
-                  iconType="circle"
-                />
-              </PieChart>
-            </ResponsiveContainer>
           </div>
         </div>
 
-        {/* 3. PENDING PR LIST */}
-        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="font-bold text-gray-800 flex items-center gap-2">
-              <ShoppingCart size={18} className="text-emerald-600" />
-              List Pending Purchase Request
-            </h3>
-            <div className="w-48">
-              <SearchableSelect
-                label=""
-                placeholder="Department"
-                value={pendingDeptFilter}
-                onChange={(val) => setPendingDeptFilter(val.toString())}
-                disabled={!canViewAllDepartments}
-                options={[
-                  ...(canViewAllDepartments
-                    ? [{ value: "all", label: "All Dept." }]
-                    : []),
-                  ...(canViewAllDepartments
-                    ? departments.map((d) => ({
-                        value: d.id,
-                        label: d.department_name,
-                      }))
-                    : [
-                        {
-                          value: user?.department_id,
-                          label:
-                            user?.department?.department_name ||
-                            "Departemen Anda",
-                        },
-                      ]),
-                ]}
-              />
-            </div>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-gray-50 text-gray-500 uppercase text-xs font-bold">
-                <tr>
-                  <th className="px-4 py-3">Reference</th>
-                  <th className="px-4 py-3">Dept</th>
-                  <th className="px-4 py-3">Requester</th>
-                  <th className="px-4 py-3">Date</th>
-                  {/* <th className="px-4 py-3 text-right">
-                                        Total
-                                    </th> */}
-                  {/* <th className="px-4 py-3">Action</th> */}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                {pendingPRs.length > 0 ? (
-                  pendingPRs.slice(0, 5).map((pr) => (
-                    <tr
-                      key={pr.id}
-                      onClick={() => {
-                        setSelectedPR(pr);
-                        setIsDetailModalOpen(true);
-                      }}
-                      className="hover:bg-emerald-50 transition-colors cursor-pointer group"
-                    >
-                      <td className="px-4 py-4 font-semibold text-gray-700">
-                        {pr.reference}
-                      </td>
-                      <td className="px-4 py-4 text-gray-500">
-                        {pr.department?.department_code || "-"}
-                      </td>
-                      <td className="px-4 py-4 text-gray-500">
-                        {pr.user?.name || "-"}
-                      </td>
-                      <td className="px-4 py-4 text-gray-500">
-                        {new Date(pr.date).toLocaleDateString("id-ID")}
-                      </td>
-                      {/* <td className="px-4 py-4 text-right font-bold text-emerald-600">
-                                                {formatCurrency(
-                                                    pr.total_amount,
-                                                )}
-                                            </td> */}
-                      {/* <td className="px-4 py-4">
-                                                <button
-                                                    onClick={() =>
-                                                        router.push(
-                                                            "/budgeting/approval-request",
-                                                        )
-                                                    }
-                                                    className="px-3 py-1 bg-emerald-50 text-emerald-600 rounded-full text-xs font-bold hover:bg-emerald-600 hover:text-white transition-all shadow-sm"
-                                                >
-                                                    Detail
-                                                </button>
-                                            </td> */}
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan={6}
-                      className="px-4 py-8 text-center text-gray-400 italic"
-                    >
-                      Tidak ada purchase request pending
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-          {pendingPRs.length > 5 && (
-            <div className="mt-4 flex justify-center w-full">
+        {/* Search Bar inside Hero */}
+        <div className="mt-6 pt-5 border-t border-white/15 relative z-10 max-w-md">
+          <div className="relative">
+            <Search
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-emerald-200"
+            />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Cari modul atau menu kerja..."
+              className="w-full pl-11 pr-4 py-2.5 bg-white/15 backdrop-blur-md border border-white/25 text-white placeholder-emerald-200/70 text-xs md:text-sm rounded-xl focus:outline-none focus:ring-2 focus:ring-white/40 transition-all"
+            />
+            {searchQuery && (
               <button
-                onClick={() => router.push("/budgeting/purchase-request")}
-                className="w-full px-5 py-2 text-xs font-bold rounded-full 
-                       bg-emerald-50 text-emerald-600 
-                       hover:bg-emerald-600 hover:text-white 
-                       transition-all shadow-sm"
+                onClick={() => setSearchQuery("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-white/70 hover:text-white"
               >
-                Lihat PR lainnya →
+                Clear
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Module Grid (Previously Implemented) */}
-      {/* <div>
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="w-1 h-6 bg-emerald-500 rounded-full"></div>
-                    <h2 className="text-lg font-bold text-gray-800">
-                        Akses Modul Cepat
-                    </h2>
+      {/* ── EMPTY STATE ── */}
+      {filteredModules.length === 0 && (
+        <div className="flex flex-col items-center justify-center p-12 bg-white rounded-3xl border border-gray-100 shadow-sm text-center">
+          <div className="w-16 h-16 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center mb-4">
+            <Search size={32} />
+          </div>
+          <h3 className="text-lg font-bold text-gray-800 mb-1">
+            {searchQuery ? "Menu Tidak Ditemukan" : "Tidak Ada Modul yang Dapat Diakses"}
+          </h3>
+          <p className="text-xs text-gray-500 max-w-md">
+            {searchQuery
+              ? `Tidak ada menu atau modul yang cocok dengan kata kunci "${searchQuery}". Silakan coba kata kunci lain.`
+              : "Akun Anda saat ini belum memiliki hak akses ke modul ERP. Hubungi Administrator sistem untuk mengonfigurasi izin peran Anda."}
+          </p>
+        </div>
+      )}
+
+      {/* ── CONTAINERS MASING-MASING MENU ── */}
+      <div className="space-y-8">
+        {filteredModules.map((module) => {
+          const theme = MODULE_THEMES[module.name] || DEFAULT_THEME;
+          const submenus = module.submenus || [];
+          const functionalSubmenus = submenus.filter((s) => !s.is_divider);
+
+          return (
+            <div
+              key={module.id}
+              className={`bg-white rounded-[2rem] border border-gray-100/90 shadow-sm transition-all duration-300 hover:shadow-xl ${theme.borderHover} overflow-hidden`}
+            >
+              {/* Container Header */}
+              <div className="p-5 md:p-6 border-b border-gray-100/80 bg-gradient-to-r from-gray-50/70 to-white flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div
+                    className={`w-13 h-13 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br ${theme.gradient} flex items-center justify-center shadow-lg shadow-gray-200 text-white shrink-0`}
+                  >
+                    <IconRenderer name={module.icon} size={26} className="text-white" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2.5">
+                      <h2 className="text-lg md:text-xl font-black text-gray-900 tracking-tight">
+                        {module.name}
+                      </h2>
+                      <span
+                        className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${theme.badgeBg} ${theme.badgeText}`}
+                      >
+                        {functionalSubmenus.length} Fitur
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500 font-medium mt-0.5 line-clamp-1">
+                      {module.description || `Kelola modul dan transaksi ${module.name}.`}
+                    </p>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {STATIC_MENUS.map((menu, index) => (
-                        <div
-                            key={menu.id}
-                            onClick={() => handleCardClick(menu.path)}
-                            className="group relative bg-white p-6 rounded-3xl border border-gray-100 cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden"
-                        >
-                            <div className="absolute inset-0 bg-linear-to-br from-transparent to-emerald-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                {/* Direct Action to Module Overview/Dashboard if applicable */}
+                {module.path && module.path !== "#" && (
+                  <button
+                    onClick={() => handleNavigate(module.path)}
+                    className="inline-flex items-center gap-2 self-start md:self-auto px-4 py-2 bg-gray-900 hover:bg-black text-white text-xs font-bold rounded-xl transition-all active:scale-95 shadow-md shadow-gray-900/10 group"
+                  >
+                    <span>Buka Modul</span>
+                    <ArrowRight
+                      size={14}
+                      className="group-hover:translate-x-1 transition-transform"
+                    />
+                  </button>
+                )}
+              </div>
 
-                            <div className="absolute -bottom-6 -right-6 text-gray-50 opacity-60 group-hover:opacity-40 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500">
-                                <IconRenderer name={menu.icon} size={120} />
+              {/* Container Body - Submenus organized by Divider or Grid */}
+              <div className="p-5 md:p-6 bg-white">
+                {submenus.length > 0 ? (
+                  <div className="space-y-5">
+                    {/* Render grouped sections */}
+                    {(() => {
+                      // Group submenus by their preceding divider
+                      const sections: { label: string; items: Menu[] }[] = [];
+                      let currentLabel = "Menu Utama";
+                      let currentItems: Menu[] = [];
+
+                      submenus.forEach((sub) => {
+                        if (sub.is_divider) {
+                          if (currentItems.length > 0) {
+                            sections.push({ label: currentLabel, items: currentItems });
+                          }
+                          currentLabel = sub.divider_label || sub.name;
+                          currentItems = [];
+                        } else {
+                          currentItems.push(sub);
+                        }
+                      });
+
+                      if (currentItems.length > 0) {
+                        sections.push({ label: currentLabel, items: currentItems });
+                      }
+
+                      return sections.map((sec, idx) => (
+                        <div key={idx} className="space-y-3">
+                          {/* Section Title */}
+                          {sections.length > 1 && (
+                            <div className="flex items-center gap-2 pt-1 pb-1">
+                              <span className="text-[10px] font-black uppercase tracking-wider text-gray-400">
+                                {sec.label}
+                              </span>
+                              <div className="flex-1 h-px bg-gray-100"></div>
                             </div>
+                          )}
 
-                            <div className="relative z-10 flex flex-col h-full justify-between min-h-[140px]">
-                                <div>
-                                    <div className="w-12 h-12 mb-4 rounded-xl flex items-center justify-center transition-all shadow-sm duration-300 group-hover:scale-110 group-hover:text-white bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600">
+                          {/* Submenu Item Cards Grid */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                            {sec.items.map((sub) => {
+                              const targetPath =
+                                module.path && module.path !== "#" && !sub.path.startsWith("/")
+                                  ? `${module.path.replace(/\/+$/, "")}/${sub.path}`
+                                  : sub.path;
+
+                              return (
+                                <div
+                                  key={sub.id}
+                                  onClick={() => handleNavigate(targetPath)}
+                                  className="group cursor-pointer bg-gray-50/70 hover:bg-white border border-gray-100 hover:border-gray-200 p-3.5 rounded-2xl transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 flex items-center justify-between gap-3 relative"
+                                >
+                                  <div className="flex items-center gap-3 overflow-hidden">
+                                    <div
+                                      className={`w-9 h-9 rounded-xl ${theme.iconBg} flex items-center justify-center shrink-0 border transition-transform duration-200 group-hover:scale-105`}
+                                    >
+                                      {sub.icon ? (
                                         <IconRenderer
-                                            name={menu.icon}
-                                            size={24}
+                                          name={sub.icon}
+                                          size={16}
+                                          className={theme.iconColor}
                                         />
+                                      ) : (
+                                        <Layers size={16} className={theme.iconColor} />
+                                      )}
                                     </div>
-                                    <h3 className="font-bold text-lg text-gray-800 transition-colors mb-1 group-hover:text-emerald-700">
-                                        {menu.name}
-                                    </h3>
-                                    <p className="text-sm">
-                                        {menu.description}
-                                    </p>
-                                </div>
+                                    <div className="overflow-hidden">
+                                      <h4 className="text-xs font-bold text-gray-800 group-hover:text-emerald-700 transition-colors truncate">
+                                        {sub.name}
+                                      </h4>
+                                      <p className="text-[10px] text-gray-400 truncate mt-0.5">
+                                        {targetPath}
+                                      </p>
+                                    </div>
+                                  </div>
 
-                                <div className="mt-4 flex items-center text-xs font-bold opacity-60 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300 uppercase tracking-wider text-emerald-600">
-                                    Buka{" "}
-                                    <ArrowRight size={14} className="ml-1.5" />
+                                  <div className="w-6 h-6 rounded-lg bg-gray-100 group-hover:bg-emerald-50 text-gray-400 group-hover:text-emerald-600 flex items-center justify-center shrink-0 transition-colors">
+                                    <ChevronRight size={14} />
+                                  </div>
                                 </div>
-                            </div>
+                              );
+                            })}
+                          </div>
                         </div>
-                    ))}
-                </div>
-            </div> */}
-
-      <PurchaseDetailModal
-        isOpen={isDetailModalOpen}
-        onClose={() => setIsDetailModalOpen(false)}
-        purchase={selectedPR}
-      />
-    </div>
-  );
-}
-
-function StatsCard({
-  title,
-  value,
-  icon,
-  gradient,
-}: {
-  title: string;
-  value: string;
-  icon: string;
-  gradient: string;
-}) {
-  return (
-    <div className="bg-white border border-gray-100 rounded-3xl p-6 shadow-sm flex items-center gap-4 hover:shadow-lg transition-shadow duration-300">
-      <div
-        className={`w-14 h-14 rounded-2xl bg-linear-to-br ${gradient} flex items-center justify-center text-white shrink-0 shadow-md`}
-      >
-        <IconRenderer name={icon} size={28} />
-      </div>
-      <div>
-        <p className="text-gray-500 text-xs font-medium uppercase tracking-wider mb-1">
-          {title}
-        </p>
-        <h3 className="text-xl font-bold text-gray-800">{value}</h3>
+                      ));
+                    })()}
+                  </div>
+                ) : (
+                  // Leaf menu action button
+                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                    <div className="flex items-center gap-2 text-xs font-semibold text-gray-600">
+                      <CheckCircle2 size={16} className="text-emerald-500" />
+                      <span>Modul siap diakses</span>
+                    </div>
+                    <button
+                      onClick={() => handleNavigate(module.path)}
+                      className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition-all"
+                    >
+                      Buka Halaman
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

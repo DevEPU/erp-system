@@ -662,6 +662,13 @@ export const STATIC_MENUS: Menu[] = [
         is_active: true,
       },
       {
+        id: 5041,
+        name: "Dashboard Budgeting",
+        path: "/budgeting/dashboard",
+        icon: "PieChart",
+        is_active: true,
+      },
+      {
         id: 505,
         name: "Budgeting",
         path: "/general-ledger/budgeting",

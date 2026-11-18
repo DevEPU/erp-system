@@ -4,6 +4,7 @@
  */
 
 export const COMPONENT_PERMISSIONS: Record<string, string> = {
+  "Dashboard Budgeting": "access_budget",
   "Supplier & Pembelian": "access_purchases",
   "Supplier": "access_suppliers",
   "Suppliers": "access_suppliers",
@@ -144,8 +145,17 @@ export const COMPONENT_PERMISSIONS: Record<string, string> = {
   "Profil Perusahaan": "access_profil_perusahaan"
 };
 
-export const PATH_PERMISSIONS: Record<string, string> = {
-  "/supplier-pembelian": "access_purchases",
+export const PATH_PERMISSIONS: Record<string, string | string[]> = {
+  "/budgeting/dashboard": "access_budget",
+  "/budgeting": "access_budget",
+  "/supplier-pembelian": [
+    "access_purchases",
+    "access_suppliers",
+    "access_supplier_groups",
+    "access_purchase_orders",
+    "access_penerimaan_barang",
+    "access_faktur_pembelian"
+  ],
   "/supplier-pembelian/suppliers": "access_suppliers",
   "/supplier-pembelian/supplier-group": "access_supplier_groups",
   "/supplier-pembelian/jurnal-pembelian": "access_jurnal_pembelian",
@@ -283,7 +293,7 @@ export const PATH_PERMISSIONS: Record<string, string> = {
  * Helper to get the required permission for a given pathname.
  * Handles exact matches and prefix matches (e.g. /supplier-pembelian/suppliers/create).
  */
-export function getRequiredPermissionForPath(pathname: string): string | null {
+export function getRequiredPermissionForPath(pathname: string): string | string[] | null {
   if (!pathname || pathname === "/" || pathname === "/dashboard" || pathname === "/profiles" || pathname === "/login") {
     return null; // Public or default authenticated pages
   }

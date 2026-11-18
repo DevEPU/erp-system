@@ -37,6 +37,7 @@ const getFullPath = (
 };
 
 import { COMPONENT_PERMISSIONS } from "@/lib/routePermissions";
+import { filterAccessibleMenus } from "@/lib/menuUtils";
 
 export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
   const pathname = usePathname();
@@ -50,61 +51,12 @@ export default function Sidebar({ isCollapsed, toggleSidebar }: SidebarProps) {
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
 
   // Filtered Menus strictly based on Role Permissions
-  const visibleMenus = menus
-    .filter((menu) => !menu.hidden)
-    .map((menu) => {
-      // 1. Filter submenus if present
-      let filteredSubmenus = menu.submenus;
-      if (menu.submenus && menu.submenus.length > 0) {
-        filteredSubmenus = menu.submenus
-          .filter((sub) => {
-            if (sub.is_divider) return true;
-            if (sub.name === "Forecast" && !isForecastEnabled) {
-              return false;
-            }
-            if (
-              (sub.name === "Penerimaan by Schedule" ||
-                sub.name === "Penerimaan dari Schedule") &&
-              !isReceiptByScheduleEnabled
-            ) {
-              return false;
-            }
-            const perm = COMPONENT_PERMISSIONS[sub.name];
-            if (perm && !can(perm)) {
-              return false;
-            }
-            return true;
-          })
-          .map((sub) => {
-            if (sub.name === "Forecast") {
-              return { ...sub, is_active: isForecastEnabled };
-            }
-            return sub;
-          });
-
-        // Filter out dividers if no functional submenus are accessible
-        const functionalCount = filteredSubmenus.filter((s) => !s.is_divider).length;
-        if (functionalCount === 0) {
-          filteredSubmenus = [];
-        }
-
-        // If parent has submenus and all functional submenus are hidden, hide parent
-        if (filteredSubmenus.length === 0) {
-          return null;
-        }
-      } else {
-        // Leaf menu without submenus (e.g. Profil Perusahaan, Dashboard)
-        if (
-          COMPONENT_PERMISSIONS[menu.name] &&
-          !can(COMPONENT_PERMISSIONS[menu.name])
-        ) {
-          return null;
-        }
-      }
-
-      return { ...menu, submenus: filteredSubmenus };
-    })
-    .filter(Boolean) as Menu[];
+  const visibleMenus = filterAccessibleMenus(
+    menus,
+    can,
+    isForecastEnabled,
+    isReceiptByScheduleEnabled
+  );
 
   // Effect: Auto Expand Menu if child is active (accordion — only one open)
   useEffect(() => {
