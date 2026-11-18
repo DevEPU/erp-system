@@ -69,6 +69,7 @@ const employeeRoutes = require('./src/routes/employee');
 
 
 app.use('/api', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/activity-logs', activityLogRoutes);
 app.use('/api/error-logs', errorLogRoutes);
 app.use('/api/users', userRoutes);

@@ -28,14 +28,17 @@ export default function usePermission() {
         }
         setLoading(false);
 
-        // 2. Real-time background sync from backend /auth/me
+        // 2. Real-time background sync from backend /auth/me or /me
         const syncPermissions = async () => {
             const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
             if (!token) return;
 
             try {
-                const res = await api.express.get("/auth/me");
-                if (res.data?.user) {
+                let res = await api.express.get("/auth/me").catch(() => null);
+                if (!res || !res.data?.user) {
+                    res = await api.express.get("/me").catch(() => null);
+                }
+                if (res?.data?.user) {
                     const freshUser = res.data.user;
                     setUser(freshUser);
                     localStorage.setItem("user", JSON.stringify(freshUser));
@@ -53,6 +56,39 @@ export default function usePermission() {
         if (!user) return false;
         // Super Admin has all permissions
         if (user.role_names?.includes("Super Admin")) return true;
+
+        // Admin role or admin@epu.com has full access to all manufacturing execution and QC menus
+        if (user.role_names?.includes("Admin") || user.email === "admin@epu.com") {
+            const adminGrantedPerms = [
+                "access_realisasi_bahan_baku",
+                "access_realisasi_produksi",
+                "access_transfer_produksi",
+                "access_ng_disposal",
+                "access_penerimaan_crusher",
+                "access_penerimaan_retur_produksi",
+                "access_produksi_langsung",
+                "access_quality_control",
+                "access_penerimaan_fg",
+                "access_customer_claim_fg",
+                "access_manufacturing",
+                "access_boms",
+                "access_machines",
+                "access_molds",
+                "access_work_centers",
+                "access_mrp",
+                "access_planning_produksi",
+                "access_work_orders",
+                "access_dashboard_transaksi",
+                "access_daily_board",
+                "access_laporan_rekap_plan_prod",
+                "access_laporan_rekap_ng",
+                "access_laporan_control_stock_whfg",
+                "access_laporan_ach_rate",
+                "access_laporan_ach_leader",
+                "access_laporan_os_delivery"
+            ];
+            if (adminGrantedPerms.includes(permissionName)) return true;
+        }
 
         if (user.permissions?.includes(permissionName)) return true;
 
