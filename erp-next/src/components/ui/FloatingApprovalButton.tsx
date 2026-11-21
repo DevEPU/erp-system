@@ -30,18 +30,18 @@ const getTimeAgo = (dateStr: string) => {
   if (!dateStr) return "Baru saja";
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) return "Baru saja";
-  
+
   const diffMs = Date.now() - date.getTime();
   const minutes = Math.floor(diffMs / 60000);
   if (minutes < 5) return "Baru saja";
   if (minutes < 60) return `${minutes} menit yang lalu`;
-  
+
   const hours = Math.floor(minutes / 60);
   if (hours < 24) return `${hours} jam yang lalu`;
-  
+
   const days = Math.floor(hours / 24);
   if (days < 30) return `${days} hari yang lalu`;
-  
+
   return date.toLocaleDateString("id-ID", { day: "numeric", month: "short" });
 };
 
@@ -83,7 +83,7 @@ export default function FloatingApprovalButton() {
               approval_types: ["MRP", "Perubahan Master Data Inventory", "Product Request", "Target Sales", "Master Budget"]
             };
           }
-        } catch (e) {}
+        } catch (e) { }
       }
 
       if (resData) {
@@ -216,10 +216,9 @@ export default function FloatingApprovalButton() {
           onClick={() => setIsOpen((prev) => !prev)}
           className={`
             flex items-center gap-2 px-3.5 py-1.5 rounded-full shadow-lg border transition-all duration-200 select-none
-            ${
-              isOpen
-                ? "bg-gray-900 text-white border-gray-800"
-                : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:shadow-xl"
+            ${isOpen
+              ? "bg-gray-900 text-white border-gray-800"
+              : "bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:shadow-xl"
             }
           `}
         >
@@ -265,11 +264,10 @@ export default function FloatingApprovalButton() {
                 <button
                   onClick={() => setSelectedType("all")}
                   title="Semua Modul"
-                  className={`py-1.5 px-2 rounded-xl text-[10px] font-black tracking-wide uppercase transition-all truncate border flex items-center justify-center ${
-                    selectedType === "all"
+                  className={`py-1.5 px-2 rounded-xl text-[10px] font-black tracking-wide uppercase transition-all truncate border flex items-center justify-center ${selectedType === "all"
                       ? "bg-emerald-600 text-white border-emerald-600 shadow-sm"
                       : "bg-white text-gray-600 border-gray-200 hover:border-emerald-300 hover:text-emerald-600"
-                  }`}
+                    }`}
                 >
                   Semua Modul
                 </button>
@@ -278,11 +276,10 @@ export default function FloatingApprovalButton() {
                     key={type}
                     onClick={() => setSelectedType(type)}
                     title={type}
-                    className={`py-1.5 px-2 rounded-xl text-[10px] font-black tracking-wide uppercase transition-all truncate border flex items-center justify-center ${
-                      selectedType === type
+                    className={`py-1.5 px-2 rounded-xl text-[10px] font-black tracking-wide uppercase transition-all truncate border flex items-center justify-center ${selectedType === type
                         ? "bg-emerald-600 text-white border-emerald-600 shadow-sm"
                         : "bg-white text-gray-600 border-gray-200 hover:border-emerald-300 hover:text-emerald-600"
-                    }`}
+                      }`}
                   >
                     {type}
                   </button>
@@ -314,11 +311,10 @@ export default function FloatingApprovalButton() {
 
                         <div className="flex items-center gap-2">
                           <span
-                            className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider ${
-                              item.category === "persetujuan"
+                            className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider ${item.category === "persetujuan"
                                 ? "bg-purple-100 text-purple-700"
                                 : "bg-amber-100 text-amber-700"
-                            }`}
+                              }`}
                           >
                             {item.category}
                           </span>

@@ -52,8 +52,8 @@ exports.getApprovalRules = async (req, res) => {
 
 exports.getApprovalRulesFormData = async (req, res) => {
     try {
-        const [types] = await db.execute('SELECT * FROM approval_types');
-        const [users] = await db.execute('SELECT id, name FROM users');
+        const [types] = await db.execute('SELECT * FROM approval_types ORDER BY approval_name ASC');
+        const [users] = await db.execute('SELECT id, name FROM users ORDER BY name ASC');
         return res.json({ types: serialize(types), users: serialize(users) });
     } catch (error) { res.status(500).json({ message: error.message }); }
 };
@@ -71,7 +71,7 @@ exports.getApprovalRequests = async (req, res) => {
             'purchase': ['Modules\\Purchase\\Entities\\Purchase', 'Purchase Request', 'Over Budget', 'Modules\\Purchase\\Entities\\Purchase'],
             'target': ['Modules\\TargetSale\\Entities\\TargetSale', 'Target Sales', 'Modules\\TargetSale\\Entities\\TargetSale'],
             'product': ['Modules\\Product\\Entities\\ProductRequest', 'Product Request', 'Modules\\Product\\Entities\\ProductRequest'],
-            'inv_change': ['Modules\\Product\\Entities\\ProductChangeRequest', 'Perubahan Master Data Inventory', 'Product Change Request'],
+            'inv_change': ['Modules\\Product\\Entities\\ProductChangeRequest', 'Master Inventory', 'Perubahan Master Data Inventory', 'Product Change Request'],
             'mrp': ['Modules\\MRP\\Entities\\MRP', 'MRP', 'Modules\\MRP\\Entities\\MRP']
         };
 
@@ -112,6 +112,7 @@ exports.getApprovalRequests = async (req, res) => {
                 'Modules\\Product\\Entities\\ProductRequest': { table: 'product_requests', includes: null, dateField: 'created_at' },
                 'Product Request': { table: 'product_requests', includes: null, dateField: 'created_at' },
                 'Modules\\Product\\Entities\\ProductChangeRequest': { table: 'product_change_requests', includes: null, dateField: 'created_at' },
+                'Master Inventory': { table: 'product_change_requests', includes: null, dateField: 'created_at' },
                 'Perubahan Master Data Inventory': { table: 'product_change_requests', includes: null, dateField: 'created_at' },
                 'Product Change Request': { table: 'product_change_requests', includes: null, dateField: 'created_at' }
             };
@@ -277,6 +278,7 @@ exports.getPendingCounts = async (req, res) => {
                 'Master Budget': 0,
                 'Target Sales': 0,
                 'Product Request': 0,
+                'Master Inventory': 0,
                 'Perubahan Master Data Inventory': 0,
                 'inv_change': 0,
                 'Over Budget': 0,
@@ -304,6 +306,7 @@ exports.getPendingCounts = async (req, res) => {
             'Master Budget': 0,
             'Target Sales': 0,
             'Product Request': 0,
+            'Master Inventory': 0,
             'Perubahan Master Data Inventory': 0,
             'inv_change': 0,
             'Over Budget': 0,
@@ -321,6 +324,7 @@ exports.getPendingCounts = async (req, res) => {
             } else if (code === 'Product') {
                 counts['Product Request'] += countVal;
             } else if (code === 'INV_CHANGE') {
+                counts['Master Inventory'] += countVal;
                 counts['Perubahan Master Data Inventory'] += countVal;
                 counts['inv_change'] += countVal;
             } else if (code === 'OB') {
@@ -389,6 +393,7 @@ exports.getNotifications = async (req, res) => {
                     'Modules\\Product\\Entities\\ProductRequest': { table: 'product_requests', col: 'request_number' },
                     'Product Request': { table: 'product_requests', col: 'request_number' },
                     'Modules\\Product\\Entities\\ProductChangeRequest': { table: 'product_change_requests', col: 'request_number' },
+                    'Master Inventory': { table: 'product_change_requests', col: 'request_number' },
                     'Perubahan Master Data Inventory': { table: 'product_change_requests', col: 'request_number' },
                     'Product Change Request': { table: 'product_change_requests', col: 'request_number' },
                     'Modules\\MRP\\Entities\\MRP': { table: 'mrps', col: 'mrp_number' },
@@ -448,6 +453,7 @@ exports.getNotifications = async (req, res) => {
                     'Modules\\Product\\Entities\\ProductRequest': { table: 'product_requests', col: 'request_number' },
                     'Product Request': { table: 'product_requests', col: 'request_number' },
                     'Modules\\Product\\Entities\\ProductChangeRequest': { table: 'product_change_requests', col: 'request_number' },
+                    'Master Inventory': { table: 'product_change_requests', col: 'request_number' },
                     'Perubahan Master Data Inventory': { table: 'product_change_requests', col: 'request_number' },
                     'Product Change Request': { table: 'product_change_requests', col: 'request_number' },
                     'Modules\\MRP\\Entities\\MRP': { table: 'mrps', col: 'mrp_number' },
@@ -559,27 +565,49 @@ exports.createApprovalRule = async (req, res) => {
     const connection = await db.getConnection();
     try {
         await connection.beginTransaction();
-        const { approval_types_id, name, is_active, levels } = req.body;
+        const { approval_types_id, rule_name, name, is_active, levels } = req.body;
+        const actualRuleName = rule_name || name || 'Approval Rule';
 
         const [result] = await connection.execute(
-            'INSERT INTO approval_rules (approval_types_id, name, is_active, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())',
-            [approval_types_id, name, is_active ? 1 : 0]
+            'INSERT INTO approval_rules (approval_types_id, rule_name, is_active, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())',
+            [approval_types_id, actualRuleName, is_active ? 1 : 0]
         );
         const ruleId = result.insertId;
 
         if (levels && levels.length > 0) {
             for (const level of levels) {
                 const [lvlResult] = await connection.execute(
-                    'INSERT INTO approval_rule_levels (approval_rules_id, level, amount_limit, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())',
-                    [ruleId, level.level, level.amount_limit || 9999999999]
+                    'INSERT INTO approval_rule_levels (approval_rules_id, level, amount_limit, is_active, created_at, updated_at) VALUES (?, ?, ?, 1, NOW(), NOW())',
+                    [ruleId, level.level, level.amount_limit || 0]
                 );
                 const levelId = lvlResult.insertId;
 
-                if (level.users && level.users.length > 0) {
+                // Support both level.pairs (from frontend modal) and level.users
+                if (level.pairs && Array.isArray(level.pairs)) {
+                    for (let pairIdx = 0; pairIdx < level.pairs.length; pairIdx++) {
+                        const pair = level.pairs[pairIdx];
+                        if (pair.requester && Array.isArray(pair.requester)) {
+                            for (const uid of pair.requester) {
+                                await connection.execute(
+                                    'INSERT INTO approval_rule_users (approval_rule_levels_id, user_id, role, sequence, is_active, created_at, updated_at) VALUES (?, ?, "requester", ?, 1, NOW(), NOW())',
+                                    [levelId, uid, pairIdx]
+                                );
+                            }
+                        }
+                        if (pair.approver && Array.isArray(pair.approver)) {
+                            for (const uid of pair.approver) {
+                                await connection.execute(
+                                    'INSERT INTO approval_rule_users (approval_rule_levels_id, user_id, role, sequence, is_active, created_at, updated_at) VALUES (?, ?, "approver", ?, 1, NOW(), NOW())',
+                                    [levelId, uid, pairIdx]
+                                );
+                            }
+                        }
+                    }
+                } else if (level.users && Array.isArray(level.users)) {
                     for (const user of level.users) {
                         await connection.execute(
-                            'INSERT INTO approval_rule_users (approval_rule_levels_id, user_id, role, sequence, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())',
-                            [levelId, user.user_id, user.role, user.sequence || 1]
+                            'INSERT INTO approval_rule_users (approval_rule_levels_id, user_id, role, sequence, is_active, created_at, updated_at) VALUES (?, ?, ?, ?, 1, NOW(), NOW())',
+                            [levelId, user.user_id, user.role, user.sequence || 0]
                         );
                     }
                 }
@@ -599,11 +627,12 @@ exports.updateApprovalRule = async (req, res) => {
     try {
         await connection.beginTransaction();
         const { id } = req.params;
-        const { approval_types_id, name, is_active, levels } = req.body;
+        const { approval_types_id, rule_name, name, is_active, levels } = req.body;
+        const actualRuleName = rule_name || name || 'Approval Rule';
 
         await connection.execute(
-            'UPDATE approval_rules SET approval_types_id = ?, name = ?, is_active = ?, updated_at = NOW() WHERE id = ?',
-            [approval_types_id, name, is_active ? 1 : 0, id]
+            'UPDATE approval_rules SET approval_types_id = ?, rule_name = ?, is_active = ?, updated_at = NOW() WHERE id = ?',
+            [approval_types_id, actualRuleName, is_active ? 1 : 0, id]
         );
 
         // Delete existing levels and users, then re-insert
@@ -616,16 +645,36 @@ exports.updateApprovalRule = async (req, res) => {
         if (levels && levels.length > 0) {
             for (const level of levels) {
                 const [lvlResult] = await connection.execute(
-                    'INSERT INTO approval_rule_levels (approval_rules_id, level, amount_limit, created_at, updated_at) VALUES (?, ?, ?, NOW(), NOW())',
-                    [id, level.level, level.amount_limit || 9999999999]
+                    'INSERT INTO approval_rule_levels (approval_rules_id, level, amount_limit, is_active, created_at, updated_at) VALUES (?, ?, ?, 1, NOW(), NOW())',
+                    [id, level.level, level.amount_limit || 0]
                 );
                 const levelId = lvlResult.insertId;
 
-                if (level.users && level.users.length > 0) {
+                if (level.pairs && Array.isArray(level.pairs)) {
+                    for (let pairIdx = 0; pairIdx < level.pairs.length; pairIdx++) {
+                        const pair = level.pairs[pairIdx];
+                        if (pair.requester && Array.isArray(pair.requester)) {
+                            for (const uid of pair.requester) {
+                                await connection.execute(
+                                    'INSERT INTO approval_rule_users (approval_rule_levels_id, user_id, role, sequence, is_active, created_at, updated_at) VALUES (?, ?, "requester", ?, 1, NOW(), NOW())',
+                                    [levelId, uid, pairIdx]
+                                );
+                            }
+                        }
+                        if (pair.approver && Array.isArray(pair.approver)) {
+                            for (const uid of pair.approver) {
+                                await connection.execute(
+                                    'INSERT INTO approval_rule_users (approval_rule_levels_id, user_id, role, sequence, is_active, created_at, updated_at) VALUES (?, ?, "approver", ?, 1, NOW(), NOW())',
+                                    [levelId, uid, pairIdx]
+                                );
+                            }
+                        }
+                    }
+                } else if (level.users && Array.isArray(level.users)) {
                     for (const user of level.users) {
                         await connection.execute(
-                            'INSERT INTO approval_rule_users (approval_rule_levels_id, user_id, role, sequence, created_at, updated_at) VALUES (?, ?, ?, ?, NOW(), NOW())',
-                            [levelId, user.user_id, user.role, user.sequence || 1]
+                            'INSERT INTO approval_rule_users (approval_rule_levels_id, user_id, role, sequence, is_active, created_at, updated_at) VALUES (?, ?, ?, ?, 1, NOW(), NOW())',
+                            [levelId, user.user_id, user.role, user.sequence || 0]
                         );
                     }
                 }

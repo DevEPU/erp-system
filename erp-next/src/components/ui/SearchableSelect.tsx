@@ -48,9 +48,15 @@ export default function SearchableSelect({
 
   const normalize = (str: string) => str.toLowerCase().replace(/\s+/g, "");
 
-  const filtered = options.filter((opt) =>
-    normalize(opt.label).includes(normalize(search)),
-  );
+  const filtered = options.filter((opt) => {
+    const labelLower = (opt.label || "").toLowerCase();
+    const searchLower = (search || "").toLowerCase().trim();
+    if (!searchLower) return true;
+    if (labelLower.includes(searchLower)) return true;
+    if (normalize(opt.label || "").includes(normalize(search))) return true;
+    const words = searchLower.split(/\s+/).filter(Boolean);
+    return words.every((word) => labelLower.includes(word));
+  });
 
   const isSelected = (opt: Option) => {
     if (isMulti && Array.isArray(value)) {

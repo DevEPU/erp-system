@@ -108,8 +108,8 @@ export default function ApprovalRuleModal({
     try {
       const res = await api.get("/approval-rules/form-data");
       const data = res.data;
-      setTypes(data.types);
-      setUsers(data.users);
+      setTypes(data?.types || []);
+      setUsers(data?.users || []);
     } catch (e) {
       console.error(e);
     } finally {
@@ -238,10 +238,12 @@ export default function ApprovalRuleModal({
                     approval_types_id: val.toString(),
                   }))
                 }
-                options={types.map((t) => ({
-                  value: t.id,
-                  label: t.approval_name,
-                }))}
+                options={[...types]
+                  .sort((a, b) => (a.approval_name || "").localeCompare(b.approval_name || ""))
+                  .map((t) => ({
+                    value: t.id,
+                    label: t.approval_name,
+                  }))}
               />
             </div>
             <div className="space-y-2">
